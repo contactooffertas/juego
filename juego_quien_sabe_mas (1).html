@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noche de Trivia — Juego para pasarla bien</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --navy-950:#070b1a;
+    --navy-900:#0c1230;
+    --navy-800:#141c40;
+    --navy-700:#1c2654;
+    --gold-500:#e2b13c;
+    --gold-400:#f0c65b;
+    --gold-300:#f6dd97;
+    --ember:#d9552c;
+    --green:#2e9e5b;
+    --green-bright:#37c26f;
+    --red:#c0392b;
+    --ink-100:#f4f2ea;
+    --ink-300:#c9cede;
+    --ink-500:#8b93b8;
+    --radius:14px;
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 20% -10%, #2a3570 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 10%, #1a2452 0%, transparent 50%),
+      linear-gradient(180deg, var(--navy-950), var(--navy-900) 60%, #05070f 100%);
+    color:var(--ink-100);
+    font-family:var(--sans);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 16px 60px;
+  }
+  .screen{ width:100%; max-width:860px; display:none; animation:rise .4s ease; }
+  .screen.active{ display:block; }
+  @keyframes rise{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+  h1,h2,h3{ font-family:var(--serif); font-weight:700; margin:0 0 6px; letter-spacing:.2px; }
+  .brand{
+    text-align:center; margin-bottom:34px;
+  }
+  .brand .kicker{ font-size:13px; color:var(--gold-400); letter-spacing:.14em; margin-bottom:6px; }
+  .brand h1{ font-size:clamp(28px,5vw,44px); color:var(--ink-100); }
+  .brand h1 em{ font-style:normal; color:var(--gold-400); }
+  .brand p{ color:var(--ink-500); margin-top:8px; font-size:15px; }
+
+  .card{
+    background:linear-gradient(180deg,var(--navy-800),var(--navy-900));
+    border:1px solid #2a3468;
+    border-radius:20px;
+    padding:28px clamp(18px,4vw,40px);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
+  }
+
+  .btn{
+    font-family:var(--sans); font-weight:700; font-size:15px;
+    border:none; border-radius:11px; padding:14px 22px; cursor:pointer;
+    background:var(--gold-500); color:#22190a;
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s;
+    box-shadow:0 8px 0 #9a7318, 0 14px 20px -10px rgba(0,0,0,.5);
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn:active{ transform:translateY(2px); box-shadow:0 4px 0 #9a7318; }
+  .btn:disabled{ opacity:.35; cursor:not-allowed; box-shadow:none; transform:none; }
+  .btn.secondary{ background:transparent; color:var(--ink-100); border:1.5px solid #3a4680; box-shadow:none; }
+  .btn.secondary:hover{ border-color:var(--gold-400); }
+  .btn.danger{ background:var(--red); color:#fff; box-shadow:0 8px 0 #7d281e; }
+  .btn.small{ padding:9px 14px; font-size:13px; border-radius:9px; }
+  .btn.block{ width:100%; }
+
+  .choice-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:22px; }
+  @media(max-width:560px){ .choice-grid{ grid-template-columns:1fr; } }
+  .choice-card{
+    text-align:left; padding:20px; border-radius:16px; cursor:pointer;
+    border:2px solid #2a3468; background:var(--navy-800);
+  }
+  .choice-card:hover{ border-color:var(--gold-400); transform:translateY(-2px); }
+  .choice-card h3{ font-size:19px; margin-bottom:4px; }
+  .choice-card p{ color:var(--ink-500); font-size:13.5px; margin:0; line-height:1.5; }
+
+  label{ display:block; font-size:13px; color:var(--ink-300); margin:0 0 6px; font-weight:600; }
+  input[type=text],input[type=number]{
+    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid #35407a;
+    background:#0d1330; color:var(--ink-100); font-size:15px; font-family:var(--sans);
+  }
+  input[type=text]:focus,input[type=number]:focus{ outline:none; border-color:var(--gold-400); }
+
+  .row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .row > *{ flex:1; min-width:140px; }
+
+  .time-options{ display:flex; gap:14px; margin-top:18px; flex-wrap:wrap; }
+  .time-opt{
+    flex:1; min-width:130px; padding:22px 10px; text-align:center; border-radius:16px;
+    border:2px solid #2a3468; cursor:pointer; background:var(--navy-800);
+  }
+  .time-opt .num{ font-family:var(--serif); font-size:34px; color:var(--gold-400); }
+  .time-opt.selected{ border-color:var(--gold-400); background:#1c2454; }
+
+  .player-row{
+    display:flex; gap:10px; align-items:center; margin-bottom:12px;
+    background:var(--navy-800); padding:10px 14px; border-radius:12px; border:1.5px solid #2a3468;
+  }
+  .player-row .avatar{
+    width:34px; height:34px; border-radius:50%; background:var(--gold-500); color:#22190a;
+    display:flex; align-items:center; justify-content:center; font-weight:800; flex-shrink:0;
+  }
+  .player-row input{ flex:1; }
+  .remove-x{ cursor:pointer; color:var(--ink-500); font-size:20px; padding:0 6px; }
+  .remove-x:hover{ color:var(--red); }
+
+  .rules-list{ padding:0; margin:18px 0; list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .rules-list li{ display:flex; gap:12px; align-items:flex-start; font-size:14.5px; line-height:1.5; color:var(--ink-300); }
+  .rules-list .bullet{ color:var(--gold-400); font-family:var(--serif); font-weight:700; font-size:16px; flex-shrink:0; }
+  .rules-list b{ color:var(--ink-100); }
+
+  .topbar{ display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:18px; flex-wrap:wrap; }
+  .scoreboard{ display:flex; gap:10px; flex-wrap:wrap; }
+  .score-chip{
+    background:var(--navy-800); border:1.5px solid #2a3468; border-radius:11px; padding:8px 12px; font-size:13px;
+  }
+  .score-chip.current{ border-color:var(--gold-400); background:#232b5c; }
+  .score-chip b{ display:block; font-size:16px; color:var(--gold-400); font-family:var(--serif); }
+
+  .qmeta{ display:flex; justify-content:space-between; align-items:center; color:var(--ink-500); font-size:13px; margin-bottom:10px; }
+  .timer-wrap{ display:flex; align-items:center; gap:12px; }
+  .timer{
+    font-family:var(--serif); font-size:30px; color:var(--gold-400); min-width:64px; text-align:center;
+    background:var(--navy-800); border-radius:10px; padding:4px 10px; border:1.5px solid #2a3468;
+  }
+  .timer.low{ color:var(--red); animation:pulse 1s infinite; }
+  @keyframes pulse{ 50%{ opacity:.4; } }
+
+  .question-box{
+    background:linear-gradient(180deg,#1a2454,#151d47);
+    border:1.5px solid #354087; border-radius:16px; padding:22px; margin:14px 0 20px;
+  }
+  .question-box h2{ font-size:clamp(18px,3vw,23px); line-height:1.4; color:var(--ink-100); font-weight:600; }
+  .qnum{ color:var(--gold-400); font-family:var(--serif); font-weight:700; margin-right:8px; }
+
+  .options{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:560px){ .options{ grid-template-columns:1fr; } }
+  .opt{
+    text-align:left; padding:15px 16px; border-radius:12px; border:2px solid #2a3468;
+    background:var(--navy-800); cursor:pointer; font-size:15px; display:flex; gap:10px; align-items:center;
+  }
+  .opt .letter{
+    width:26px; height:26px; border-radius:50%; background:#2a3468; color:var(--ink-100);
+    display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; flex-shrink:0;
+  }
+  .opt:hover:not(.disabled):not(.correct):not(.wrong){ border-color:var(--gold-400); }
+  .opt.eliminated{ opacity:.25; pointer-events:none; text-decoration:line-through; }
+  .opt.correct{ border-color:var(--green-bright); background:#123b24; }
+  .opt.correct .letter{ background:var(--green-bright); color:#06210f; }
+  .opt.wrong{ border-color:var(--red); background:#3a1712; }
+  .opt.disabled{ pointer-events:none; opacity:.6; }
+
+  .jokers{ display:flex; gap:12px; margin:18px 0 6px; flex-wrap:wrap; }
+  .joker{
+    flex:1; min-width:150px; padding:12px 14px; border-radius:12px; border:1.5px solid #3a4680;
+    background:var(--navy-800); cursor:pointer; text-align:left; font-size:13px;
+  }
+  .joker .jtitle{ font-weight:700; color:var(--gold-300); font-size:13.5px; }
+  .joker .jdesc{ color:var(--ink-500); font-size:12px; margin-top:2px; }
+  .joker.used{ opacity:.3; text-decoration:line-through; pointer-events:none; }
+  .joker:hover:not(.used){ border-color:var(--gold-400); }
+
+  .audience-bars{ margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .abar-row{ display:flex; align-items:center; gap:10px; font-size:13px; }
+  .abar-track{ flex:1; background:#0d1330; border-radius:6px; height:16px; overflow:hidden; }
+  .abar-fill{ height:100%; background:linear-gradient(90deg,var(--gold-500),var(--gold-300)); border-radius:6px; transition:width .6s ease; }
+
+  .footer-actions{ display:flex; justify-content:space-between; margin-top:20px; gap:12px; flex-wrap:wrap; }
+
+  .final-list{ display:flex; flex-direction:column; gap:10px; margin:18px 0; }
+  .final-row{
+    display:flex; justify-content:space-between; align-items:center; padding:14px 18px;
+    border-radius:12px; background:var(--navy-800); border:1.5px solid #2a3468;
+  }
+  .final-row.winner{ border-color:var(--gold-400); background:#26254a; }
+  .final-row .pts{ font-family:var(--serif); font-size:22px; color:var(--gold-400); }
+  .medal{ font-size:20px; margin-right:8px; }
+
+  table.history{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; table-layout:fixed; }
+  table.history th, table.history td{ text-align:left; padding:8px 8px; border-bottom:1px solid #2a3468; word-wrap:break-word; overflow-wrap:break-word; }
+  table.history th{ color:var(--ink-500); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
+  table.history th:nth-child(1), table.history td:nth-child(1){ width:26%; }
+  table.history th:nth-child(2), table.history td:nth-child(2){ width:15%; }
+  table.history th:nth-child(3), table.history td:nth-child(3){ width:36%; }
+  table.history th:nth-child(4), table.history td:nth-child(4){ width:23%; }
+
+  .link-btn{ background:none; border:none; color:var(--gold-400); font-size:13px; cursor:pointer; text-decoration:underline; padding:0; }
+  .badge{ display:inline-block; background:#3a1712; color:#f6a58e; font-size:11.5px; padding:2px 8px; border-radius:20px; margin-left:8px; }
+  .badge.mode{ background:#123b24; color:#8fe3b0; }
+  .center{ text-align:center; }
+  .muted{ color:var(--ink-500); font-size:13.5px; }
+  hr.div{ border:none; border-top:1px solid #2a3468; margin:20px 0; }
+  .modal-bg{ position:fixed; inset:0; background:rgba(3,5,14,.7); display:none; align-items:center; justify-content:center; z-index:50; padding:20px; }
+  .modal-bg.active{ display:flex; }
+  .modal{ max-width:520px; width:100%; }
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <div class="kicker">TRIVIA PARA COMPARTIR · HASTA 4 JUGADORES</div>
+  <h1>Noche de <em>Trivia</em></h1>
+  <p>Elegí el modo, respondé de a uno y disfruten la ronda juntos</p>
+</div>
+
+<!-- MODE SCREEN -->
+<div class="screen active" id="screen-mode">
+  <div class="card">
+    <h2>Elegí el modo de juego</h2>
+    <p class="muted">Cada modo tiene su propio banco de preguntas — nunca se repiten dentro de la misma partida.</p>
+    <div class="choice-grid">
+      <div class="choice-card" onclick="selectMode('tj')">
+        <h3>📖 Modo Testigos de Jehová</h3>
+        <p>Preguntas bíblicas y de doctrina para reuniones y noches en familia.</p>
+      </div>
+      <div class="choice-card" onclick="selectMode('gk')">
+        <h3>🌎 Conocimiento General</h3>
+        <p>Música, cocina, arte, dibujos animados y series de todo tipo.</p>
+      </div>
+    </div>
+    <div class="center" style="margin-top:22px; display:flex; flex-direction:column; gap:8px;">
+      <button class="link-btn" onclick="openHistory()">Ver tabla de campeones anteriores</button>
+      <button class="link-btn" onclick="openDonate()">💛 ¿Te gustó el juego? Podés colaborar acá</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIME SCREEN -->
+<div class="screen" id="screen-time">
+  <div class="card">
+    <h2>Tiempo por pregunta</h2>
+    <p class="muted">Este es el tiempo base con el que arranca cada pregunta.</p>
+    <div class="time-options">
+      <div class="time-opt" data-t="30" onclick="selectTime(30,this)"><div class="num">30</div>segundos</div>
+      <div class="time-opt" data-t="15" onclick="selectTime(15,this)"><div class="num">15</div>segundos</div>
+      <div class="time-opt" id="time-custom-box"><div class="num" id="custom-num">—</div>
+        <input type="number" id="custom-time" min="5" max="120" placeholder="Otro (seg)" style="margin-top:8px;text-align:center;" oninput="selectCustomTime(this.value)">
+      </div>
+    </div>
+    <div class="footer-actions">
+      <button class="btn secondary" onclick="goTo('screen-mode')">← Atrás</button>
+      <button class="btn" id="time-next" disabled onclick="goTo('screen-players')">Continuar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYERS SCREEN -->
+<div class="screen" id="screen-players">
+  <div class="card">
+    <h2>Jugadores</h2>
+    <p class="muted">Hasta 4 jugadores. Cada uno arranca en 0 puntos con sus 3 comodines.</p>
+    <div id="players-list"></div>
+    <button class="btn secondary small" id="add-player-btn" onclick="addPlayerRow()">+ Agregar jugador</button>
+    <div class="footer-actions">
+      <button class="btn secondary" onclick="goTo('screen-time')">← Atrás</button>
+      <button class="btn" onclick="tryStartFromPlayers()">Ver reglas →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RULES SCREEN -->
+<div class="screen" id="screen-rules">
+  <div class="card">
+    <h2 id="rules-title">Reglas del juego</h2>
+    <p class="muted" id="rules-sub">Que el presentador lea esto en voz alta antes de arrancar.</p>
+    <ul class="rules-list">
+      <li><span class="bullet">•</span><span>Cada jugador juega <b>su turno completo</b> antes de que empiece el siguiente. El orden es: <b id="rules-order-list"></b>.</span></li>
+      <li><span class="bullet">•</span><span>Cada pregunta correcta suma <b>10 puntos</b>. Hay 4 opciones (A, B, C, D); la correcta se marca en <b style="color:#37c26f">verde</b>.</span></li>
+      <li><span class="bullet">•</span><span>El cronómetro <b>no arranca solo</b>: el presentador debe tocar "Iniciar tiempo" antes de cada pregunta.</span></li>
+      <li><span class="bullet">•</span><span>Cada jugador tiene 3 comodines para usar <b>una sola vez cada uno</b> en toda su partida: <b>50/50</b> (elimina 2 opciones incorrectas), <b>Preguntar al público</b> (detiene el cronómetro y muestra una encuesta simulada) y <b>Extender tiempo</b> (si el tiempo base es 30s y quedan 15s o menos, suma 30s más; si es 15s y quedan 8s o menos, suma 15s más).</span></li>
+      <li><span class="bullet">•</span><span>Un jugador puede <b>retirarse</b> de su partida en cualquier momento y conserva los puntos que ya sumó.</span></li>
+      <li><span class="bullet">•</span><span>Las preguntas nunca se repiten entre jugadores dentro de la misma partida.</span></li>
+      <li><span class="bullet">•</span><span>Si al terminar todos los turnos hay <b>empate</b>, se juega un desempate solo entre los empatados: preguntas nuevas, tiempo fijo de <b>15 segundos</b> y <b>sin comodines</b>.</span></li>
+      <li><span class="bullet">•</span><span>Al final de cada partida, el <b>ganador</b> queda anotado en la tabla general de campeones.</span></li>
+    </ul>
+    <div class="footer-actions">
+      <button class="btn secondary" id="rules-back-btn" onclick="goTo('screen-players')">← Atrás</button>
+      <button class="btn" id="rules-continue-btn">Comenzar 1er jugador →</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="screen-game">
+  <div class="topbar">
+    <div class="scoreboard" id="scoreboard"></div>
+    <button class="btn secondary small" onclick="confirmRetire()">Retirarme</button>
+  </div>
+  <div class="card">
+    <div class="qmeta">
+      <span id="turn-label">Turno de —</span>
+      <div class="timer-wrap">
+        <button class="btn secondary small" id="start-timer-btn" onclick="startTimer()">▶ Iniciar tiempo</button>
+        <div class="timer" id="timer-display">--</div>
+      </div>
+    </div>
+    <div class="question-box">
+      <h2><span class="qnum" id="q-number">Q1</span><span id="q-text"></span></h2>
+    </div>
+    <div class="options" id="options-grid"></div>
+
+    <div id="audience-box" style="display:none;" class="audience-bars"></div>
+
+    <div class="jokers" id="jokers-box"></div>
+
+    <div class="footer-actions">
+      <span class="muted" id="game-status"></span>
+      <button class="btn" id="next-btn" style="display:none;" onclick="nextQuestion()">Siguiente pregunta →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TURN END SCREEN -->
+<div class="screen" id="screen-turnend">
+  <div class="card center">
+    <h2 id="turnend-title">¡Turno terminado!</h2>
+    <p class="muted" id="turnend-sub"></p>
+    <div style="margin:24px 0;">
+      <div style="font-family:var(--serif);font-size:52px;color:var(--gold-400);" id="turnend-score">0</div>
+      <div class="muted">puntos totales</div>
+    </div>
+    <button class="btn" id="turnend-continue">Continuar →</button>
+  </div>
+</div>
+
+<!-- TIEBREAK INTRO -->
+<div class="screen" id="screen-tiebreak-intro">
+  <div class="card">
+    <h2>⚖️ Hay empate</h2>
+    <p class="muted" id="tiebreak-who"></p>
+    <ul class="rules-list">
+      <li><span class="bullet">•</span><span>Se juega una <b>pregunta de desempate</b> entre los jugadores empatados.</span></li>
+      <li><span class="bullet">•</span><span>Tiempo fijo: <b>15 segundos</b>, cronómetro descendente. Sin comodines.</span></li>
+      <li><span class="bullet">•</span><span>El presentador toca "Iniciar tiempo" para arrancar cada ronda de desempate.</span></li>
+      <li><span class="bullet">•</span><span>Si vuelve a haber empate, se repite con una pregunta nueva hasta que quede un ganador.</span></li>
+    </ul>
+    <div class="footer-actions">
+      <span></span>
+      <button class="btn" onclick="startTiebreakRound()">Comenzar desempate →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="screen" id="screen-final">
+  <div class="card">
+    <h2 class="center">🏆 Resultado final</h2>
+    <div class="final-list" id="final-list"></div>
+    <div class="footer-actions">
+      <button class="btn secondary" onclick="openHistory()">Ver tabla de campeones</button>
+      <button class="btn" onclick="newGame()">Jugar de nuevo</button>
+    </div>
+    <div class="center" style="margin-top:16px;">
+      <button class="link-btn" onclick="openDonate()">💛 Apoyar este proyecto</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-bg" id="history-modal">
+  <div class="card modal">
+    <h2>🏆 Tabla general de campeones</h2>
+    <table class="history">
+      <thead><tr><th>Ganador</th><th>Puntos</th><th>Modo</th><th>Fecha</th></tr></thead>
+      <tbody id="history-body"></tbody>
+    </table>
+    <div class="footer-actions">
+      <span></span>
+      <button class="btn secondary" onclick="closeHistory()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- DONATE MODAL -->
+<div class="modal-bg" id="donate-modal">
+  <div class="card modal">
+    <h2>💛 Apoyá este proyecto</h2>
+    <p class="muted">Si te gustó "Noche de Trivia" y querés colaborar para que siga mejorando, podés hacerlo por acá. ¡Totalmente opcional y muy agradecido!</p>
+    <div style="background:var(--navy-800); border:1.5px solid #2a3468; border-radius:12px; padding:16px; margin:14px 0;">
+      <label>Alias / CBU (transferencia)</label>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <input type="text" id="donate-alias" value="cetro.chispa.tribu" readonly>
+        <button class="btn secondary small" onclick="copyDonateAlias()">Copiar</button>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:14px; font-size:12px;">Próximamente vamos a sumar también un link de PayPal.</p>
+    <div class="footer-actions">
+      <span></span>
+      <button class="btn secondary" onclick="closeDonate()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- GENERIC MODAL (confirmaciones y avisos) -->
+<div class="modal-bg" id="generic-modal">
+  <div class="card modal">
+    <h2 id="generic-modal-title">Aviso</h2>
+    <p class="muted" id="generic-modal-msg"></p>
+    <div class="footer-actions" id="generic-modal-actions"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   BANCO DE PREGUNTAS
+   Formato: {q:"pregunta", o:["A","B","C","D"], c: indice_correcto (0-3)}
+   NOTA IMPORTANTE PARA EL PRESENTADOR:
+   Estas respuestas fueron completadas por Claude con el mejor
+   criterio posible a partir de conocimiento bíblico general y de
+   publicaciones de los Testigos de Jehová. Las preguntas marcadas
+   con "verify:true" son MUY específicas (abreviaturas de
+   publicaciones como T-30/T-37/S-38, títulos de canciones, cifras
+   puntuales) y conviene que el presentador las revise antes de
+   usarlas en el juego real. Podés editar "c" libremente para
+   corregir cualquier respuesta.
+   ========================================================= */
+const QUESTIONS_TJ = [
+{q:"¿Cómo se conoce a las cuatro letras originales que componen el nombre de Dios en hebreo?",o:["LEVIATAN","TETRAGRAMATON","HELENATRON","MARATON"],c:1},
+{q:"¿Cuáles son las 4 cualidades principales de Jehová?",o:["MISERICORDIA, AMOR, PACIENCIA, AUTODOMINIO","AMOR, PODER, SABIDURIA, JUSTICIA","PODER, LEALTAD, SANTIDAD, JUSTICIA","SANTIDAD, AMOR, BENEVOLENCIA, SABIDURIA"],c:1},
+{q:"¿Qué significa el nombre de Jehová?",o:["EL HACE QUE LLEGUE A SER","EL HACE QUE LOS DEMAS HAGAN","EL HACE POR LOS DEMAS","EL DEJA QUE CADA UNO HAGA"],c:0},
+{q:"¿Cuál de las siguientes afirmaciones sobre Jehová es correcta? Es:",o:["OMNIPRESENTE","OBSOLETO","OMNIPOTENTE","OBSECUENTE"],c:2,verify:true},
+{q:"¿Qué título distingue a Jehová como Dios eterno, majestuoso y venerable Juez de todos?",o:["ANCIANO DE NOCHE","REY DE REYES","JEHOVA DE LOS EJERCITOS","ANCIANO DE DIAS"],c:3},
+{q:"¿Con cuál de estos nombres se lo identifica también a Jesús?",o:["EMMANUEL, RUBEN, LEMUEL","SANTIAGO, JESUS, MARCOS","EMMANUEL, MIGUEL, ADAN","MIGUEL, ABEL, EMMANUEL"],c:2},
+{q:"¿Dónde nació Jesús?",o:["NAZARET","BELEN DE ZABULON","BELEN DE JUDEA","JERUSALEN"],c:2},
+{q:"¿Quién bautizó a Jesús?",o:["PEDRO","FELIPE","ANDRES","JUAN"],c:3},
+{q:"¿Qué edad tenía Jesús cuando sus padres lo encontraron en el templo?",o:["15","33","9","12"],c:3},
+{q:"¿Qué significa Unigénito?",o:["UNGIDO DE JEHOVÁ","HIJO AMADO","PRIMER HIJO QUE ABRE MATRIZ","EL UNICO HIJO QUE JEHOVA CREO DIRECTAMENTE"],c:3},
+{q:"¿Cuánto dura el reinado milenario de Cristo?",o:["144000","1200 años","1000 años","999 años"],c:2},
+{q:"¿Quiénes gobernarán en el reino de Cristo?",o:["LOS ANGELES","LOS PRINCIPES","JEHOVA Y CRISTO","CRISTO Y LOS 144000"],c:3},
+{q:"¿Qué llegan a ser los ungidos en su vida celestial?",o:["CORRUPTIBLES","AUTORITARIOS","ARISTOCRATAS","AUTARQUICOS"],c:2,verify:true},
+{q:"¿Qué pasa después de los 1000 años?",o:["LA RESURRECCION DE LAS PERSONAS","SE LIBERA A SATANAS","SE DEVUELVE LA PERFECCION","JESUS REGRESA"],c:1},
+{q:"¿A partir de qué año y mes empezó a regir el reino Mesiánico?",o:["OCTUBRE 1914","SEPTIEMBRE 1919","SEPTIEMBRE 1914","NISAN 14"],c:0},
+{q:"¿Cuántos son los frutos del espíritu de Jehová?",o:["3","9","1","5"],c:1},
+{q:"¿Qué es el espíritu santo de Dios?",o:["UNA ENTIDAD SEPARADA","EL PODER DE DIOS","UNA PERSONA","LA FUERZA ACTIVA"],c:3},
+{q:"Mencione 3 cualidades que produce la persona mediante el espíritu santo:",o:["AMOR, GOZO, FORTALEZA","AMOR, ENTUSIASMO, DECISION","AMOR, BENIGNIDAD, BONDAD","AMOR, BONDAD, OBEDIENCIA"],c:2},
+{q:"¿En qué ayuda hoy día el espíritu santo a los cristianos verdaderos?",o:["DA A CONOCER PREMONICIONES Y PRESENTIMIENTOS","REVELAR INTERPRETACIONES PERSONALES","HACER MILAGROS","DAR A CONOCER LA VERDAD DEL REINO"],c:3},
+{q:"¿Cuál es la palabra griega que se traduce espíritu?",o:["PNÉUMA","EMAUS","NEUMAN","SPIRIT"],c:0},
+{q:"¿En qué año se completó el libro de Romanos?",o:["54 E.C.","58 E.C.","56 E.C.","60 E.C."],c:2},
+{q:"¿En qué año se completó el libro de Mateo?",o:["45 E.C.","48 E.C.","43 E.C.","41 E.C."],c:3},
+{q:"¿En qué año se completó el libro de Jeremías?",o:["598 A.E.C.","555 A.E.C.","580 A.E.C.","546 A.E.C."],c:2},
+{q:"¿En qué año se completó el libro de Éxodo?",o:["1512 A.E.C.","1545 A.E.C.","1519 A.E.C.","1914 A.E.C."],c:0},
+{q:"¿En qué año se completó el libro de Proverbios?",o:["1465 A.E.C.","1919 E.C.","717 A.E.C.","718 A.E.C."],c:2},
+{q:"¿En qué año se completó el libro de Malaquías?",o:["445 A.E.C.","443 A.E.C.","564 A.E.C.","1512 E.C."],c:1},
+{q:"¿De quién pudo ser contemporáneo Amós?",o:["EZEQUIAS","ÁQUILA","OSEAS","JUAN EL BAUTISTA"],c:2},
+{q:"¿Cuál de los siguientes sí es hijo de Aarón?",o:["ITAMAR","DATAN","TAMAR","HUR"],c:0},
+{q:"¿En qué río se bañó 7 veces Naamán para sanar de la lepra?",o:["TIGRIS","NILO","JORDAN","PARANA"],c:2},
+{q:"¿Cuál fue el primer milagro de Jesús?",o:["BAUTIZARSE","SANAR A UN LEPROSO","CONVERTIR AGUA EN VINO","RESUCITAR A LAZARO"],c:2},
+{q:"¿Cuál fue el último milagro de Jesús?",o:["LA ASCENSION AL CIELO","LA RESURRECCION","CURAR A UN CIEGO","CURAR LA OREJA DE UN SOLDADO"],c:3},
+{q:"¿Quién fue la madre de Salomón?",o:["MICAL","ABIGAIL","BAT-SEBA","RUT"],c:2},
+{q:"¿En qué año se completó el libro de Génesis?",o:["1753 A.E.C.","1513 A.E.C.","1444 A.E.C.","1919 E.C."],c:1},
+{q:"¿En qué año se completó el libro de Deuteronomio?",o:["1473 A.E.C.","1915 E.C.","No se sabe","Nunca se completó"],c:0},
+{q:"¿En qué año se completó el libro de Levítico?",o:["1482 A.E.C.","1513 A.E.C.","1512 A.E.C.","No se completó"],c:2},
+{q:"¿En qué año se completó el libro de Números?",o:["1473 A.E.C.","No se completó","1918","No se sabe"],c:0},
+{q:"Según Proverbios 24:10, si te desanimas en los momentos difíciles, ¿qué pasa?",o:["Te vas a perder","Te irá bien","Te faltarán las fuerzas","Perderás buenas costumbres"],c:2},
+{q:"Según Proverbios 15:15, el que es bueno de corazón:",o:["Queda con hambre","Cubre una multitud de pecados","Goza de un banquete continuo","Soporta todas las cosas"],c:2},
+{q:"¿En qué año se completó el libro de Josué?",o:["1455 A.E.C.","752 A.E.C.","1513 A.E.C.","1450 A.E.C."],c:3},
+{q:"¿En qué año se completó el libro de Jueces?",o:["1092 A.E.C.","1859 A.E.C.","1100 A.E.C.","1213 A.E.C."],c:2},
+{q:"Según Proverbios 15:17, ¿qué es mejor para que haya amor?",o:["Un plato de harina","Un plato vacío","Un plato de verduras","Un plato de carne"],c:2},
+{q:"Según lo que Jesús enseñó, ¿qué es necesario para hallar la felicidad?",o:["No hacer nada","Tener muchos amigos","Reconocer las necesidades espirituales","Satisfacer a los demás"],c:2},
+{q:"Según Jesús mencionó, ¿hasta dónde seríamos sus testigos?",o:["Europa","Toda América","Jerusalén, Samaria, Belén y la parte más distante","Jerusalén, Judea, Samaria y hasta la parte más lejana de la tierra"],c:3},
+{q:"Según Jesús dijo en Juan, ¿quién es mayor que Él?",o:["Los ángeles","Los apóstoles","Los 144000","Jehová"],c:3},
+{q:"¿En qué año se completó el libro de Rut?",o:["1445 A.E.C.","1945 E.C.","1513 A.E.C.","1090 A.E.C."],c:3},
+{q:"¿En qué año se completó el libro de 1 Samuel?",o:["1456 E.C.","455 A.E.C.","1413 A.E.C.","1078 A.E.C."],c:3},
+{q:"¿En qué año se completó el libro de 2 Samuel?",o:["1040 A.E.C.","2012 A.E.C.","1513 E.C.","1914 A.E.C."],c:0},
+{q:"¿En qué año se completó el libro de 1 Reyes?",o:["1423 A.E.C.","1918 E.C.","580 A.E.C.","1455 E.C."],c:2},
+{q:"¿En qué año se completó el libro de 2 Reyes?",o:["580 A.E.C.","455 E.C.","4125 A.E.C.","250 E.C."],c:0},
+{q:"¿En qué año se completó el libro de 1 Crónicas?",o:["1513 A.E.C.","1945 E.C.","460 A.E.C.","1998 A.E.C."],c:2},
+{q:"¿En qué año se completó el libro de 2 Crónicas?",o:["430 E.C.","460 A.E.C.","1245 A.E.C.","1950 E.C."],c:1},
+{q:"¿En qué año se completó el libro de Génesis? (repaso)",o:["1914 E.C.","1513 A.E.C.","1475 E.C.","460 A.E.C."],c:1},
+{q:"¿A qué publicación hace referencia la abreviación T-37?",o:["Visite jw.org (2014)","Visite jw broadcasting","Visite la biblioteca en línea","Visite Betel"],c:0,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación T-30?",o:["La Biblia (2013)","La Atalaya","Despertad","Perspicacia"],c:0,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación T-16?",o:["La Biblia","Razonamiento","Esperanza para los que han muerto (1987)","La familia... ¿puede sobrevivir?"],c:2,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación T-21?",o:["Familia unida y feliz","Pacífico nuevo mundo","Disfrute de su vida de familia (1998)","¿Por qué estamos aquí?"],c:2,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación T-33?",o:["¿Quién es el gobernante del mundo?","¿Quién controla el mundo? (2013)","¿Quién es Jehová?","¿Quiénes son los testigos de Jehová?"],c:1,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación T-36?",o:["Reino (2014)","Religión falsa","¿Rige el destino nuestra vida?","Saber la verdad"],c:0,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación S-38?",o:["Instrucciones para la reunión Vida y Ministerio","Vida feliz","Todas las personas","Saber más de la Biblia"],c:0,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación T-35?",o:["Volver a vivir (2013)","La vida... ¿cómo se presentó aquí?","¿Por qué hay tantos problemas en la vida?","¿Quién es Jesucristo?"],c:0,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación nwt?",o:["Índice","Traducción del Nuevo Mundo","Guía de estudio","Nuestro Ministerio del Reino"],c:1},
+{q:"¿A qué publicación hace referencia la abreviación cl?",o:["Apocalipsis","Amor de Dios","Acercarse a Jehová","Benefíciese"],c:2,verify:true},
+{q:"¿A qué publicación hace referencia la abreviación sjj?",o:["Cantemos con gozo a Jehová (2017)","Conocimiento","Ejemplos de fe","El hombre en busca de Dios"],c:0},
+{q:"¿Cuántas referencias a los pájaros aparecen en la Biblia?",o:["Más de 300","1254","Más de 2500","Ninguna"],c:0,verify:true},
+{q:"¿En qué «día» creativo llegaron a existir los pájaros?",o:["Día 1","Día 3","Día 8","Día 5"],c:3},
+{q:"¿Cuál de estos condimentos se menciona en la Biblia?",o:["Eneldo","El comino","La ruda","Todas las anteriores"],c:3},
+{q:"¿Cuál de estas aves se menciona en la Biblia?",o:["La tórtola","La perdiz","El gorrión","Todas las anteriores"],c:3},
+{q:"¿Qué significa el nombre del valle el Tiropeón?",o:["Queseros","Panaderos","Carniceros","Verduleros"],c:0},
+{q:"¿Qué alimento principal tuvieron los israelitas durante los 40 años en el desierto?",o:["Papas","Carne","Delivery","Maná"],c:3},
+{q:"¿En qué desierto Jehová proveyó el maná por primera vez?",o:["Sin","Sinaí","Dotán","No se menciona en la Biblia"],c:0},
+{q:"¿Cuántas profecías aproximadamente se cumplieron en Jesús?",o:["30","45","No se determina una cifra exacta","144.000"],c:2,verify:true},
+{q:"¿En qué año dejó de utilizarse «Nuestro Ministerio del Reino» en la reunión de semana?",o:["2014","2016","2015","2018"],c:1,verify:true},
+{q:"¿En qué año inició la Noche de Adoración en Familia?",o:["2008","1999","2009","2013"],c:2},
+{q:"¿Qué nombre fue dado a Azarías en el cautiverio de Babilonia?",o:["Belsasar","Abed-nego","Sadrac","No se le cambió"],c:1},
+{q:"¿Cuántos soldados del ejército de Senaquerib mató el ángel de Jehová?",o:["185.000","105.000","195.000","115.000"],c:0},
+{q:"¿Qué nombre fue dado a Daniel en el cautiverio de Babilonia?",o:["Belsasar","Abed-nego","Sadrac","No se le cambió"],c:0},
+{q:"¿Qué nombre fue dado a Misael en el cautiverio de Babilonia?",o:["Belsasar","Abed-nego","Sadrac","Mesac"],c:3},
+{q:"¿Cuántas parejas de animales colocó Moisés en el arca?",o:["2","4","1950","Ninguno (fue Noé)"],c:3},
+{q:"Luego de la destrucción del año 70 D.C. a manos de los romanos, ¿en qué año se reconstruyó Jerusalén?",o:["120 D.C.","110 D.C.","130 D.C.","1945 D.C."],c:2},
+{q:"¿Qué significa Jerusalén?",o:["Posesión [o Fundamento] de Paz Doble","Paz","Ciudad de Jesús","Ciudad de Medio Oriente"],c:0},
+{q:"¿En qué año conquistó Babilonia a Jerusalén?",o:["307 A.E.C.","1250 A.E.C.","1945 A.E.C.","607 A.E.C."],c:3},
+{q:"¿Qué significa posiblemente el título Rabsaces?",o:["Rey de Asiria","Rey de Babilonia","Copero principal","No se sabe"],c:2},
+{q:"¿Qué significa evangelizador?",o:["Enviado","Apóstol","Ángel","Que lleva un buen mensaje"],c:3},
+{q:"¿Qué significa apóstol?",o:["Viajero","Servidor","Enviado","Que lleva un buen mensaje"],c:2},
+{q:"¿Qué significa ángel?",o:["Mensajero","Enviado","Que lleva las cargas","Apóstol"],c:0},
+{q:"¿Cuál es el nombre de la primera mujer?",o:["Evangelina","Evarista","Eva","Ela"],c:2},
+{q:"¿Cuál fue la última creación de Jehová que se tiene registro?",o:["Los animales","Adán","Los cielos","Eva"],c:3},
+{q:"¿Qué significa el nombre Eva?",o:["Mujer de Adán","Mujer","Alma de mujer","Una viviente"],c:3},
+{q:"¿Quién le puso nombre a Eva?",o:["Los ángeles","Fue por voto popular","Jehová","Adán"],c:3},
+{q:"¿En qué momento del registro bíblico se indica que Adán nombró a su esposa Eva?",o:["Después de ser creada","Después de tener hijos","Luego de despertarse","Después de violar la ley de Dios (Gén. 3:20)"],c:3},
+{q:"¿Qué significa Adán?",o:["Rojo","Humanidad","Persona","Ninguna es correcta"],c:1,verify:true},
+{q:"¿En qué año nació Adán?",o:["13580 A.E.C.","3500 A.E.C.","4026 A.E.C.","No se menciona en la Biblia"],c:2},
+{q:"¿Quién pronunció la primera poesía conocida?",o:["Caín","Abel","Adán","Salomón"],c:2},
+{q:"¿Con qué otro nombre se le conocía a Pablo?",o:["Paulo","Pablito","Saulo","Gamaliel"],c:2},
+{q:"¿Quién fue uno de los maestros de Pablo?",o:["Bernabé","Rabán","Gamaliel","Todos fueron sus maestros"],c:2},
+{q:"¿De qué tribu provenía Pablo?",o:["Israelita (genérico)","Neftalí","Benjamín","Efraín"],c:2},
+{q:"¿De dónde descendieron las tribus de Israel?",o:["De los egipcios","De los doce hijos de Jacob","No se sabe el origen","De los asirios"],c:1},
+{q:"¿Quién puso el nombre a Benjamín?",o:["Raquel","Jacob","Isaac","Rebeca"],c:1},
+{q:"¿Qué nombre le puso Raquel a Benjamín cuando nació?",o:["Kilión","Mahlón","Ben-oní","Benjamín"],c:2},
+{q:"¿Qué quiere decir el nombre Benjamín?",o:["Hijo de Jacob","Hijo de la Diestra","Hijo amado","Hijo de Raquel"],c:1},
+{q:"¿Cuál era el duodécimo hijo de Jacob?",o:["Manasés","Efraín","José","Benjamín"],c:3},
+{q:"¿De quién era hija Raquel, esposa de Jacob?",o:["Adán","Abán","Labán","No se menciona"],c:2},
+{q:"¿Dónde murió Raquel?",o:["Efrat","Harán","Canaán","No se menciona"],c:0},
+{q:"¿De dónde era Rut?",o:["Zabulón","Israel","Canaán","Moab"],c:3},
+{q:"¿Qué hijo de Noemí fue esposo de Rut?",o:["Kilión","Mahlón","No se casó con su hijo","La Biblia no lo menciona"],c:1},
+{q:"¿Qué significa Edén?",o:["Jardín","Placer","Arboleda","Ciudad de Adán"],c:1},
+{q:"¿En cuántos ríos se dividía el río principal de Edén?",o:["3","5","4","Solo había un río"],c:2},
+{q:"¿Cuál de los siguientes nombres pertenece a los ríos de Edén?",o:["Éufrates","Hidequel (Tigris)","Guihón","Todos ellos"],c:3},
+{q:"¿Qué significa el nombre Abdías?",o:["Siervo real","Siervo del rey","Siervo ministerial","Siervo de Jehová"],c:3},
+{q:"¿Quién fue Sansón?",o:["Un filisteo","Un hermano de Hércules","Un juez de Israel","Un profeta"],c:2},
+{q:"¿Quién traicionó a Sansón?",o:["Sus hermanos","Dalila","La vecina de al lado","Una prostituta"],c:1},
+{q:"¿Qué relación tenía el pelo largo de Sansón con su fuerza?",o:["La fuerza venía del pelo","Representaba su relación especial con Jehová como nazareo","Tenía una buena hidratación con hierbas","Su fuerza venía de su entrenamiento"],c:1},
+{q:"¿Qué significa posiblemente Dalila?",o:["Mujer de Israel","Colgante","Brazalete","Enviada de los filisteos"],c:1,verify:true},
+{q:"¿Qué significa el nombre Jaquín?",o:["Sacerdote de Jehová","Descendiente de Jehová","Que [Jehová] establezca firmemente","No se puede saber con exactitud"],c:2},
+{q:"¿Quién recibió hospitalariamente a Pablo y Silas en su primer viaje a Macedonia?",o:["Jasón","César","Silas","Bernabé"],c:0},
+{q:"¿Qué edad tenían en el reencuentro los gemelos Jacob y Esaú?",o:["98","88","97","77"],c:2},
+{q:"¿Qué significa Betel?",o:["Casa de oración","Casa de Israel","Casa de Dios","Casa de luz"],c:2},
+{q:"¿Qué significa fariseos?",o:["Hermandad","Adorador","Separados","Sectario"],c:2},
+{q:"¿A quién fue el primero que se le otorgó el título de «Rabán»?",o:["Pablo","Bernabé","Gamaliel","Caifás"],c:2},
+{q:"¿A quién se le atribuye la frase: «Si este proyecto proviene de hombres, será derribado; pero si proviene de Dios, no podrán derribarlo»?",o:["César","Caifás","Un salmista","Gamaliel"],c:3},
+{q:"¿A quién se le atribuye la frase: «¿Quién es Jehová, para que yo obedezca su voz y envíe a Israel?»?",o:["Poncio Pilato","Faraón","Caifás","Balaam"],c:1},
+{q:"¿Qué animal golpeó Balaam en su camino a maldecir a Israel?",o:["Iba caminando","Un caballo","Una asna","Iba en un carruaje"],c:2},
+{q:"¿A quién se le atribuye la frase: «¿Soy yo un perro, para que vengas a mí con cayados?»?",o:["César","Nemrod","Goliat","Félix"],c:2},
+{q:"¿Qué familiar intervino para salvar a Pablo de una emboscada de sus enemigos?",o:["La hermana","La sobrina","El sobrino","El tío"],c:2},
+{q:"¿Quién reemplazó a Judas como apóstol?",o:["Bernabé","Pablo","Matías","José"],c:2},
+{q:"¿A quién se le atribuye la frase: «Lo que he escrito, he escrito»?",o:["Caifás","Saulo de Tarso","Pilato","Pedro"],c:2},
+{q:"¿A qué criminal se liberó en el juicio a Jesús?",o:["Berseba","Almoran","Barrabás","Aguarras"],c:2},
+{q:"¿Quién fue el padre de Boaz de la línea del Mesías?",o:["Pérez","Jesé","Salmón","Asá"],c:2},
+{q:"¿Quién fue el padre de Manasés de la línea del Mesías?",o:["Acaz","Ezequías","Pérez","Amón"],c:1},
+{q:"¿A qué edad fue rey Josías?",o:["33","10","8","12"],c:2},
+{q:"¿Quién más menciona la Biblia que se levantó en rebelión contra Moisés (Núm. 16:1)?",o:["Coré, Datán, Abirán, Omán","Coré, Datán, Abirán, Of","Coré, Datán, Abirán, On","Solo fueron Coré, Datán, Abirán"],c:2},
+{q:"¿Quién hizo que Jacob quedara rengo?",o:["Esaú","Un ángel","Un golpe en batalla","Un enemigo"],c:1},
+{q:"¿Sobre quiénes gobernaban «los señores del eje»?",o:["Moabitas","Jaquinitas","Filisteos","Cananeos"],c:2},
+{q:"Cuando Jesús dijo a sus opositores «Yo dije: ‘Ustedes son dioses’», ¿de qué salmo citó?",o:["Salmo 115","Salmo 92","Salmo 82","Salmo 102"],c:2},
+{q:"¿Qué día y hora murió Jesús?",o:["Jueves 12 del mediodía","Martes 7 de la tarde","Viernes 3 de la tarde","Sábado 3 de la tarde"],c:2},
+{q:"¿Cuántos son los meses del calendario judío?",o:["11","12","10","13"],c:1},
+{q:"¿Cuál de los siguientes corresponde a un mes judío?",o:["Abiatar","Nassan","Nisán","Labam"],c:2},
+{q:"¿A qué hace referencia la palabra waw?",o:["Un instrumento de trabajo","Una letra","Una ciudad filistea","No aparece dicha palabra"],c:1},
+{q:"¿Cuál es el último libro que se escribió de la Biblia?",o:["Mateo","Revelación (Apocalipsis)","Juan","Marcos"],c:1},
+{q:"¿Cuántas resurrecciones menciona la Biblia?",o:["4","8","10","9"],c:3,verify:true},
+{q:"¿Qué título tiene la canción 3 de «Cantemos con gozo»?",o:["Tú me das fe, confianza y valor","Tú me das fuerza, valor y decisión","Tú me das fuerza, confianza y valor","La fe en Jehová da fuerza"],c:2,verify:true},
+{q:"¿Quién alimenta hoy día a los domésticos en sentido espiritual?",o:["Los ancianos","El comité de enlace","El esclavo fiel y prudente","Los ángeles"],c:2},
+{q:"En la parábola del capítulo 25 de Mateo, ¿qué cantidad de vírgenes menciona Jesús?",o:["8","5","10","12"],c:2},
+{q:"¿Qué reemplazó al anuario impreso desde que dejó de publicarse en 2017?",o:["Un video-informe anual","Un folleto trimestral","Ya no se informa nada","Un apéndice de La Atalaya"],c:0},
+{q:"¿Con qué frecuencia se realiza actualmente la Conmemoración de la muerte de Cristo?",o:["Cada mes","Una vez al año","Cada dos años","Solo cuando cae domingo"],c:1},
+{q:"¿Cuántos libros y cartas contiene la Biblia?",o:["56","75","66","45"],c:2},
+{q:"¿Con qué libro terminan las Escrituras Hebreo-arameas?",o:["Zacarías","Miqueas","Malaquías","Sofonías"],c:2},
+{q:"¿Qué significa la palabra iglesia?",o:["Lugar de culto","Lugar de adoración","Grupo de fieles (congregación)","Adoración"],c:2},
+{q:"¿Quién era la esposa de Aquila?",o:["Marta","Rut","Priscila","Jael"],c:2},
+{q:"¿Cuántas canciones contiene el libro «Cantemos con gozo a Jehová»?",o:["134","205","148","151"],c:3},
+{q:"¿Sobre qué montaña se posó el arca de Noé?",o:["Arsat","Alpes","Ararat","Siguió en el agua"],c:2},
+{q:"¿Qué fue lo que envió Noé por primera vez para constatar que el agua había bajado?",o:["Un gorrión","Un cuervo","Una paloma","Una codorniz"],c:1},
+{q:"¿Qué sucedió con la paloma que Noé envió la última vez?",o:["Trajo una hoja de olivo","No envió una paloma","No regresó","No se menciona en la Biblia"],c:2},
+{q:"¿Cuántos capítulos contiene el libro de Génesis?",o:["45","150","38","50"],c:3},
+{q:"¿Cuántos capítulos contiene el libro de 1 Reyes?",o:["32","22","15","50"],c:1},
+{q:"¿Cuántos capítulos contiene el libro de Zacarías?",o:["11","14","45","120"],c:1},
+{q:"¿Cómo se llamaba el papá de Juan el Bautista?",o:["Anás","Caifás","Zacarías","No se menciona"],c:2},
+{q:"¿Cómo sigue el estribillo de la canción 151, «Llamaré a los que duermen, ellos me responderán»?",o:["La obra de mis manos eres tú, ¿despierta ya?","Extraño tanto verlos… ese día llegará","Nuestro Dios está anhelante","Volveremos a besarlos"],c:1,verify:true},
+{q:"¿Cómo sigue el estribillo de la canción 139, «Por ti, oh Jehová, mediante Jesús»?",o:["Mi corazón rebosa de felicidad","El reino de Dios nos dará libertad","El nuevo mundo ha visto la luz","Un nuevo mundo ha visto la luz"],c:3,verify:true},
+{q:"¿A qué publicación hace referencia el título en inglés «Insight on the Scriptures»?",o:["Conocimiento de las Escrituras","Despertad de las Escrituras","Perspicacia para comprender las Escrituras","Atalaya en inglés"],c:2}
+];
+
+const QUESTIONS_GK = [
+{q:"¿Qué instrumento tiene 88 teclas?",o:["Violín","Piano","Arpa","Acordeón"],c:1},
+{q:"¿Quién compuso «Las Cuatro Estaciones»?",o:["Mozart","Bach","Vivaldi","Beethoven"],c:2},
+{q:"¿Cuál fue la primera banda de los Beatles antes del nombre definitivo?",o:["The Quarrymen","The Rolling Stones","The Kinks","The Shadows"],c:0},
+{q:"¿Qué cantante es conocida como «La Reina del Tex-Mex»?",o:["Shakira","Selena Quintanilla","Gloria Estefan","Thalía"],c:1},
+{q:"¿De qué país es originario el tango?",o:["México","España","Argentina","Brasil"],c:2},
+{q:"¿Cuántas cuerdas tiene una guitarra clásica estándar?",o:["4","5","6","7"],c:2},
+{q:"¿Quién es conocido como «El Rey del Pop»?",o:["Prince","Michael Jackson","Elvis Presley","James Brown"],c:1},
+{q:"¿Qué género musical nació en Jamaica en los años 60?",o:["Reggae","Blues","Funk","Disco"],c:0},
+{q:"¿Qué banda interpretó «Bohemian Rhapsody»?",o:["Queen","Led Zeppelin","The Who","Pink Floyd"],c:0},
+{q:"¿Cuál es el instrumento nacional de México en muchos mariachis, de cuerdas graves?",o:["Guitarrón","Violonchelo","Contrabajo","Bajo eléctrico"],c:0},
+{q:"¿Qué ingrediente principal lleva el guacamole?",o:["Tomate","Palta / aguacate","Cebolla","Pimiento"],c:1},
+{q:"¿De qué país es originaria la pizza margarita?",o:["Francia","España","Italia","Grecia"],c:2},
+{q:"¿Qué tipo de leche se usa tradicionalmente para el dulce de leche?",o:["Leche de cabra","Leche de vaca","Leche de soja","Leche de almendra"],c:1},
+{q:"¿Qué especia se obtiene del estigma de una flor y es una de las más caras del mundo?",o:["Canela","Azafrán","Pimentón","Cúrcuma"],c:1},
+{q:"¿Cuál es el ingrediente base del sushi?",o:["Arroz","Fideos","Papa","Quinoa"],c:0},
+{q:"¿Qué fruta se usa tradicionalmente para hacer el vino?",o:["Manzana","Uva","Pera","Ciruela"],c:1},
+{q:"¿Qué país es famoso por la fondue de queso?",o:["Suiza","Bélgica","Holanda","Austria"],c:0},
+{q:"¿Qué carne lleva tradicionalmente el asado argentino como corte típico?",o:["Cordero","Cerdo","Vacuno","Pollo"],c:2},
+{q:"¿Qué técnica de cocción consiste en cocinar al vacío a baja temperatura?",o:["Sous vide","Flambeado","Gratinado","Escalfado"],c:0},
+{q:"¿Cuál es el ingrediente principal de un ceviche?",o:["Pescado o marisco crudo marinado en cítricos","Carne asada","Pollo frito","Arroz con verduras"],c:0},
+{q:"¿Quién pintó «La Mona Lisa»?",o:["Miguel Ángel","Rafael","Leonardo da Vinci","Donatello"],c:2},
+{q:"¿A qué movimiento artístico pertenece Salvador Dalí?",o:["Cubismo","Surrealismo","Impresionismo","Barroco"],c:1},
+{q:"¿Qué artista pintó «La noche estrellada»?",o:["Vincent van Gogh","Claude Monet","Edvard Munch","Paul Cézanne"],c:0},
+{q:"¿En qué museo se encuentra «El Guernica» de Picasso?",o:["Louvre","Museo del Prado","Museo Reina Sofía","Museo Británico"],c:2},
+{q:"¿Qué técnica de dibujo usa tinta y puntos para crear sombras?",o:["Puntillismo (stippling)","Esfumado","Acuarela","Grabado"],c:0},
+{q:"¿Quién esculpió el «David»?",o:["Leonardo da Vinci","Miguel Ángel","Bernini","Donatello"],c:1},
+{q:"¿Qué colores primarios se usan en pintura tradicional?",o:["Rojo, verde, azul","Amarillo, rojo, azul","Negro, blanco, gris","Naranja, violeta, verde"],c:1},
+{q:"¿Qué artista es famoso por sus obras de «sopa Campbell» dentro del Pop Art?",o:["Andy Warhol","Roy Lichtenstein","Jackson Pollock","Keith Haring"],c:0},
+{q:"¿Qué estudio de animación creó a Mickey Mouse?",o:["Warner Bros","Disney","Pixar","DreamWorks"],c:1},
+{q:"¿Cómo se llama el pueblo ficticio donde vive la familia Simpson?",o:["Quahog","Springfield","South Park","Bedrock"],c:1},
+{q:"¿Qué estudio de animación japonesa creó «Mi vecino Totoro»?",o:["Toei Animation","Studio Ghibli","Sunrise","Madhouse"],c:1},
+{q:"¿Cuál es el nombre real de Goku en la serie Dragon Ball?",o:["Kakaroto","Vegeta","Gohan","Piccolo"],c:0},
+{q:"¿Qué personaje de dibujos animados vive en una piña debajo del mar?",o:["Patricio Estrella","Bob Esponja","Calamardo","Don Cangrejo"],c:1},
+{q:"¿Qué serie animada sigue a una familia prehistórica llamada Picapiedra?",o:["Los Supersónicos","Los Picapiedra","Scooby-Doo","Tom y Jerry"],c:1},
+{q:"¿Cómo se llama el perro detective que resuelve misterios con una pandilla de adolescentes?",o:["Snoopy","Pluto","Scooby-Doo","Goofy"],c:2},
+{q:"¿Qué serie de animación creó Matt Groening antes de «Los Simpson»?",o:["Futurama","Vida en el infierno (Life in Hell)","Family Guy","King of the Hill"],c:1},
+{q:"¿Cuál es el nombre del ratón que persigue eternamente al gato Tom?",o:["Jerry","Stuart","Mickey","Speedy"],c:0},
+{q:"¿Qué serie de HBO está ambientada en los Siete Reinos de Poniente?",o:["Vikings","Juego de Tronos","The Witcher","Los Anillos de Poder"],c:1},
+{q:"¿En qué ciudad transcurre la serie «Friends»?",o:["Los Ángeles","Chicago","Nueva York","Boston"],c:2},
+{q:"¿Cómo se llama el protagonista de «Breaking Bad»?",o:["Jesse Pinkman","Walter White","Saul Goodman","Hank Schrader"],c:1},
+{q:"¿Qué serie sigue las aventuras de un grupo de amigos en un café de Manhattan llamado Central Perk?",o:["Seinfeld","Friends","How I Met Your Mother","Cheers"],c:1},
+{q:"¿Qué serie española de Netflix trata sobre un robo a la Fábrica Nacional de Moneda y Timbre?",o:["Élite","La Casa de Papel","Vis a vis","Las chicas del cable"],c:1},
+{q:"¿Cómo se llama el laboratorio ficticio de «Stranger Things»?",o:["Hawkins Lab","Umbrella Corp","Aperture Science","Black Mesa"],c:0},
+{q:"¿Qué serie de comedia estadounidense transcurre en una oficina de papelería llamada Dunder Mifflin?",o:["Parks and Recreation","The Office","Brooklyn Nine-Nine","Community"],c:1},
+{q:"¿Cuál es la capital de Francia?",o:["Lyon","Marsella","París","Niza"],c:2},
+{q:"¿Cuántos huesos tiene el cuerpo humano adulto aproximadamente?",o:["106","156","206","256"],c:2},
+{q:"¿Cuál es el planeta más grande del sistema solar?",o:["Saturno","Júpiter","Neptuno","Urano"],c:1},
+{q:"¿Qué gas es esencial para la respiración humana?",o:["Nitrógeno","Dióxido de carbono","Oxígeno","Hidrógeno"],c:2},
+{q:"¿En qué año llegó el hombre a la Luna por primera vez?",o:["1965","1969","1972","1959"],c:1},
+{q:"¿Cuál es el río más largo del mundo?",o:["Nilo","Amazonas","Mississippi","Yangtsé"],c:1},
+{q:"¿Qué deporte se juega en Wimbledon?",o:["Golf","Tenis","Críquet","Rugby"],c:1},
+{q:"¿Cuántos jugadores tiene un equipo de fútbol en la cancha?",o:["9","10","11","12"],c:2},
+{q:"¿Cuál es el metal más abundante en la corteza terrestre?",o:["Hierro","Aluminio","Cobre","Oro"],c:1},
+{q:"¿Qué país tiene forma de bota en el mapa?",o:["España","Italia","Grecia","Portugal"],c:1}
+];
+
+/* ============ MODALES GENÉRICOS (reemplazan alert/confirm nativos) ============ */
+function closeGenericModal(){ document.getElementById('generic-modal').classList.remove('active'); }
+function showAlert(msg, title){
+  document.getElementById('generic-modal-title').textContent = title || 'Aviso';
+  document.getElementById('generic-modal-msg').textContent = msg;
+  document.getElementById('generic-modal-actions').innerHTML =
+    `<span></span><button class="btn" onclick="closeGenericModal()">Entendido</button>`;
+  document.getElementById('generic-modal').classList.add('active');
+}
+function showConfirm(msg, onYes, title){
+  document.getElementById('generic-modal-title').textContent = title || 'Confirmar';
+  document.getElementById('generic-modal-msg').textContent = msg;
+  document.getElementById('generic-modal-actions').innerHTML =
+    `<button class="btn secondary" onclick="closeGenericModal()">Cancelar</button>
+     <button class="btn danger" id="generic-modal-yes">Sí, confirmar</button>`;
+  document.getElementById('generic-modal').classList.add('active');
+  document.getElementById('generic-modal-yes').onclick = ()=>{ closeGenericModal(); onYes(); };
+}
+
+/* ============ ESTADO ============ */
+const HISTORY_KEY = 'trivia_history_v1';
+const STATE_KEY = 'trivia_state_v1';
+let state = null;
+let timerInterval = null;
+let selectedTimeValue = null;
+let audienceUsedThisQuestion = false;
+
+function freshState(){
+  return {
+    mode:null, baseTime:null, players:[], usedIds:[], currentPlayerIndex:0,
+    currentQ:null, questionsThisTurn:0, maxPerTurn:10, phase:'mode',
+    tiebreak:null, timeLeft:0, timerRunning:false, answered:false,
+    playerOrderNames:[]
+  };
+}
+function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
+function loadState(){
+  const raw = localStorage.getItem(STATE_KEY);
+  if(raw){ try{ state = JSON.parse(raw); return true; }catch(e){} }
+  return false;
+}
+function getHistory(){
+  try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; }
+}
+function addToHistory(entry){
+  const h = getHistory(); h.unshift(entry);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0,50)));
+}
+
+if(!loadState()){ state = freshState(); }
+
+/* ============ NAVEGACIÓN ============ */
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  state.phase = id;
+  if(id==='screen-players'){ renderPlayersList(); }
+  saveState();
+}
+
+/* ============ MODO ============ */
+function selectMode(m){
+  state = freshState();
+  state.mode = m;
+  saveState();
+  goTo('screen-time');
+}
+
+/* ============ TIEMPO ============ */
+function selectTime(t, el){
+  selectedTimeValue = t;
+  document.querySelectorAll('.time-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('time-next').disabled = false;
+  document.getElementById('custom-time').value='';
+  document.getElementById('custom-num').textContent='—';
+}
+function selectCustomTime(v){
+  const n = parseInt(v,10);
+  document.querySelectorAll('.time-opt').forEach(o=>o.classList.remove('selected'));
+  if(n && n>=5){
+    selectedTimeValue = n;
+    document.getElementById('custom-num').textContent = n;
+    document.getElementById('time-custom-box').classList.add('selected');
+    document.getElementById('time-next').disabled = false;
+  } else {
+    document.getElementById('time-next').disabled = true;
+  }
+}
+document.getElementById('time-next').addEventListener('click', ()=>{
+  state.baseTime = selectedTimeValue;
+  saveState();
+});
+
+/* ============ JUGADORES ============ */
+function renderPlayersList(){
+  const list = document.getElementById('players-list');
+  list.innerHTML='';
+  const count = Math.max(state.players.length,2);
+  if(state.players.length===0){ state.players=[{name:''},{name:''}]; }
+  state.players.forEach((p,i)=>{
+    const row = document.createElement('div');
+    row.className='player-row';
+    row.innerHTML = `<div class="avatar">${i+1}</div>
+      <input type="text" placeholder="Nombre del jugador ${i+1}" value="${p.name||''}" oninput="state.players[${i}].name=this.value">
+      ${state.players.length>1 ? `<span class="remove-x" onclick="removePlayer(${i})">×</span>` : ''}`;
+    list.appendChild(row);
+  });
+  document.getElementById('add-player-btn').style.display = state.players.length>=4 ? 'none':'inline-block';
+}
+function addPlayerRow(){
+  if(state.players.length<4){ state.players.push({name:''}); renderPlayersList(); }
+}
+function removePlayer(i){ state.players.splice(i,1); renderPlayersList(); }
+
+function tryStartFromPlayers(){
+  const names = state.players.map(p=>(p.name||'').trim()).filter(n=>n.length>0);
+  if(names.length<1){ showAlert('Ingresá al menos el nombre de un jugador.'); return; }
+  state.players = names.map(n=>({
+    name:n, score:0, retired:false, finished:false,
+    jokers:{fifty:false, audience:false, extend:false}
+  }));
+  state.currentPlayerIndex = 0;
+  saveState();
+  setupRulesScreen(false);
+  goTo('screen-rules');
+}
+
+/* ============ REGLAS ============ */
+function setupRulesScreen(isReturning){
+  document.getElementById('rules-order-list').textContent = state.players.map(p=>p.name).join(' → ');
+  const cont = document.getElementById('rules-continue-btn');
+  const backBtn = document.getElementById('rules-back-btn');
+  if(isReturning){
+    const nextP = state.players[state.currentPlayerIndex];
+    document.getElementById('rules-title').textContent = 'Reglas del juego';
+    document.getElementById('rules-sub').textContent = `Turno de: ${nextP.name}. Que el presentador vuelva a leer las reglas en voz alta.`;
+    cont.textContent = `Comenzar turno de ${nextP.name} →`;
+    backBtn.style.display='none';
+  } else {
+    document.getElementById('rules-title').textContent = 'Reglas del juego';
+    document.getElementById('rules-sub').textContent = 'Que el presentador lea esto en voz alta antes de arrancar.';
+    cont.textContent = `Comenzar turno de ${state.players[0].name} →`;
+    backBtn.style.display='inline-block';
+  }
+  cont.onclick = beginPlayerTurn;
+}
+
+/* ============ PREGUNTAS / POOL ============ */
+function pool(){ return state.mode==='tj' ? QUESTIONS_TJ : QUESTIONS_GK; }
+function pickRandomQuestion(excludeIds){
+  const p = pool();
+  const available = p.map((q,idx)=>idx).filter(idx=>!excludeIds.includes(idx));
+  if(available.length===0) return null;
+  const pick = available[Math.floor(Math.random()*available.length)];
+  return {id:pick, ...p[pick]};
+}
+
+/* ============ TURNO DE JUGADOR ============ */
+function beginPlayerTurn(){
+  state.questionsThisTurn = 0;
+  saveState();
+  goTo('screen-game');
+  loadNextQuestion();
+}
+function currentPlayer(){ return state.players[state.currentPlayerIndex]; }
+
+function renderScoreboard(){
+  const sb = document.getElementById('scoreboard');
+  sb.innerHTML = state.players.map((p,i)=>`
+    <div class="score-chip ${i===state.currentPlayerIndex?'current':''}">
+      ${p.name}${p.retired?' <span class="badge">retirado</span>':''}
+      <b>${p.score}</b>
+    </div>`).join('');
+}
+
+function loadNextQuestion(){
+  clearInterval(timerInterval);
+  audienceUsedThisQuestion = false;
+  document.getElementById('audience-box').style.display='none';
+  document.getElementById('audience-box').innerHTML='';
+  const q = pickRandomQuestion(state.usedIds);
+  if(!q){ endTurn('sin_preguntas'); return; }
+  state.currentQ = q;
+  state.usedIds.push(q.id);
+  state.answered = false;
+  state.timeLeft = state.baseTime;
+  state.timerRunning = false;
+  saveState();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  renderScoreboard();
+  document.getElementById('turn-label').textContent = `Turno de ${currentPlayer().name}`;
+  document.getElementById('q-number').textContent = `P${state.questionsThisTurn+1}`;
+  document.getElementById('q-text').textContent = state.currentQ.q;
+  document.getElementById('timer-display').textContent = state.timeLeft;
+  document.getElementById('timer-display').classList.remove('low');
+  document.getElementById('start-timer-btn').disabled = false;
+  document.getElementById('start-timer-btn').textContent = '▶ Iniciar tiempo';
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('game-status').textContent='';
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML='';
+  const letters=['A','B','C','D'];
+  state.currentQ.o.forEach((opt,i)=>{
+    const div = document.createElement('div');
+    div.className='opt';
+    div.id = 'opt-'+i;
+    div.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+    div.onclick = ()=>selectAnswer(i);
+    grid.appendChild(div);
+  });
+
+  renderJokers();
+}
+
+function renderJokers(){
+  const p = currentPlayer();
+  const box = document.getElementById('jokers-box');
+  box.innerHTML = `
+    <div class="joker ${p.jokers.fifty?'used':''}" onclick="useFifty()">
+      <div class="jtitle">50/50</div><div class="jdesc">Elimina 2 opciones incorrectas</div>
+    </div>
+    <div class="joker ${p.jokers.audience?'used':''}" onclick="useAudience()">
+      <div class="jtitle">🗳️ Preguntar al público</div><div class="jdesc">Detiene el tiempo y muestra una encuesta</div>
+    </div>
+    <div class="joker ${p.jokers.extend?'used':''}" onclick="useExtend()">
+      <div class="jtitle">⏱️ Extender tiempo</div><div class="jdesc">Suma tiempo extra si queda poco</div>
+    </div>`;
+}
+
+/* ============ CRONÓMETRO ============ */
+function startTimer(){
+  if(state.timerRunning || state.answered) return;
+  state.timerRunning = true;
+  document.getElementById('start-timer-btn').disabled = true;
+  document.getElementById('start-timer-btn').textContent = 'Corriendo...';
+  saveState();
+  timerInterval = setInterval(()=>{
+    state.timeLeft--;
+    const td = document.getElementById('timer-display');
+    td.textContent = Math.max(state.timeLeft,0);
+    if(state.timeLeft<=5) td.classList.add('low'); else td.classList.remove('low');
+    if(state.timeLeft<=0){
+      clearInterval(timerInterval);
+      state.timerRunning=false;
+      timeUp();
+    }
+    saveState();
+  },1000);
+}
+function pauseTimer(){ clearInterval(timerInterval); state.timerRunning=false; saveState(); }
+
+function timeUp(){
+  if(state.answered) return;
+  document.getElementById('game-status').textContent = '⏰ Se acabó el tiempo — respuesta incorrecta.';
+  revealAnswer(-1);
+}
+
+/* ============ RESPONDER ============ */
+function selectAnswer(i){
+  if(state.answered) return;
+  pauseTimer();
+  const correct = state.currentQ.c;
+  if(i===correct){
+    currentPlayer().score += 10;
+    document.getElementById('game-status').textContent = '✅ ¡Correcto! +10 puntos.';
+  } else {
+    document.getElementById('game-status').textContent = '❌ Incorrecto.';
+  }
+  revealAnswer(i);
+}
+function revealAnswer(chosen){
+  state.answered = true;
+  saveState();
+  const correct = state.currentQ.c;
+  document.querySelectorAll('.opt').forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(i===correct) el.classList.add('correct');
+    if(i===chosen && chosen!==correct) el.classList.add('wrong');
+  });
+  document.getElementById('start-timer-btn').disabled = true;
+  document.getElementById('next-btn').style.display='inline-block';
+  renderScoreboard();
+}
+
+/* ============ COMODINES ============ */
+function useFifty(){
+  const p = currentPlayer();
+  if(p.jokers.fifty || state.answered) return;
+  p.jokers.fifty = true;
+  const correct = state.currentQ.c;
+  const wrongIdx = [0,1,2,3].filter(i=>i!==correct);
+  wrongIdx.sort(()=>Math.random()-0.5);
+  const toEliminate = wrongIdx.slice(0,2);
+  toEliminate.forEach(i=>{
+    document.getElementById('opt-'+i).classList.add('eliminated');
+  });
+  renderJokers();
+  saveState();
+}
+function useAudience(){
+  const p = currentPlayer();
+  if(p.jokers.audience || state.answered) return;
+  p.jokers.audience = true;
+  pauseTimer();
+  const correct = state.currentQ.c;
+  const results = [0,0,0,0];
+  let remaining = 100;
+  const correctShare = 45 + Math.floor(Math.random()*30); // 45-74%
+  results[correct] = correctShare;
+  remaining -= correctShare;
+  const others = [0,1,2,3].filter(i=>i!==correct);
+  others.forEach((idx,k)=>{
+    if(k===others.length-1){ results[idx]=remaining; }
+    else{
+      const share = Math.floor(Math.random()*remaining*0.6);
+      results[idx]=share; remaining-=share;
+    }
+  });
+  const letters=['A','B','C','D'];
+  const box = document.getElementById('audience-box');
+  box.style.display='flex';
+  box.innerHTML = results.map((v,i)=>`
+    <div class="abar-row">
+      <span style="width:16px;">${letters[i]}</span>
+      <div class="abar-track"><div class="abar-fill" style="width:${v}%"></div></div>
+      <span style="width:36px;text-align:right;">${v}%</span>
+    </div>`).join('');
+  document.getElementById('game-status').textContent = '🗳️ El público votó — el cronómetro está detenido. Tocá "Iniciar tiempo" para seguir.';
+  document.getElementById('start-timer-btn').disabled = false;
+  document.getElementById('start-timer-btn').textContent = '▶ Reanudar tiempo';
+  renderJokers();
+  saveState();
+}
+function useExtend(){
+  const p = currentPlayer();
+  if(p.jokers.extend || state.answered) return;
+  const base = state.baseTime;
+  const threshold = base/2;
+  if(state.timeLeft > threshold){
+    showAlert(`Este comodín solo se puede usar cuando queden ${threshold} segundos o menos.`);
+    return;
+  }
+  p.jokers.extend = true;
+  state.timeLeft += base;
+  document.getElementById('timer-display').textContent = state.timeLeft;
+  document.getElementById('game-status').textContent = `⏱️ ¡Tiempo extendido! Se sumaron ${base} segundos.`;
+  renderJokers();
+  saveState();
+}
+
+/* ============ SIGUIENTE PREGUNTA / FIN DE TURNO ============ */
+function nextQuestion(){
+  state.questionsThisTurn++;
+  if(currentPlayer().retired){ return; }
+  if(state.questionsThisTurn >= state.maxPerTurn){ endTurn('completo'); return; }
+  saveState();
+  loadNextQuestion();
+}
+
+function confirmRetire(){
+  if(state.tiebreak){ return; } // no retiro en desempate
+  showConfirm(
+    `¿${currentPlayer().name} quiere retirarse de su partida? Conserva ${currentPlayer().score} puntos.`,
+    ()=>{ currentPlayer().retired = true; endTurn('retiro'); },
+    'Retirarse de la partida'
+  );
+}
+
+function endTurn(reason){
+  pauseTimer();
+  currentPlayer().finished = true;
+  saveState();
+  const title = document.getElementById('turnend-title');
+  const sub = document.getElementById('turnend-sub');
+  if(reason==='retiro') { title.textContent = `${currentPlayer().name} se retiró`; sub.textContent='Conserva los puntos acumulados.'; }
+  else if(reason==='sin_preguntas'){ title.textContent = `¡Se acabaron las preguntas del banco!`; sub.textContent = `Turno de ${currentPlayer().name} finalizado.`; }
+  else { title.textContent = `¡Turno de ${currentPlayer().name} terminado!`; sub.textContent = `Respondió ${state.questionsThisTurn} preguntas.`; }
+  document.getElementById('turnend-score').textContent = currentPlayer().score;
+
+  const btn = document.getElementById('turnend-continue');
+  const hasNext = state.players.some(p=>!p.finished);
+  if(hasNext){
+    btn.textContent = 'Ver reglas y continuar →';
+    btn.onclick = ()=>{
+      state.currentPlayerIndex = state.players.findIndex(p=>!p.finished);
+      saveState();
+      setupRulesScreen(true);
+      goTo('screen-rules');
+    };
+  } else {
+    btn.textContent = 'Ver resultado final →';
+    btn.onclick = ()=>{ goToFinal(); };
+  }
+  goTo('screen-turnend');
+}
+
+/* ============ FINAL / EMPATE ============ */
+function goToFinal(){
+  const maxScore = Math.max(...state.players.map(p=>p.score));
+  const tied = state.players.filter(p=>p.score===maxScore);
+  if(tied.length>1){
+    state.tiebreak = { names: tied.map(t=>t.name), round:1 };
+    saveState();
+    document.getElementById('tiebreak-who').textContent = `Empatados con ${maxScore} puntos: ${tied.map(t=>t.name).join(', ')}.`;
+    goTo('screen-tiebreak-intro');
+  } else {
+    finishGame();
+  }
+}
+
+let tiebreakResults = [];
+function startTiebreakRound(){
+  tiebreakResults = [];
+  goTo('screen-game');
+  runTiebreakQuestionForIndex(0);
+}
+function runTiebreakQuestionForIndex(i){
+  const names = state.tiebreak.names;
+  if(i>=names.length){
+    evaluateTiebreak();
+    return;
+  }
+  const playerObj = state.players.find(p=>p.name===names[i]);
+  const q = pickRandomQuestion(state.usedIds);
+  if(!q){ evaluateTiebreak(); return; }
+  state.usedIds.push(q.id);
+  state.currentQ = q;
+  state.answered=false;
+  state.timeLeft=15;
+  state.timerRunning=false;
+  saveState();
+
+  document.getElementById('turn-label').textContent = `⚖️ Desempate — turno de ${playerObj.name}`;
+  document.getElementById('q-number').textContent = `DESEMPATE`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('timer-display').textContent = 15;
+  document.getElementById('timer-display').classList.remove('low');
+  document.getElementById('start-timer-btn').disabled=false;
+  document.getElementById('start-timer-btn').textContent='▶ Iniciar tiempo';
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('game-status').textContent='';
+  document.getElementById('jokers-box').innerHTML = '<span class="muted">Sin comodines durante el desempate.</span>';
+  document.getElementById('audience-box').style.display='none';
+  renderScoreboard();
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.o.forEach((opt,idx)=>{
+    const div = document.createElement('div');
+    div.className='opt'; div.id='opt-'+idx;
+    div.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt}</span>`;
+    div.onclick = ()=>{
+      if(state.answered) return;
+      pauseTimer();
+      state.answered=true;
+      const correctIdx = q.c;
+      document.querySelectorAll('.opt').forEach((el,k)=>{
+        el.classList.add('disabled');
+        if(k===correctIdx) el.classList.add('correct');
+        if(k===idx && idx!==correctIdx) el.classList.add('wrong');
+      });
+      tiebreakResults.push({name:playerObj.name, correct: idx===correctIdx, timeLeft: state.timeLeft});
+      document.getElementById('next-btn').style.display='inline-block';
+      document.getElementById('next-btn').textContent = (i+1<names.length) ? `Siguiente: ${names[i+1]} →` : 'Ver resultado del desempate →';
+      document.getElementById('next-btn').onclick = ()=> runTiebreakQuestionForIndex(i+1);
+      saveState();
+    };
+    grid.appendChild(div);
+  });
+  timerInterval && clearInterval(timerInterval);
+  const startBtn = document.getElementById('start-timer-btn');
+  startBtn.onclick = ()=>{
+    if(state.timerRunning || state.answered) return;
+    state.timerRunning=true;
+    startBtn.disabled=true; startBtn.textContent='Corriendo...';
+    timerInterval = setInterval(()=>{
+      state.timeLeft--;
+      document.getElementById('timer-display').textContent = Math.max(state.timeLeft,0);
+      if(state.timeLeft<=5) document.getElementById('timer-display').classList.add('low');
+      if(state.timeLeft<=0){
+        clearInterval(timerInterval); state.timerRunning=false;
+        if(!state.answered){
+          state.answered=true;
+          const correctIdx = q.c;
+          document.querySelectorAll('.opt').forEach((el,k)=>{
+            el.classList.add('disabled');
+            if(k===correctIdx) el.classList.add('correct');
+          });
+          tiebreakResults.push({name:playerObj.name, correct:false, timeLeft:0});
+          document.getElementById('next-btn').style.display='inline-block';
+          document.getElementById('next-btn').textContent = (i+1<names.length) ? `Siguiente: ${names[i+1]} →` : 'Ver resultado del desempate →';
+          document.getElementById('next-btn').onclick = ()=> runTiebreakQuestionForIndex(i+1);
+        }
+      }
+    },1000);
+  };
+}
+function evaluateTiebreak(){
+  const correctOnes = tiebreakResults.filter(r=>r.correct);
+  if(correctOnes.length===1){
+    finishGame(correctOnes[0].name);
+    return;
+  }
+  if(correctOnes.length>1){
+    correctOnes.sort((a,b)=>b.timeLeft-a.timeLeft);
+    if(correctOnes[0].timeLeft > correctOnes[1].timeLeft){
+      finishGame(correctOnes[0].name);
+      return;
+    }
+    // sigue empatado entre los más rápidos con igual tiempo -> nueva ronda solo entre ellos
+    const stillTied = correctOnes.filter(r=>r.timeLeft===correctOnes[0].timeLeft).map(r=>r.name);
+    state.tiebreak.names = stillTied;
+    document.getElementById('tiebreak-who').textContent = `Sigue el empate entre: ${stillTied.join(', ')}. Nueva pregunta de desempate.`;
+    goTo('screen-tiebreak-intro');
+    return;
+  }
+  // nadie acertó -> se repite la ronda con los mismos jugadores
+  document.getElementById('tiebreak-who').textContent = `Nadie acertó — se repite el desempate entre: ${state.tiebreak.names.join(', ')}.`;
+  goTo('screen-tiebreak-intro');
+}
+
+function finishGame(tiebreakWinnerName){
+  goTo('screen-final');
+  const sorted = [...state.players].sort((a,b)=>b.score-a.score);
+  let winner = sorted[0];
+  if(tiebreakWinnerName){
+    winner = state.players.find(p=>p.name===tiebreakWinnerName);
+  }
+  const list = document.getElementById('final-list');
+  const medals = ['🥇','🥈','🥉','🎖️'];
+  list.innerHTML = sorted.map((p,i)=>{
+    const isWinner = p.name===winner.name;
+    return `<div class="final-row ${isWinner?'winner':''}">
+      <span><span class="medal">${medals[i]||''}</span>${p.name}${isWinner?' — 🏆 Campeón/a':''}${p.retired?' <span class="badge">retirado</span>':''}</span>
+      <span class="pts">${p.score}</span>
+    </div>`;
+  }).join('');
+
+  addToHistory({
+    name: winner.name,
+    score: winner.score,
+    mode: state.mode==='tj' ? 'Testigos de Jehová' : 'Conocimiento general',
+    date: new Date().toLocaleDateString('es-AR')
+  });
+  localStorage.removeItem(STATE_KEY);
+}
+
+function newGame(){
+  state = freshState();
+  saveState();
+  goTo('screen-mode');
+}
+
+/* ============ HISTORIAL ============ */
+function openHistory(){
+  const body = document.getElementById('history-body');
+  const h = getHistory();
+  body.innerHTML = h.length ? h.map(e=>`<tr><td>${e.name}</td><td>${e.score}</td><td>${e.mode}</td><td>${e.date}</td></tr>`).join('')
+    : '<tr><td colspan="4" class="muted">Todavía no hay partidas jugadas.</td></tr>';
+  document.getElementById('history-modal').classList.add('active');
+}
+function closeHistory(){ document.getElementById('history-modal').classList.remove('active'); }
+
+/* ============ DONACIONES ============ */
+function openDonate(){ document.getElementById('donate-modal').classList.add('active'); }
+function closeDonate(){ document.getElementById('donate-modal').classList.remove('active'); }
+function copyDonateAlias(){
+  const input = document.getElementById('donate-alias');
+  input.removeAttribute('readonly');
+  input.select();
+  input.setSelectionRange(0,99999);
+  try{
+    document.execCommand('copy');
+  }catch(e){
+    if(navigator.clipboard) navigator.clipboard.writeText(input.value);
+  }
+  input.setAttribute('readonly','readonly');
+}
+
+/* ============ RESTAURAR PANTALLA AL CARGAR ============ */
+window.addEventListener('load', ()=>{
+  renderPlayersList();
+  if(state.phase && state.phase!=='mode' && state.players && state.players.length){
+    if(state.phase==='screen-game' && state.currentQ){
+      goTo('screen-game');
+      renderQuestion();
+    } else if(document.getElementById(state.phase)){
+      if(state.phase==='screen-players') renderPlayersList();
+      goTo(state.phase);
+    } else {
+      goTo('screen-mode');
+    }
+  } else {
+    goTo('screen-mode');
+  }
+});
+</script>
+</body>
+</html>
