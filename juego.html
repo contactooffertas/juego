@@ -1,1255 +1,1665 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noche de Trivia — Juego para pasarla bien</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap');
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f2eb"><title>Noche de Trivia · Una buena pregunta nos reúne</title><style>
+:root{--bg:#f5f2eb;--paper:#fffcf5;--ink:#25243b;--muted:#686779;--line:#d9d6cf;--accent:#5b45ce;--soft:#ebe6fb;--citrus:#e7ed99;--good:#146d50;--bad:#a63339;--shadow:0 14px 44px #25243b09;color-scheme:light}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Segoe UI',Arial,sans-serif}body.dark{--bg:#191a23;--paper:#232531;--ink:#f3f0e7;--muted:#b3b2c2;--line:#414250;--accent:#c0b3ff;--soft:#343044;--citrus:#dce6a0;--good:#8ee6c2;--bad:#ffb0b0;color-scheme:dark}button,input,select{font:inherit}button,a,input,select{ -webkit-tap-highlight-color:transparent}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.42;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}button{color:inherit}h1,h2,h3,p{margin:0}h1,h2,.serif{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.04em;line-height:1.12}h1{font-size:clamp(44px,6vw,76px)}h2{font-size:clamp(28px,4vw,42px)}h3{font-size:19px;line-height:1.4}a{color:var(--accent);text-underline-offset:4px}small,.muted{color:var(--muted)}.eyebrow{text-transform:uppercase;font-size:11px;font-weight:750;letter-spacing:.15em;color:var(--muted)}.appbar{max-width:1224px;margin:auto;padding:24px 36px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:16px}.wordmark{border:0;background:none;display:flex;align-items:center;gap:12px;text-align:left;font-size:17px;line-height:1.25;padding:0}.wordmark small{display:block;font-size:8px;letter-spacing:.14em;margin-top:5px}.logo{width:42px;height:42px;display:grid;place-content:center;background:var(--accent);color:var(--bg);font:italic 31px Georgia;border-radius:12px 12px 12px 2px;position:relative;padding-right:6px}.logo span{position:absolute;font:italic 20px Georgia;right:6px;bottom:5px}.appbar nav{display:flex;gap:10px;align-items:center}.quiet{border:0;background:transparent;padding:9px 8px;font-size:13px;min-height:44px}.quiet:hover{color:var(--accent)}.theme{background:var(--paper);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:23px;flex-shrink:0}main{max-width:1152px;margin:0 auto;padding:38px 0 65px;min-height:75vh}.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:60px;align-items:center;margin:14px 0 42px}.hero h1{margin:15px 0 20px}.hero h1 em{font-weight:400;color:var(--accent)}.hero p{max-width:440px;color:var(--muted);font-size:17px;line-height:1.7}.hero-art{height:290px;position:relative;display:grid;place-items:center;background:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--line) 28px,transparent 29px);border-radius:50%;max-width:380px;justify-self:center;width:100%}.orbit{position:absolute;inset:15px;border:1px solid var(--line);border-radius:50%;transform:rotate(-25deg)}.art-book{transform:rotate(-8deg);background:var(--accent);color:var(--bg);width:160px;height:206px;border-radius:8px 20px 20px 8px;box-shadow:8px 8px 0 var(--paper),9px 9px 0 var(--line);padding:21px;display:flex;flex-direction:column;justify-content:space-between}.art-book b{font:92px/1 Georgia}.art-book span{font-size:9px;letter-spacing:.18em}.art-pill{position:absolute;padding:11px 18px;background:var(--citrus);color:#333b24;border:1px solid #b7be75;box-shadow:var(--shadow);font-weight:650;font-size:13px;transform:rotate(8deg);right:-5px;bottom:36px}.art-star{position:absolute;left:22px;top:40px;color:var(--accent);font-size:62px;line-height:1}.homegrid{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow);min-width:0}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}.panel-title h2{font-size:29px}.step{border-top:1px solid var(--line);padding-top:21px;margin-top:23px}.step>label,.step-label{display:block;font-size:13px;font-weight:700;margin-bottom:13px}.step-label span{display:inline-grid;place-items:center;background:var(--soft);color:var(--accent);width:23px;height:23px;border-radius:50%;margin-right:9px;font-size:11px}.segmented{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modepick{border:1px solid var(--line);background:var(--bg);padding:18px;text-align:left;border-radius:10px;min-width:0;position:relative}.modepick.active{border:2px solid var(--accent);background:var(--soft);padding:17px}.modepick strong{display:block;font-size:17px;margin:8px 0 4px}.modepick small{display:block;font-size:12px;line-height:1.6}.mode-icon{font-size:24px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;font-size:12px;font-weight:650;gap:7px;min-width:0}input,select{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--bg);color:var(--ink);width:100%;min-width:0;font-size:16px;min-height:47px}select{cursor:pointer}.players{display:grid;grid-template-columns:1fr 1fr;gap:10px}.playerfield{display:flex;align-items:center;gap:9px}.avatar{background:var(--soft);color:var(--accent);border-radius:50%;width:29px;height:29px;flex-shrink:0;display:grid;place-items:center;font-size:12px;font-weight:700}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--accent);border-radius:9px;padding:13px 22px;background:var(--accent);color:var(--bg);font-weight:650;min-height:49px;text-decoration:none}.btn:hover:not(:disabled){filter:brightness(.94)}.btn.secondary{background:transparent;color:var(--ink);border-color:var(--line)}.btn.small{font-size:13px;padding:9px 14px;min-height:42px}.full{width:100%}.start{margin-top:25px}.fine{font-size:12px;line-height:1.7;color:var(--muted);margin-top:11px}.aside-note{background:var(--citrus);color:#333b24;border:1px solid #b7be75;border-radius:16px;padding:27px;position:relative}.aside-note .eyebrow{color:#566134}.aside-note h2{font-size:32px;margin:17px 0}.aside-note p{font-size:14px;line-height:1.8}.aside-note a{color:#333b24}.stats{display:grid;grid-template-columns:1fr 1fr;margin-top:24px;border-top:1px solid #b5bc7c;padding-top:20px;gap:12px}.stats b{font:36px Georgia;display:block}.stats small{color:#566134;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.aside-link{display:flex;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;width:100%;border-top:0;border-left:0;border-right:0;background:none;text-align:left}.resume{background:var(--soft);border:1px solid var(--accent);padding:16px 20px;border-radius:10px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:14px}.game{max-width:900px;margin:auto}.gamehead{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:21px}.gamehead h1{font-size:29px;margin-top:6px}.scoreboard{display:flex;gap:9px;overflow:auto;padding:4px 0 14px;scrollbar-width:thin}.score{border:1px solid var(--line);border-radius:9px;padding:10px 14px;min-width:125px;flex:1;background:var(--paper);font-size:13px}.score.active{border-color:var(--accent);background:var(--soft)}.score b{font-size:21px;display:block}.score span{display:block;max-width:180px;overflow-wrap:anywhere}.gamepanel{padding:30px 34px}.questionmeta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}.badge{border:1px solid var(--line);border-radius:25px;padding:5px 10px;font-size:11px;color:var(--muted)}.clock{font-size:24px;font-variant-numeric:tabular-nums;font-weight:750;color:var(--accent)}.clock.low{color:var(--bad)}.question{font:400 clamp(25px,3.6vw,35px)/1.3 Georgia;letter-spacing:-.025em;min-height:85px;margin:19px 0 26px}.progress{height:4px;background:var(--line);border-radius:4px;overflow:hidden}.progress div{height:100%;background:var(--accent)}.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.option{display:flex;align-items:center;gap:13px;text-align:left;width:100%;padding:16px;background:var(--bg);border:1px solid var(--line);border-radius:10px;min-height:72px;line-height:1.45;font-size:16px}.option:hover:not(:disabled){border-color:var(--accent);background:var(--soft)}.letter{display:grid;place-items:center;flex-shrink:0;width:29px;height:29px;border:1px solid var(--line);border-radius:7px;font-size:12px;font-weight:750}.option.correct{background:color-mix(in srgb,var(--good) 12%,var(--paper));border:2px solid var(--good);opacity:1}.option.wrong{background:color-mix(in srgb,var(--bad) 10%,var(--paper));border:2px solid var(--bad);opacity:1}.option.eliminated{display:none}.option:disabled{opacity:.65}.answerbox{margin-top:23px;padding:20px;border-radius:10px;border:1px solid var(--line);background:var(--bg)}.answerbox h3{font-size:18px;color:var(--good);margin-bottom:8px}.answerbox p{font-size:14px;line-height:1.75}.answerbox a{display:inline-block;font-size:13px;margin-top:12px;min-height:30px}.gameactions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:24px;flex-wrap:wrap}.jokers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.joker{background:var(--paper);border:1px solid var(--line);border-radius:9px;min-height:68px;text-align:left;padding:13px;font-size:14px;font-weight:650}.joker small{display:block;font-size:10px;font-weight:400;margin-top:4px}.hint{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}.pageintro{margin-bottom:28px;display:flex;justify-content:space-between;align-items:end;gap:20px}.pageintro h1{font-size:48px;margin-top:12px}.libraryfilters{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:23px}.librarylist{display:grid;grid-template-columns:1fr 1fr;gap:15px}.librarylist details{padding:22px;background:var(--paper);border:1px solid var(--line);border-radius:10px}.librarylist summary{cursor:pointer;font-weight:600;line-height:1.6;font-size:16px}.librarylist details .eyebrow{display:block;margin-bottom:8px}.librarylist details p{margin-top:15px;font-size:14px}.librarylist details a{font-size:13px;display:inline-block;margin-top:12px}.result-hero{text-align:center;padding:25px 0 32px}.result-hero .seal{display:grid;place-items:center;margin:0 auto 25px;width:83px;height:83px;background:var(--citrus);color:#333b24;border-radius:50%;font:48px Georgia}.result-hero h1{font-size:49px;margin:12px 0}.result-hero p{color:var(--muted)}.ranking{display:grid;gap:10px;margin:25px 0}.rank{display:flex;align-items:center;gap:18px;padding:17px 20px;background:var(--bg);border:1px solid var(--line);border-radius:10px}.rank .place{font:25px Georgia;color:var(--accent)}.rank .name{flex:1;overflow-wrap:anywhere}.rank b{font-size:24px}.rank small{display:block;font-size:11px}dialog{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:16px;width:min(590px,calc(100% - 28px));padding:26px;max-height:90dvh;overflow:auto;box-shadow:0 25px 100px #0004}dialog::backdrop{background:#17162599;backdrop-filter:blur(5px)}.modalhead{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}.modalhead h2{font-size:29px}#modalBody p{margin-bottom:16px;font-size:14px;line-height:1.8}.rules{padding-left:21px;font-size:14px;line-height:1.9}.rules li{margin-bottom:11px}.sitefooter{max-width:1152px;margin:auto;border-top:1px solid var(--line);padding:20px 0 28px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:15px;align-items:center}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:10px;font-size:14px;max-width:90%;z-index:100;display:none}.vote{display:grid;grid-template-columns:1fr 90px;gap:15px;align-items:center;margin-bottom:10px;font-size:14px}.empty{text-align:center;padding:30px;color:var(--muted)}.historyrow{padding:14px 0;border-bottom:1px solid var(--line)}.historyrow b{display:block}.historyrow small{display:block;margin-top:4px}.reviewrow{border-top:1px solid var(--line);padding:20px 0}.reviewrow p{font-size:14px;margin:10px 0}.reviewrow h3{font-size:16px}.checkline{display:flex;gap:9px;align-items:center;font-size:13px;margin:15px 0}.checkline input{width:20px;min-height:20px}.error{color:var(--bad);font-size:13px;margin-top:10px}.hidden{display:none!important}@media(max-width:1200px){main,.sitefooter{margin-left:30px;margin-right:30px}}@media(max-width:760px){.appbar{padding:15px 18px}.wordmark{font-size:15px}.wordmark small{font-size:7px}.logo{width:36px;height:36px}.appbar nav{gap:2px}.appbar .quiet{font-size:11px;padding:7px 5px}.theme{width:36px;height:36px}main{margin:0;padding:26px 18px 45px}.hero{grid-template-columns:1fr;gap:0;margin:7px 0 30px}.hero h1{font-size:49px;max-width:420px}.hero p{font-size:15px}.hero-art{display:none}.homegrid{grid-template-columns:1fr;gap:23px}.panel{padding:22px 18px;border-radius:14px}.panel-title h2{font-size:27px}.modepick{padding:14px}.modepick.active{padding:13px}.modepick strong{font-size:15px}.modepick small{font-size:11px}.fields{gap:10px}.players{grid-template-columns:1fr}.aside-note{padding:23px}.aside-note h2{font-size:30px}.aside-note .stats{margin-top:17px}.aside-note .stats b{font-size:30px}.sitefooter{margin:0 18px;flex-direction:column;align-items:start;gap:3px}.resume{align-items:start;flex-direction:column}.gamehead{gap:12px}.gamehead h1{font-size:25px}.gamehead .quiet{font-size:12px}.score{min-width:110px;padding:9px 12px}.score b{font-size:19px}.gamepanel{padding:21px 17px}.question{font-size:27px;min-height:0;margin:21px 0}.options{grid-template-columns:1fr;gap:10px}.option{min-height:64px;padding:13px;font-size:16px}.jokers{gap:7px;margin-top:14px}.joker{font-size:12px;padding:10px 8px;text-align:center}.joker small{font-size:9px;line-height:1.5}.gameactions{align-items:stretch}.gameactions .btn{flex:1;font-size:14px;padding:12px}.answerbox{padding:15px}.pageintro{align-items:start}.pageintro h1{font-size:37px}.libraryfilters,.librarylist{grid-template-columns:1fr}.librarylist{gap:10px}.result-hero h1{font-size:39px}.rank{padding:15px;gap:12px}.rank b{font-size:21px}.field{font-size:12px}.questionmeta .badge{font-size:10px}.clock{font-size:22px}dialog{padding:22px 18px}.modalhead h2{font-size:26px}}@media(prefers-reduced-motion:no-preference){main{animation:appear .25s ease}@keyframes appear{from{opacity:.4;transform:translateY(7px)}to{opacity:1;transform:none}}}@media print{.appbar,.sitefooter,.btn,.jokers,.gameactions{display:none}body{background:white;color:black}main{padding:0}.panel{border:0;box-shadow:none}}
 
-  :root{
-    --navy-950:#070b1a;
-    --navy-900:#0c1230;
-    --navy-800:#141c40;
-    --navy-700:#1c2654;
-    --gold-500:#e2b13c;
-    --gold-400:#f0c65b;
-    --gold-300:#f6dd97;
-    --ember:#d9552c;
-    --green:#2e9e5b;
-    --green-bright:#37c26f;
-    --red:#c0392b;
-    --ink-100:#f4f2ea;
-    --ink-300:#c9cede;
-    --ink-500:#8b93b8;
-    --radius:14px;
-    --serif: 'Fraunces', serif;
-    --sans: 'Inter', system-ui, sans-serif;
+main:focus{outline:none}
+</style></head><body>
+<header class="appbar"><button class="wordmark" onclick="home()" aria-label="Noche de Trivia, inicio"><span class="logo">n<span>t</span></span><span>Noche de <b>Trivia</b><small>PREGUNTAS QUE NOS REÚNEN</small></span></button><nav><button class="quiet" onclick="showLibrary()">Biblioteca</button><button class="quiet" onclick="showHistory()">Historial</button><button class="theme" onclick="toggleTheme()" aria-label="Cambiar tema">◐</button></nav></header>
+<main id="main" tabindex="-1"></main><footer class="sitefooter"><span>Hecho para compartir, aprender y volver a intentar.</span><button class="quiet" onclick="support()">Apoyar el proyecto ↗</button></footer>
+<dialog id="modal"><div class="modalhead"><h2 id="modalTitle"></h2><button class="theme" onclick="closeModal()" aria-label="Cerrar ventana">×</button></div><div id="modalBody"></div></dialog><div id="toast" role="status"></div>
+<script>const BIBLE=[
+  {
+    "id": "b1",
+    "q": "¿Qué nombre recibió Daniel en Babilonia?",
+    "o": [
+      "Beltsasar",
+      "Belsasar",
+      "Sadrac",
+      "Mesac"
+    ],
+    "c": 0,
+    "ref": "Daniel 1:7",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/1/",
+    "ex": "Daniel recibió el nombre Beltsasar; Belsasar es otro nombre.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b2",
+    "q": "¿Qué nombre recibió Azarías?",
+    "o": [
+      "Abednego",
+      "Mesac",
+      "Sadrac",
+      "Beltsasar"
+    ],
+    "c": 0,
+    "ref": "Daniel 1:7",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/1/",
+    "ex": "El cambio de nombres identifica a Azarías como Abednego.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b3",
+    "q": "¿Durante cuántos días pidió Daniel probar una alimentación diferente?",
+    "o": [
+      "10",
+      "3",
+      "7",
+      "40"
+    ],
+    "c": 0,
+    "ref": "Daniel 1:12",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/1/",
+    "ex": "Daniel propuso una prueba de diez días.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b4",
+    "q": "¿Qué pidieron comer y beber durante la prueba?",
+    "o": [
+      "Legumbres y agua",
+      "Carne y vino",
+      "Pan y leche",
+      "Pescado y aceite"
+    ],
+    "c": 0,
+    "ref": "Daniel 1:12",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/1/",
+    "ex": "Esa fue la alternativa solicitada al guardián.",
+    "topic": "Relatos de Daniel",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b5",
+    "q": "¿A cuál de los cuatro jóvenes se atribuye entender visiones y sueños?",
+    "o": [
+      "Daniel",
+      "Hananías",
+      "Misael",
+      "Azarías"
+    ],
+    "c": 0,
+    "ref": "Daniel 1:17",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/1/",
+    "ex": "El relato destaca esa capacidad de Daniel.",
+    "topic": "Relatos de Daniel",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b6",
+    "q": "¿Qué rey mandó levantar la estatua de oro?",
+    "o": [
+      "Nabucodonosor",
+      "Darío",
+      "Ciro",
+      "Saúl"
+    ],
+    "c": 0,
+    "ref": "Daniel 3:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/3/",
+    "ex": "Nabucodonosor ordenó levantar la estatua.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b7",
+    "q": "¿En qué llanura colocaron la estatua?",
+    "o": [
+      "Dura",
+      "Sinar",
+      "Meguidó",
+      "Jericó"
+    ],
+    "c": 0,
+    "ref": "Daniel 3:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/3/",
+    "ex": "La ubicación indicada es la llanura de Dura.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b8",
+    "q": "¿Qué debían hacer las personas cuando sonaran los instrumentos?",
+    "o": [
+      "Adorar la estatua",
+      "Salir de Babilonia",
+      "Encender lámparas",
+      "Guardar silencio"
+    ],
+    "c": 0,
+    "ref": "Daniel 3:5",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/3/",
+    "ex": "La orden exigía adorar la estatua al oír la música.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b9",
+    "q": "¿Qué castigo anunciaron para quien no adorara la estatua?",
+    "o": [
+      "Un horno de fuego",
+      "El destierro",
+      "La prisión",
+      "El foso de leones"
+    ],
+    "c": 0,
+    "ref": "Daniel 3:6",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/3/",
+    "ex": "El castigo anunciado era un horno de fuego.",
+    "topic": "Relatos de Daniel",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b10",
+    "q": "¿De qué material era la estatua mencionada al inicio del capítulo?",
+    "o": [
+      "Oro",
+      "Plata",
+      "Bronce",
+      "Hierro"
+    ],
+    "c": 0,
+    "ref": "Daniel 3:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/3/",
+    "ex": "El relato la presenta como una estatua de oro.",
+    "topic": "Relatos de Daniel",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b11",
+    "q": "¿Qué rey firmó la prohibición de hacer peticiones a otros?",
+    "o": [
+      "Darío",
+      "Nabucodonosor",
+      "Herodes",
+      "Ciro"
+    ],
+    "c": 0,
+    "ref": "Daniel 6:9",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/6/",
+    "ex": "Darío firmó el decreto.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b12",
+    "q": "¿Cuántos sátrapas nombró Darío?",
+    "o": [
+      "120",
+      "12",
+      "70",
+      "100"
+    ],
+    "c": 0,
+    "ref": "Daniel 6:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/6/",
+    "ex": "El capítulo comienza con el nombramiento de 120 sátrapas.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b13",
+    "q": "¿Cuántos altos funcionarios estaban por encima de los sátrapas?",
+    "o": [
+      "3",
+      "2",
+      "7",
+      "12"
+    ],
+    "c": 0,
+    "ref": "Daniel 6:2",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/6/",
+    "ex": "Daniel era uno de los tres altos funcionarios.",
+    "topic": "Relatos de Daniel",
+    "level": "Inicial"
+  },
+  {
+    "id": "b14",
+    "q": "¿Durante cuántos días debía mantenerse la prohibición?",
+    "o": [
+      "30",
+      "7",
+      "10",
+      "40"
+    ],
+    "c": 0,
+    "ref": "Daniel 6:7",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/6/",
+    "ex": "La propuesta establecía un periodo de treinta días.",
+    "topic": "Relatos de Daniel",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b15",
+    "q": "¿Qué castigo establecía aquel decreto?",
+    "o": [
+      "El foso de los leones",
+      "Un horno de fuego",
+      "El destierro",
+      "La esclavitud"
+    ],
+    "c": 0,
+    "ref": "Daniel 6:7",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/daniel/6/",
+    "ex": "El decreto amenazaba con arrojar al infractor al foso.",
+    "topic": "Relatos de Daniel",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b16",
+    "q": "¿En qué localidad nació Jesús, según Mateo?",
+    "o": [
+      "Belén de Judea",
+      "Nazaret",
+      "Capernaúm",
+      "Jericó"
+    ],
+    "c": 0,
+    "ref": "Mateo 2:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/2/",
+    "ex": "Mateo especifica Belén de Judea.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b17",
+    "q": "¿Qué rey gobernaba cuando llegaron los astrólogos?",
+    "o": [
+      "Herodes",
+      "Darío",
+      "Ciro",
+      "Salomón"
+    ],
+    "c": 0,
+    "ref": "Mateo 2:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/2/",
+    "ex": "El relato sitúa el nacimiento en tiempos de Herodes.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b18",
+    "q": "¿A qué ciudad llegaron primero los astrólogos en este relato?",
+    "o": [
+      "Jerusalén",
+      "Belén",
+      "Nazaret",
+      "Caná"
+    ],
+    "c": 0,
+    "ref": "Mateo 2:1-2",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/2/",
+    "ex": "Primero llegaron a Jerusalén y preguntaron por el niño.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b19",
+    "q": "¿De qué región venían los astrólogos?",
+    "o": [
+      "Oriente",
+      "Galilea",
+      "Samaria",
+      "Egipto"
+    ],
+    "c": 0,
+    "ref": "Mateo 2:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/2/",
+    "ex": "Mateo indica que venían de Oriente.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b20",
+    "q": "¿A quiénes consultó Herodes sobre el lugar de nacimiento del Cristo?",
+    "o": [
+      "Sacerdotes principales y escribas",
+      "Pescadores de Galilea",
+      "Soldados romanos",
+      "Pastores de Belén"
+    ],
+    "c": 0,
+    "ref": "Mateo 2:4",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/2/",
+    "ex": "Herodes reunió a los sacerdotes principales y los escribas.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b21",
+    "q": "¿Quién predicaba en el desierto de Judea al inicio de Mateo 3?",
+    "o": [
+      "Juan el Bautista",
+      "Pedro",
+      "Pablo",
+      "Esteban"
+    ],
+    "c": 0,
+    "ref": "Mateo 3:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/3/",
+    "ex": "El capítulo presenta la predicación de Juan el Bautista.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b22",
+    "q": "¿En qué río bautizaba Juan?",
+    "o": [
+      "Jordán",
+      "Nilo",
+      "Éufrates",
+      "Tigris"
+    ],
+    "c": 0,
+    "ref": "Mateo 3:6",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/3/",
+    "ex": "El lugar de bautismo señalado es el río Jordán.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b23",
+    "q": "¿De qué estaba hecha la ropa de Juan?",
+    "o": [
+      "Pelo de camello",
+      "Lino fino",
+      "Lana teñida",
+      "Seda"
+    ],
+    "c": 0,
+    "ref": "Mateo 3:4",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/3/",
+    "ex": "Mateo describe ropa hecha de pelo de camello.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b24",
+    "q": "¿Qué comía Juan, según este capítulo?",
+    "o": [
+      "Langostas y miel silvestre",
+      "Pan y pescado",
+      "Higos y leche",
+      "Uvas y queso"
+    ],
+    "c": 0,
+    "ref": "Mateo 3:4",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/3/",
+    "ex": "Esa es la alimentación que menciona el relato.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b25",
+    "q": "¿Qué profeta se cita para describir la labor de Juan?",
+    "o": [
+      "Isaías",
+      "Daniel",
+      "Amós",
+      "Malaquías"
+    ],
+    "c": 0,
+    "ref": "Mateo 3:3",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/mateo/3/",
+    "ex": "Mateo relaciona la labor de Juan con una profecía de Isaías.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b26",
+    "q": "¿Dónde realizó Jesús el primer milagro que identifica Juan?",
+    "o": [
+      "Caná de Galilea",
+      "Betania",
+      "Jerusalén",
+      "Nazaret"
+    ],
+    "c": 0,
+    "ref": "Juan 2:1-11",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/2/",
+    "ex": "Juan identifica aquel suceso de Caná como el primero de sus milagros.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b27",
+    "q": "¿Qué hizo Jesús con el agua durante aquel banquete?",
+    "o": [
+      "La convirtió en vino",
+      "La hizo desaparecer",
+      "La convirtió en aceite",
+      "La congeló"
+    ],
+    "c": 0,
+    "ref": "Juan 2:7-9",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/2/",
+    "ex": "El director del banquete probó el agua transformada en vino.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b28",
+    "q": "¿Cuántas vasijas de piedra había allí?",
+    "o": [
+      "6",
+      "2",
+      "7",
+      "12"
+    ],
+    "c": 0,
+    "ref": "Juan 2:6",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/2/",
+    "ex": "El relato menciona seis vasijas de piedra.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b29",
+    "q": "¿Qué celebración se estaba realizando en Caná?",
+    "o": [
+      "Una boda",
+      "La Pascua",
+      "Un cumpleaños",
+      "Una coronación"
+    ],
+    "c": 0,
+    "ref": "Juan 2:1-2",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/2/",
+    "ex": "Jesús y sus discípulos fueron invitados a un banquete de boda.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b30",
+    "q": "¿Quién advirtió a Jesús que faltaba vino?",
+    "o": [
+      "Su madre",
+      "Pedro",
+      "El novio",
+      "Juan el Bautista"
+    ],
+    "c": 0,
+    "ref": "Juan 2:3",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/2/",
+    "ex": "La madre de Jesús le comunicó la situación.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b31",
+    "q": "¿Cómo envió Jesús a los discípulos al inicio de Lucas 10?",
+    "o": [
+      "De dos en dos",
+      "De tres en tres",
+      "En grupos de doce",
+      "A cada uno solo"
+    ],
+    "c": 0,
+    "ref": "Lucas 10:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/10/",
+    "ex": "Los envió por parejas a los lugares que visitaría.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b32",
+    "q": "¿Qué dijo Jesús que era mucha, aunque había pocos trabajadores?",
+    "o": [
+      "La cosecha",
+      "La lluvia",
+      "La riqueza",
+      "La comida"
+    ],
+    "c": 0,
+    "ref": "Lucas 10:2",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/10/",
+    "ex": "Usó la cosecha como comparación para la obra que debían realizar.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b33",
+    "q": "¿Qué debían desear primero a la casa donde entraran?",
+    "o": [
+      "Paz",
+      "Riqueza",
+      "Fama",
+      "Poder"
+    ],
+    "c": 0,
+    "ref": "Lucas 10:5",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/10/",
+    "ex": "La instrucción comenzaba con un deseo de paz.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b34",
+    "q": "¿Qué debían anunciar a los habitantes que los recibieran?",
+    "o": [
+      "Que el Reino de Dios se había acercado",
+      "Que el viaje había terminado",
+      "Que dejaran su ciudad",
+      "Que se acababa la cosecha"
+    ],
+    "c": 0,
+    "ref": "Lucas 10:8-9",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/10/",
+    "ex": "Además de curar, debían anunciar la cercanía del Reino.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b35",
+    "q": "¿Qué debían hacer respecto a cambiar de alojamiento?",
+    "o": [
+      "Evitar cambiar de casa en casa",
+      "Cambiar cada noche",
+      "Dormir fuera de la ciudad",
+      "Visitar solo palacios"
+    ],
+    "c": 0,
+    "ref": "Lucas 10:7",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/10/",
+    "ex": "Jesús indicó que permanecieran en la casa que los recibiera.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b36",
+    "q": "¿Cuántas ovejas tenía el hombre de la comparación?",
+    "o": [
+      "100",
+      "10",
+      "12",
+      "50"
+    ],
+    "c": 0,
+    "ref": "Lucas 15:4",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/15/",
+    "ex": "La comparación comienza con un rebaño de cien ovejas.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b37",
+    "q": "¿Cuántas ovejas se habían perdido en esa comparación?",
+    "o": [
+      "1",
+      "2",
+      "10",
+      "9"
+    ],
+    "c": 0,
+    "ref": "Lucas 15:4",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/15/",
+    "ex": "El pastor salió a buscar una oveja perdida.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b38",
+    "q": "¿Dónde cargó el pastor a la oveja que encontró?",
+    "o": [
+      "Sobre sus hombros",
+      "En una carreta",
+      "En una cesta",
+      "Sobre un burro"
+    ],
+    "c": 0,
+    "ref": "Lucas 15:5",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/15/",
+    "ex": "Regresó alegre cargándola sobre los hombros.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b39",
+    "q": "¿Cuántas monedas tenía la mujer antes de perder una?",
+    "o": [
+      "10",
+      "100",
+      "5",
+      "30"
+    ],
+    "c": 0,
+    "ref": "Lucas 15:8",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/15/",
+    "ex": "La mujer tenía diez monedas de dracma.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b40",
+    "q": "¿Cuántos hijos tenía el padre de la siguiente comparación?",
+    "o": [
+      "2",
+      "3",
+      "4",
+      "12"
+    ],
+    "c": 0,
+    "ref": "Lucas 15:11",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/lucas/15/",
+    "ex": "La comparación del hijo que se fue comienza con dos hijos.",
+    "topic": "Enseñanzas de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b41",
+    "q": "¿En qué aldea vivían Lázaro y sus hermanas?",
+    "o": [
+      "Betania",
+      "Belén",
+      "Caná",
+      "Jericó"
+    ],
+    "c": 0,
+    "ref": "Juan 11:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/11/",
+    "ex": "Juan identifica a Betania como su aldea.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b42",
+    "q": "¿Cómo se llamaban las hermanas de Lázaro?",
+    "o": [
+      "Marta y María",
+      "Rut y Noemí",
+      "Lea y Raquel",
+      "Débora y Jael"
+    ],
+    "c": 0,
+    "ref": "Juan 11:1-3",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/11/",
+    "ex": "Marta y María enviaron a avisar a Jesús.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b43",
+    "q": "¿Quién estaba enfermo al inicio de Juan 11?",
+    "o": [
+      "Lázaro",
+      "Pedro",
+      "Juan",
+      "Tomás"
+    ],
+    "c": 0,
+    "ref": "Juan 11:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/11/",
+    "ex": "La noticia de su enfermedad inicia el relato.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b44",
+    "q": "¿Cuánto tiempo permaneció Jesús donde estaba tras oír la noticia?",
+    "o": [
+      "2 días",
+      "7 días",
+      "Un mes",
+      "Una semana"
+    ],
+    "c": 0,
+    "ref": "Juan 11:6",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/11/",
+    "ex": "Jesús permaneció dos días más en aquel lugar.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b45",
+    "q": "¿Qué quiso decir Jesús al hablar del sueño de Lázaro?",
+    "o": [
+      "Que había muerto",
+      "Que estaba viajando",
+      "Que estaba descansando",
+      "Que ya se había curado"
+    ],
+    "c": 0,
+    "ref": "Juan 11:11-13",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/11/",
+    "ex": "Juan aclara que Jesús hablaba de la muerte de Lázaro.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b46",
+    "q": "¿Junto a qué mar se apareció Jesús en Juan 21?",
+    "o": [
+      "Tiberíades",
+      "Muerto",
+      "Rojo",
+      "Mediterráneo"
+    ],
+    "c": 0,
+    "ref": "Juan 21:1",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/21/",
+    "ex": "El capítulo sitúa la aparición junto al mar de Tiberíades.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b47",
+    "q": "¿Qué discípulo dijo que iba a pescar?",
+    "o": [
+      "Simón Pedro",
+      "Tomás",
+      "Natanael",
+      "Andrés"
+    ],
+    "c": 0,
+    "ref": "Juan 21:3",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/21/",
+    "ex": "Pedro anunció que iba a pescar y los otros lo acompañaron.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b48",
+    "q": "¿Cuánto habían pescado durante aquella noche?",
+    "o": [
+      "Nada",
+      "Dos peces",
+      "Cinco peces",
+      "Una red llena"
+    ],
+    "c": 0,
+    "ref": "Juan 21:3",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/21/",
+    "ex": "La pesca de aquella noche no había dado resultado.",
+    "topic": "Vida de Jesús",
+    "level": "Inicial"
+  },
+  {
+    "id": "b49",
+    "q": "¿A qué lado indicó Jesús que echaran la red?",
+    "o": [
+      "Al derecho",
+      "Al izquierdo",
+      "A la proa",
+      "A la popa"
+    ],
+    "c": 0,
+    "ref": "Juan 21:6",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/21/",
+    "ex": "Jesús indicó el lado derecho de la barca.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b50",
+    "q": "¿Dónde estaba Jesús cuando amaneció?",
+    "o": [
+      "En la playa",
+      "En el templo",
+      "En una montaña",
+      "Dentro de la barca"
+    ],
+    "c": 0,
+    "ref": "Juan 21:4",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/juan/21/",
+    "ex": "Jesús estaba en la orilla, aunque al principio no lo reconocieron.",
+    "topic": "Vida de Jesús",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b51",
+    "q": "¿A qué ciudad viajaba Saulo cuando lo envolvió una luz?",
+    "o": [
+      "Damasco",
+      "Jerusalén",
+      "Roma",
+      "Éfeso"
+    ],
+    "c": 0,
+    "ref": "Hechos 9:2-3",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/hechos/9/",
+    "ex": "Saulo estaba cerca de Damasco cuando ocurrió aquello.",
+    "topic": "Primeros cristianos",
+    "level": "Inicial"
+  },
+  {
+    "id": "b52",
+    "q": "¿Quién se identificó al hablarle a Saulo?",
+    "o": [
+      "Jesús",
+      "Pedro",
+      "Ananías",
+      "Esteban"
+    ],
+    "c": 0,
+    "ref": "Hechos 9:4-5",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/hechos/9/",
+    "ex": "La voz se identificó como Jesús.",
+    "topic": "Primeros cristianos",
+    "level": "Inicial"
+  },
+  {
+    "id": "b53",
+    "q": "¿Cuántos días estuvo Saulo sin ver?",
+    "o": [
+      "3",
+      "7",
+      "10",
+      "40"
+    ],
+    "c": 0,
+    "ref": "Hechos 9:9",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/hechos/9/",
+    "ex": "Durante tres días no vio y tampoco comió ni bebió.",
+    "topic": "Primeros cristianos",
+    "level": "Inicial"
+  },
+  {
+    "id": "b54",
+    "q": "¿Cómo se llamaba el discípulo al que se le pidió visitar a Saulo?",
+    "o": [
+      "Ananías",
+      "Bernabé",
+      "Felipe",
+      "Timoteo"
+    ],
+    "c": 0,
+    "ref": "Hechos 9:10-12",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/hechos/9/",
+    "ex": "Ananías recibió la instrucción en una visión.",
+    "topic": "Primeros cristianos",
+    "level": "Intermedio"
+  },
+  {
+    "id": "b55",
+    "q": "¿En qué calle debía buscar Ananías a Saulo?",
+    "o": [
+      "Recta",
+      "Ancha",
+      "Real",
+      "Del Templo"
+    ],
+    "c": 0,
+    "ref": "Hechos 9:11",
+    "url": "https://www.jw.org/es/biblioteca/biblia/biblia-estudio/libros/hechos/9/",
+    "ex": "La instrucción especificaba la calle llamada Recta.",
+    "topic": "Primeros cristianos",
+    "level": "Intermedio"
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      radial-gradient(ellipse at 20% -10%, #2a3570 0%, transparent 55%),
-      radial-gradient(ellipse at 100% 10%, #1a2452 0%, transparent 50%),
-      linear-gradient(180deg, var(--navy-950), var(--navy-900) 60%, #05070f 100%);
-    color:var(--ink-100);
-    font-family:var(--sans);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:28px 16px 60px;
+];
+const GENERAL=[
+  {
+    "q": "¿Qué instrumento tiene 88 teclas?",
+    "o": [
+      "Violín",
+      "Piano",
+      "Arpa",
+      "Acordeón"
+    ],
+    "c": 1,
+    "id": "g0",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Piano."
+  },
+  {
+    "q": "¿Quién compuso «Las Cuatro Estaciones»?",
+    "o": [
+      "Mozart",
+      "Bach",
+      "Vivaldi",
+      "Beethoven"
+    ],
+    "c": 2,
+    "id": "g1",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Vivaldi."
+  },
+  {
+    "q": "¿Cuál fue la primera banda de los Beatles antes del nombre definitivo?",
+    "o": [
+      "The Quarrymen",
+      "The Rolling Stones",
+      "The Kinks",
+      "The Shadows"
+    ],
+    "c": 0,
+    "id": "g2",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: The Quarrymen."
+  },
+  {
+    "q": "¿Qué cantante es conocida como «La Reina del Tex-Mex»?",
+    "o": [
+      "Shakira",
+      "Selena Quintanilla",
+      "Gloria Estefan",
+      "Thalía"
+    ],
+    "c": 1,
+    "id": "g3",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Selena Quintanilla."
+  },
+  {
+    "q": "¿De qué país es originario el tango?",
+    "o": [
+      "México",
+      "España",
+      "Argentina",
+      "Brasil"
+    ],
+    "c": 2,
+    "id": "g4",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Argentina."
+  },
+  {
+    "q": "¿Cuántas cuerdas tiene una guitarra clásica estándar?",
+    "o": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "c": 2,
+    "id": "g5",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: 6."
+  },
+  {
+    "q": "¿Quién es conocido como «El Rey del Pop»?",
+    "o": [
+      "Prince",
+      "Michael Jackson",
+      "Elvis Presley",
+      "James Brown"
+    ],
+    "c": 1,
+    "id": "g6",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Michael Jackson."
+  },
+  {
+    "q": "¿Qué género musical nació en Jamaica en los años 60?",
+    "o": [
+      "Reggae",
+      "Blues",
+      "Funk",
+      "Disco"
+    ],
+    "c": 0,
+    "id": "g7",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Reggae."
+  },
+  {
+    "q": "¿Qué banda interpretó «Bohemian Rhapsody»?",
+    "o": [
+      "Queen",
+      "Led Zeppelin",
+      "The Who",
+      "Pink Floyd"
+    ],
+    "c": 0,
+    "id": "g8",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Queen."
+  },
+  {
+    "q": "¿Cuál es el instrumento nacional de México en muchos mariachis, de cuerdas graves?",
+    "o": [
+      "Guitarrón",
+      "Violonchelo",
+      "Contrabajo",
+      "Bajo eléctrico"
+    ],
+    "c": 0,
+    "id": "g9",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Guitarrón."
+  },
+  {
+    "q": "¿Qué ingrediente principal lleva el guacamole?",
+    "o": [
+      "Tomate",
+      "Palta / aguacate",
+      "Cebolla",
+      "Pimiento"
+    ],
+    "c": 1,
+    "id": "g10",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Palta / aguacate."
+  },
+  {
+    "q": "¿De qué país es originaria la pizza margarita?",
+    "o": [
+      "Francia",
+      "España",
+      "Italia",
+      "Grecia"
+    ],
+    "c": 2,
+    "id": "g11",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Italia."
+  },
+  {
+    "q": "¿Qué tipo de leche se usa tradicionalmente para el dulce de leche?",
+    "o": [
+      "Leche de cabra",
+      "Leche de vaca",
+      "Leche de soja",
+      "Leche de almendra"
+    ],
+    "c": 1,
+    "id": "g12",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Leche de vaca."
+  },
+  {
+    "q": "¿Qué especia se obtiene del estigma de una flor y es una de las más caras del mundo?",
+    "o": [
+      "Canela",
+      "Azafrán",
+      "Pimentón",
+      "Cúrcuma"
+    ],
+    "c": 1,
+    "id": "g13",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Azafrán."
+  },
+  {
+    "q": "¿Cuál es el ingrediente base del sushi?",
+    "o": [
+      "Arroz",
+      "Fideos",
+      "Papa",
+      "Quinoa"
+    ],
+    "c": 0,
+    "id": "g14",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Arroz."
+  },
+  {
+    "q": "¿Qué fruta se usa tradicionalmente para hacer el vino?",
+    "o": [
+      "Manzana",
+      "Uva",
+      "Pera",
+      "Ciruela"
+    ],
+    "c": 1,
+    "id": "g15",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Uva."
+  },
+  {
+    "q": "¿Qué país es famoso por la fondue de queso?",
+    "o": [
+      "Suiza",
+      "Bélgica",
+      "Holanda",
+      "Austria"
+    ],
+    "c": 0,
+    "id": "g16",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Suiza."
+  },
+  {
+    "q": "¿Qué carne lleva tradicionalmente el asado argentino como corte típico?",
+    "o": [
+      "Cordero",
+      "Cerdo",
+      "Vacuno",
+      "Pollo"
+    ],
+    "c": 2,
+    "id": "g17",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Vacuno."
+  },
+  {
+    "q": "¿Qué técnica de cocción consiste en cocinar al vacío a baja temperatura?",
+    "o": [
+      "Sous vide",
+      "Flambeado",
+      "Gratinado",
+      "Escalfado"
+    ],
+    "c": 0,
+    "id": "g18",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Sous vide."
+  },
+  {
+    "q": "¿Cuál es el ingrediente principal de un ceviche?",
+    "o": [
+      "Pescado o marisco crudo marinado en cítricos",
+      "Carne asada",
+      "Pollo frito",
+      "Arroz con verduras"
+    ],
+    "c": 0,
+    "id": "g19",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Pescado o marisco crudo marinado en cítricos."
+  },
+  {
+    "q": "¿Quién pintó «La Mona Lisa»?",
+    "o": [
+      "Miguel Ángel",
+      "Rafael",
+      "Leonardo da Vinci",
+      "Donatello"
+    ],
+    "c": 2,
+    "id": "g20",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Leonardo da Vinci."
+  },
+  {
+    "q": "¿A qué movimiento artístico pertenece Salvador Dalí?",
+    "o": [
+      "Cubismo",
+      "Surrealismo",
+      "Impresionismo",
+      "Barroco"
+    ],
+    "c": 1,
+    "id": "g21",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Surrealismo."
+  },
+  {
+    "q": "¿Qué artista pintó «La noche estrellada»?",
+    "o": [
+      "Vincent van Gogh",
+      "Claude Monet",
+      "Edvard Munch",
+      "Paul Cézanne"
+    ],
+    "c": 0,
+    "id": "g22",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Vincent van Gogh."
+  },
+  {
+    "q": "¿En qué museo se encuentra «El Guernica» de Picasso?",
+    "o": [
+      "Louvre",
+      "Museo del Prado",
+      "Museo Reina Sofía",
+      "Museo Británico"
+    ],
+    "c": 2,
+    "id": "g23",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Museo Reina Sofía."
+  },
+  {
+    "q": "¿Qué técnica de dibujo usa tinta y puntos para crear sombras?",
+    "o": [
+      "Puntillismo (stippling)",
+      "Esfumado",
+      "Acuarela",
+      "Grabado"
+    ],
+    "c": 0,
+    "id": "g24",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Puntillismo (stippling)."
+  },
+  {
+    "q": "¿Quién esculpió el «David»?",
+    "o": [
+      "Leonardo da Vinci",
+      "Miguel Ángel",
+      "Bernini",
+      "Donatello"
+    ],
+    "c": 1,
+    "id": "g25",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Miguel Ángel."
+  },
+  {
+    "q": "¿Qué colores primarios se usan en pintura tradicional?",
+    "o": [
+      "Rojo, verde, azul",
+      "Amarillo, rojo, azul",
+      "Negro, blanco, gris",
+      "Naranja, violeta, verde"
+    ],
+    "c": 1,
+    "id": "g26",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Amarillo, rojo, azul."
+  },
+  {
+    "q": "¿Qué artista es famoso por sus obras de «sopa Campbell» dentro del Pop Art?",
+    "o": [
+      "Andy Warhol",
+      "Roy Lichtenstein",
+      "Jackson Pollock",
+      "Keith Haring"
+    ],
+    "c": 0,
+    "id": "g27",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Andy Warhol."
+  },
+  {
+    "q": "¿Qué estudio de animación creó a Mickey Mouse?",
+    "o": [
+      "Warner Bros",
+      "Disney",
+      "Pixar",
+      "DreamWorks"
+    ],
+    "c": 1,
+    "id": "g28",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Disney."
+  },
+  {
+    "q": "¿Cómo se llama el pueblo ficticio donde vive la familia Simpson?",
+    "o": [
+      "Quahog",
+      "Springfield",
+      "South Park",
+      "Bedrock"
+    ],
+    "c": 1,
+    "id": "g29",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Springfield."
+  },
+  {
+    "q": "¿Qué estudio de animación japonesa creó «Mi vecino Totoro»?",
+    "o": [
+      "Toei Animation",
+      "Studio Ghibli",
+      "Sunrise",
+      "Madhouse"
+    ],
+    "c": 1,
+    "id": "g30",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Studio Ghibli."
+  },
+  {
+    "q": "¿Cuál es el nombre real de Goku en la serie Dragon Ball?",
+    "o": [
+      "Kakaroto",
+      "Vegeta",
+      "Gohan",
+      "Piccolo"
+    ],
+    "c": 0,
+    "id": "g31",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Kakaroto."
+  },
+  {
+    "q": "¿Qué personaje de dibujos animados vive en una piña debajo del mar?",
+    "o": [
+      "Patricio Estrella",
+      "Bob Esponja",
+      "Calamardo",
+      "Don Cangrejo"
+    ],
+    "c": 1,
+    "id": "g32",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Bob Esponja."
+  },
+  {
+    "q": "¿Qué serie animada sigue a una familia prehistórica llamada Picapiedra?",
+    "o": [
+      "Los Supersónicos",
+      "Los Picapiedra",
+      "Scooby-Doo",
+      "Tom y Jerry"
+    ],
+    "c": 1,
+    "id": "g33",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Los Picapiedra."
+  },
+  {
+    "q": "¿Cómo se llama el perro detective que resuelve misterios con una pandilla de adolescentes?",
+    "o": [
+      "Snoopy",
+      "Pluto",
+      "Scooby-Doo",
+      "Goofy"
+    ],
+    "c": 2,
+    "id": "g34",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Scooby-Doo."
+  },
+  {
+    "q": "¿Qué serie de HBO está ambientada en los Siete Reinos de Poniente?",
+    "o": [
+      "Vikings",
+      "Juego de Tronos",
+      "The Witcher",
+      "Los Anillos de Poder"
+    ],
+    "c": 1,
+    "id": "g35",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Juego de Tronos."
+  },
+  {
+    "q": "¿En qué ciudad transcurre la serie «Friends»?",
+    "o": [
+      "Los Ángeles",
+      "Chicago",
+      "Nueva York",
+      "Boston"
+    ],
+    "c": 2,
+    "id": "g36",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Nueva York."
+  },
+  {
+    "q": "¿Cómo se llama el protagonista de «Breaking Bad»?",
+    "o": [
+      "Jesse Pinkman",
+      "Walter White",
+      "Saul Goodman",
+      "Hank Schrader"
+    ],
+    "c": 1,
+    "id": "g37",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Walter White."
+  },
+  {
+    "q": "¿Qué serie sigue las aventuras de un grupo de amigos en un café de Manhattan llamado Central Perk?",
+    "o": [
+      "Seinfeld",
+      "Friends",
+      "How I Met Your Mother",
+      "Cheers"
+    ],
+    "c": 1,
+    "id": "g38",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Friends."
+  },
+  {
+    "q": "¿Qué serie española de Netflix trata sobre un robo a la Fábrica Nacional de Moneda y Timbre?",
+    "o": [
+      "Élite",
+      "La Casa de Papel",
+      "Vis a vis",
+      "Las chicas del cable"
+    ],
+    "c": 1,
+    "id": "g39",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: La Casa de Papel."
+  },
+  {
+    "q": "¿Cómo se llama el laboratorio ficticio de «Stranger Things»?",
+    "o": [
+      "Hawkins Lab",
+      "Umbrella Corp",
+      "Aperture Science",
+      "Black Mesa"
+    ],
+    "c": 0,
+    "id": "g40",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Hawkins Lab."
+  },
+  {
+    "q": "¿Qué serie de comedia estadounidense transcurre en una oficina de papelería llamada Dunder Mifflin?",
+    "o": [
+      "Parks and Recreation",
+      "The Office",
+      "Brooklyn Nine-Nine",
+      "Community"
+    ],
+    "c": 1,
+    "id": "g41",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: The Office."
+  },
+  {
+    "q": "¿Cuál es la capital de Francia?",
+    "o": [
+      "Lyon",
+      "Marsella",
+      "París",
+      "Niza"
+    ],
+    "c": 2,
+    "id": "g42",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: París."
+  },
+  {
+    "q": "¿Cuántos huesos tiene el cuerpo humano adulto aproximadamente?",
+    "o": [
+      "106",
+      "156",
+      "206",
+      "256"
+    ],
+    "c": 2,
+    "id": "g43",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: 206."
+  },
+  {
+    "q": "¿Cuál es el planeta más grande del sistema solar?",
+    "o": [
+      "Saturno",
+      "Júpiter",
+      "Neptuno",
+      "Urano"
+    ],
+    "c": 1,
+    "id": "g44",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Júpiter."
+  },
+  {
+    "q": "¿Qué gas es esencial para la respiración humana?",
+    "o": [
+      "Nitrógeno",
+      "Dióxido de carbono",
+      "Oxígeno",
+      "Hidrógeno"
+    ],
+    "c": 2,
+    "id": "g45",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Oxígeno."
+  },
+  {
+    "q": "¿En qué año llegó el hombre a la Luna por primera vez?",
+    "o": [
+      "1965",
+      "1969",
+      "1972",
+      "1959"
+    ],
+    "c": 1,
+    "id": "g46",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: 1969."
+  },
+  {
+    "q": "¿Qué deporte se juega en Wimbledon?",
+    "o": [
+      "Golf",
+      "Tenis",
+      "Críquet",
+      "Rugby"
+    ],
+    "c": 1,
+    "id": "g47",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Tenis."
+  },
+  {
+    "q": "¿Cuántos jugadores tiene un equipo de fútbol en la cancha?",
+    "o": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "c": 2,
+    "id": "g48",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: 11."
+  },
+  {
+    "q": "¿Cuál es el metal más abundante en la corteza terrestre?",
+    "o": [
+      "Hierro",
+      "Aluminio",
+      "Cobre",
+      "Oro"
+    ],
+    "c": 1,
+    "id": "g49",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Aluminio."
+  },
+  {
+    "q": "¿Qué país tiene forma de bota en el mapa?",
+    "o": [
+      "España",
+      "Italia",
+      "Grecia",
+      "Portugal"
+    ],
+    "c": 1,
+    "id": "g50",
+    "topic": "Cultura general",
+    "level": "Variada",
+    "ex": "Respuesta: Italia."
   }
-  .screen{ width:100%; max-width:860px; display:none; animation:rise .4s ease; }
-  .screen.active{ display:block; }
-  @keyframes rise{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
-
-  h1,h2,h3{ font-family:var(--serif); font-weight:700; margin:0 0 6px; letter-spacing:.2px; }
-  .brand{
-    text-align:center; margin-bottom:34px;
-  }
-  .brand .kicker{ font-size:13px; color:var(--gold-400); letter-spacing:.14em; margin-bottom:6px; }
-  .brand h1{ font-size:clamp(28px,5vw,44px); color:var(--ink-100); }
-  .brand h1 em{ font-style:normal; color:var(--gold-400); }
-  .brand p{ color:var(--ink-500); margin-top:8px; font-size:15px; }
-
-  .card{
-    background:linear-gradient(180deg,var(--navy-800),var(--navy-900));
-    border:1px solid #2a3468;
-    border-radius:20px;
-    padding:28px clamp(18px,4vw,40px);
-    box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
-  }
-
-  .btn{
-    font-family:var(--sans); font-weight:700; font-size:15px;
-    border:none; border-radius:11px; padding:14px 22px; cursor:pointer;
-    background:var(--gold-500); color:#22190a;
-    transition:transform .12s ease, box-shadow .12s ease, opacity .12s;
-    box-shadow:0 8px 0 #9a7318, 0 14px 20px -10px rgba(0,0,0,.5);
-  }
-  .btn:hover{ transform:translateY(-2px); }
-  .btn:active{ transform:translateY(2px); box-shadow:0 4px 0 #9a7318; }
-  .btn:disabled{ opacity:.35; cursor:not-allowed; box-shadow:none; transform:none; }
-  .btn.secondary{ background:transparent; color:var(--ink-100); border:1.5px solid #3a4680; box-shadow:none; }
-  .btn.secondary:hover{ border-color:var(--gold-400); }
-  .btn.danger{ background:var(--red); color:#fff; box-shadow:0 8px 0 #7d281e; }
-  .btn.small{ padding:9px 14px; font-size:13px; border-radius:9px; }
-  .btn.block{ width:100%; }
-
-  .choice-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:22px; }
-  @media(max-width:560px){ .choice-grid{ grid-template-columns:1fr; } }
-  .choice-card{
-    text-align:left; padding:20px; border-radius:16px; cursor:pointer;
-    border:2px solid #2a3468; background:var(--navy-800);
-  }
-  .choice-card:hover{ border-color:var(--gold-400); transform:translateY(-2px); }
-  .choice-card h3{ font-size:19px; margin-bottom:4px; }
-  .choice-card p{ color:var(--ink-500); font-size:13.5px; margin:0; line-height:1.5; }
-
-  label{ display:block; font-size:13px; color:var(--ink-300); margin:0 0 6px; font-weight:600; }
-  input[type=text],input[type=number]{
-    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid #35407a;
-    background:#0d1330; color:var(--ink-100); font-size:15px; font-family:var(--sans);
-  }
-  input[type=text]:focus,input[type=number]:focus{ outline:none; border-color:var(--gold-400); }
-
-  .row{ display:flex; gap:14px; flex-wrap:wrap; }
-  .row > *{ flex:1; min-width:140px; }
-
-  .time-options{ display:flex; gap:14px; margin-top:18px; flex-wrap:wrap; }
-  .time-opt{
-    flex:1; min-width:130px; padding:22px 10px; text-align:center; border-radius:16px;
-    border:2px solid #2a3468; cursor:pointer; background:var(--navy-800);
-  }
-  .time-opt .num{ font-family:var(--serif); font-size:34px; color:var(--gold-400); }
-  .time-opt.selected{ border-color:var(--gold-400); background:#1c2454; }
-
-  .player-row{
-    display:flex; gap:10px; align-items:center; margin-bottom:12px;
-    background:var(--navy-800); padding:10px 14px; border-radius:12px; border:1.5px solid #2a3468;
-  }
-  .player-row .avatar{
-    width:34px; height:34px; border-radius:50%; background:var(--gold-500); color:#22190a;
-    display:flex; align-items:center; justify-content:center; font-weight:800; flex-shrink:0;
-  }
-  .player-row input{ flex:1; }
-  .remove-x{ cursor:pointer; color:var(--ink-500); font-size:20px; padding:0 6px; }
-  .remove-x:hover{ color:var(--red); }
-
-  .rules-list{ padding:0; margin:18px 0; list-style:none; display:flex; flex-direction:column; gap:12px; }
-  .rules-list li{ display:flex; gap:12px; align-items:flex-start; font-size:14.5px; line-height:1.5; color:var(--ink-300); }
-  .rules-list .bullet{ color:var(--gold-400); font-family:var(--serif); font-weight:700; font-size:16px; flex-shrink:0; }
-  .rules-list b{ color:var(--ink-100); }
-
-  .topbar{ display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:18px; flex-wrap:wrap; }
-  .scoreboard{ display:flex; gap:10px; flex-wrap:wrap; }
-  .score-chip{
-    background:var(--navy-800); border:1.5px solid #2a3468; border-radius:11px; padding:8px 12px; font-size:13px;
-  }
-  .score-chip.current{ border-color:var(--gold-400); background:#232b5c; }
-  .score-chip b{ display:block; font-size:16px; color:var(--gold-400); font-family:var(--serif); }
-
-  .qmeta{ display:flex; justify-content:space-between; align-items:center; color:var(--ink-500); font-size:13px; margin-bottom:10px; }
-  .timer-wrap{ display:flex; align-items:center; gap:12px; }
-  .timer{
-    font-family:var(--serif); font-size:30px; color:var(--gold-400); min-width:64px; text-align:center;
-    background:var(--navy-800); border-radius:10px; padding:4px 10px; border:1.5px solid #2a3468;
-  }
-  .timer.low{ color:var(--red); animation:pulse 1s infinite; }
-  @keyframes pulse{ 50%{ opacity:.4; } }
-
-  .question-box{
-    background:linear-gradient(180deg,#1a2454,#151d47);
-    border:1.5px solid #354087; border-radius:16px; padding:22px; margin:14px 0 20px;
-  }
-  .question-box h2{ font-size:clamp(18px,3vw,23px); line-height:1.4; color:var(--ink-100); font-weight:600; }
-  .qnum{ color:var(--gold-400); font-family:var(--serif); font-weight:700; margin-right:8px; }
-
-  .options{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  @media(max-width:560px){ .options{ grid-template-columns:1fr; } }
-  .opt{
-    text-align:left; padding:15px 16px; border-radius:12px; border:2px solid #2a3468;
-    background:var(--navy-800); cursor:pointer; font-size:15px; display:flex; gap:10px; align-items:center;
-  }
-  .opt .letter{
-    width:26px; height:26px; border-radius:50%; background:#2a3468; color:var(--ink-100);
-    display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; flex-shrink:0;
-  }
-  .opt:hover:not(.disabled):not(.correct):not(.wrong){ border-color:var(--gold-400); }
-  .opt.eliminated{ opacity:.25; pointer-events:none; text-decoration:line-through; }
-  .opt.correct{ border-color:var(--green-bright); background:#123b24; }
-  .opt.correct .letter{ background:var(--green-bright); color:#06210f; }
-  .opt.wrong{ border-color:var(--red); background:#3a1712; }
-  .opt.disabled{ pointer-events:none; opacity:.6; }
-
-  .jokers{ display:flex; gap:12px; margin:18px 0 6px; flex-wrap:wrap; }
-  .joker{
-    flex:1; min-width:150px; padding:12px 14px; border-radius:12px; border:1.5px solid #3a4680;
-    background:var(--navy-800); cursor:pointer; text-align:left; font-size:13px;
-  }
-  .joker .jtitle{ font-weight:700; color:var(--gold-300); font-size:13.5px; }
-  .joker .jdesc{ color:var(--ink-500); font-size:12px; margin-top:2px; }
-  .joker.used{ opacity:.3; text-decoration:line-through; pointer-events:none; }
-  .joker:hover:not(.used){ border-color:var(--gold-400); }
-
-  .audience-bars{ margin-top:14px; display:flex; flex-direction:column; gap:8px; }
-  .abar-row{ display:flex; align-items:center; gap:10px; font-size:13px; }
-  .abar-track{ flex:1; background:#0d1330; border-radius:6px; height:16px; overflow:hidden; }
-  .abar-fill{ height:100%; background:linear-gradient(90deg,var(--gold-500),var(--gold-300)); border-radius:6px; transition:width .6s ease; }
-
-  .footer-actions{ display:flex; justify-content:space-between; margin-top:20px; gap:12px; flex-wrap:wrap; }
-
-  .final-list{ display:flex; flex-direction:column; gap:10px; margin:18px 0; }
-  .final-row{
-    display:flex; justify-content:space-between; align-items:center; padding:14px 18px;
-    border-radius:12px; background:var(--navy-800); border:1.5px solid #2a3468;
-  }
-  .final-row.winner{ border-color:var(--gold-400); background:#26254a; }
-  .final-row .pts{ font-family:var(--serif); font-size:22px; color:var(--gold-400); }
-  .medal{ font-size:20px; margin-right:8px; }
-
-  table.history{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; table-layout:fixed; }
-  table.history th, table.history td{ text-align:left; padding:8px 8px; border-bottom:1px solid #2a3468; word-wrap:break-word; overflow-wrap:break-word; }
-  table.history th{ color:var(--ink-500); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
-  table.history th:nth-child(1), table.history td:nth-child(1){ width:26%; }
-  table.history th:nth-child(2), table.history td:nth-child(2){ width:15%; }
-  table.history th:nth-child(3), table.history td:nth-child(3){ width:36%; }
-  table.history th:nth-child(4), table.history td:nth-child(4){ width:23%; }
-
-  .link-btn{ background:none; border:none; color:var(--gold-400); font-size:13px; cursor:pointer; text-decoration:underline; padding:0; }
-  .badge{ display:inline-block; background:#3a1712; color:#f6a58e; font-size:11.5px; padding:2px 8px; border-radius:20px; margin-left:8px; }
-  .badge.mode{ background:#123b24; color:#8fe3b0; }
-  .center{ text-align:center; }
-  .muted{ color:var(--ink-500); font-size:13.5px; }
-  hr.div{ border:none; border-top:1px solid #2a3468; margin:20px 0; }
-  .modal-bg{ position:fixed; inset:0; background:rgba(3,5,14,.7); display:none; align-items:center; justify-content:center; z-index:50; padding:20px; }
-  .modal-bg.active{ display:flex; }
-  .modal{ max-width:520px; width:100%; }
-</style>
-</head>
-<body>
-
-<div class="brand">
-  <div class="kicker">TRIVIA PARA COMPARTIR · HASTA 4 JUGADORES</div>
-  <h1>Noche de <em>Trivia</em></h1>
-  <p>Elegí el modo, respondé de a uno y disfruten la ronda juntos</p>
-</div>
-
-<!-- MODE SCREEN -->
-<div class="screen active" id="screen-mode">
-  <div class="card">
-    <h2>Elegí el modo de juego</h2>
-    <p class="muted">Cada modo tiene su propio banco de preguntas — nunca se repiten dentro de la misma partida.</p>
-    <div class="choice-grid">
-      <div class="choice-card" onclick="selectMode('tj')">
-        <h3>📖 Modo Testigos de Jehová</h3>
-        <p>Preguntas bíblicas y de doctrina para reuniones y noches en familia.</p>
-      </div>
-      <div class="choice-card" onclick="selectMode('gk')">
-        <h3>🌎 Conocimiento General</h3>
-        <p>Música, cocina, arte, dibujos animados y series de todo tipo.</p>
-      </div>
-    </div>
-    <div class="center" style="margin-top:22px; display:flex; flex-direction:column; gap:8px;">
-      <button class="link-btn" onclick="openHistory()">Ver tabla de campeones anteriores</button>
-      <button class="link-btn" onclick="openDonate()">💛 ¿Te gustó el juego? Podés colaborar acá</button>
-    </div>
-  </div>
-</div>
-
-<!-- TIME SCREEN -->
-<div class="screen" id="screen-time">
-  <div class="card">
-    <h2>Tiempo por pregunta</h2>
-    <p class="muted">Este es el tiempo base con el que arranca cada pregunta.</p>
-    <div class="time-options">
-      <div class="time-opt" data-t="30" onclick="selectTime(30,this)"><div class="num">30</div>segundos</div>
-      <div class="time-opt" data-t="15" onclick="selectTime(15,this)"><div class="num">15</div>segundos</div>
-      <div class="time-opt" id="time-custom-box"><div class="num" id="custom-num">—</div>
-        <input type="number" id="custom-time" min="5" max="120" placeholder="Otro (seg)" style="margin-top:8px;text-align:center;" oninput="selectCustomTime(this.value)">
-      </div>
-    </div>
-    <div class="footer-actions">
-      <button class="btn secondary" onclick="goTo('screen-mode')">← Atrás</button>
-      <button class="btn" id="time-next" disabled onclick="goTo('screen-players')">Continuar →</button>
-    </div>
-  </div>
-</div>
-
-<!-- PLAYERS SCREEN -->
-<div class="screen" id="screen-players">
-  <div class="card">
-    <h2>Jugadores</h2>
-    <p class="muted">Hasta 4 jugadores. Cada uno arranca en 0 puntos con sus 3 comodines.</p>
-    <div id="players-list"></div>
-    <button class="btn secondary small" id="add-player-btn" onclick="addPlayerRow()">+ Agregar jugador</button>
-    <div class="footer-actions">
-      <button class="btn secondary" onclick="goTo('screen-time')">← Atrás</button>
-      <button class="btn" onclick="tryStartFromPlayers()">Ver reglas →</button>
-    </div>
-  </div>
-</div>
-
-<!-- RULES SCREEN -->
-<div class="screen" id="screen-rules">
-  <div class="card">
-    <h2 id="rules-title">Reglas del juego</h2>
-    <p class="muted" id="rules-sub">Que el presentador lea esto en voz alta antes de arrancar.</p>
-    <ul class="rules-list">
-      <li><span class="bullet">•</span><span>Cada jugador juega <b>su turno completo</b> antes de que empiece el siguiente. El orden es: <b id="rules-order-list"></b>.</span></li>
-      <li><span class="bullet">•</span><span>Cada pregunta correcta suma <b>10 puntos</b>. Hay 4 opciones (A, B, C, D); la correcta se marca en <b style="color:#37c26f">verde</b>.</span></li>
-      <li><span class="bullet">•</span><span>El cronómetro <b>no arranca solo</b>: el presentador debe tocar "Iniciar tiempo" antes de cada pregunta.</span></li>
-      <li><span class="bullet">•</span><span>Cada jugador tiene 3 comodines para usar <b>una sola vez cada uno</b> en toda su partida: <b>50/50</b> (elimina 2 opciones incorrectas), <b>Preguntar al público</b> (detiene el cronómetro y muestra una encuesta simulada) y <b>Extender tiempo</b> (si el tiempo base es 30s y quedan 15s o menos, suma 30s más; si es 15s y quedan 8s o menos, suma 15s más).</span></li>
-      <li><span class="bullet">•</span><span>Un jugador puede <b>retirarse</b> de su partida en cualquier momento y conserva los puntos que ya sumó.</span></li>
-      <li><span class="bullet">•</span><span>Las preguntas nunca se repiten entre jugadores dentro de la misma partida.</span></li>
-      <li><span class="bullet">•</span><span>Si al terminar todos los turnos hay <b>empate</b>, se juega un desempate solo entre los empatados: preguntas nuevas, tiempo fijo de <b>15 segundos</b> y <b>sin comodines</b>.</span></li>
-      <li><span class="bullet">•</span><span>Al final de cada partida, el <b>ganador</b> queda anotado en la tabla general de campeones.</span></li>
-    </ul>
-    <div class="footer-actions">
-      <button class="btn secondary" id="rules-back-btn" onclick="goTo('screen-players')">← Atrás</button>
-      <button class="btn" id="rules-continue-btn">Comenzar 1er jugador →</button>
-    </div>
-  </div>
-</div>
-
-<!-- GAME SCREEN -->
-<div class="screen" id="screen-game">
-  <div class="topbar">
-    <div class="scoreboard" id="scoreboard"></div>
-    <button class="btn secondary small" onclick="confirmRetire()">Retirarme</button>
-  </div>
-  <div class="card">
-    <div class="qmeta">
-      <span id="turn-label">Turno de —</span>
-      <div class="timer-wrap">
-        <button class="btn secondary small" id="start-timer-btn" onclick="startTimer()">▶ Iniciar tiempo</button>
-        <div class="timer" id="timer-display">--</div>
-      </div>
-    </div>
-    <div class="question-box">
-      <h2><span class="qnum" id="q-number">Q1</span><span id="q-text"></span></h2>
-    </div>
-    <div class="options" id="options-grid"></div>
-
-    <div id="audience-box" style="display:none;" class="audience-bars"></div>
-
-    <div class="jokers" id="jokers-box"></div>
-
-    <div class="footer-actions">
-      <span class="muted" id="game-status"></span>
-      <button class="btn" id="next-btn" style="display:none;" onclick="nextQuestion()">Siguiente pregunta →</button>
-    </div>
-  </div>
-</div>
-
-<!-- TURN END SCREEN -->
-<div class="screen" id="screen-turnend">
-  <div class="card center">
-    <h2 id="turnend-title">¡Turno terminado!</h2>
-    <p class="muted" id="turnend-sub"></p>
-    <div style="margin:24px 0;">
-      <div style="font-family:var(--serif);font-size:52px;color:var(--gold-400);" id="turnend-score">0</div>
-      <div class="muted">puntos totales</div>
-    </div>
-    <button class="btn" id="turnend-continue">Continuar →</button>
-  </div>
-</div>
-
-<!-- TIEBREAK INTRO -->
-<div class="screen" id="screen-tiebreak-intro">
-  <div class="card">
-    <h2>⚖️ Hay empate</h2>
-    <p class="muted" id="tiebreak-who"></p>
-    <ul class="rules-list">
-      <li><span class="bullet">•</span><span>Se juega una <b>pregunta de desempate</b> entre los jugadores empatados.</span></li>
-      <li><span class="bullet">•</span><span>Tiempo fijo: <b>15 segundos</b>, cronómetro descendente. Sin comodines.</span></li>
-      <li><span class="bullet">•</span><span>El presentador toca "Iniciar tiempo" para arrancar cada ronda de desempate.</span></li>
-      <li><span class="bullet">•</span><span>Si vuelve a haber empate, se repite con una pregunta nueva hasta que quede un ganador.</span></li>
-    </ul>
-    <div class="footer-actions">
-      <span></span>
-      <button class="btn" onclick="startTiebreakRound()">Comenzar desempate →</button>
-    </div>
-  </div>
-</div>
-
-<!-- FINAL SCREEN -->
-<div class="screen" id="screen-final">
-  <div class="card">
-    <h2 class="center">🏆 Resultado final</h2>
-    <div class="final-list" id="final-list"></div>
-    <div class="footer-actions">
-      <button class="btn secondary" onclick="openHistory()">Ver tabla de campeones</button>
-      <button class="btn" onclick="newGame()">Jugar de nuevo</button>
-    </div>
-    <div class="center" style="margin-top:16px;">
-      <button class="link-btn" onclick="openDonate()">💛 Apoyar este proyecto</button>
-    </div>
-  </div>
-</div>
-
-<!-- HISTORY MODAL -->
-<div class="modal-bg" id="history-modal">
-  <div class="card modal">
-    <h2>🏆 Tabla general de campeones</h2>
-    <table class="history">
-      <thead><tr><th>Ganador</th><th>Puntos</th><th>Modo</th><th>Fecha</th></tr></thead>
-      <tbody id="history-body"></tbody>
-    </table>
-    <div class="footer-actions">
-      <span></span>
-      <button class="btn secondary" onclick="closeHistory()">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- DONATE MODAL -->
-<div class="modal-bg" id="donate-modal">
-  <div class="card modal">
-    <h2>💛 Apoyá este proyecto</h2>
-    <p class="muted">Si te gustó "Noche de Trivia" y querés colaborar para que siga mejorando, podés hacerlo por acá. ¡Totalmente opcional y muy agradecido!</p>
-    <div style="background:var(--navy-800); border:1.5px solid #2a3468; border-radius:12px; padding:16px; margin:14px 0;">
-      <label>Alias / CBU (transferencia)</label>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <input type="text" id="donate-alias" value="cetro.chispa.tribu" readonly>
-        <button class="btn secondary small" onclick="copyDonateAlias()">Copiar</button>
-      </div>
-    </div>
-    <p class="muted" style="margin-top:14px; font-size:12px;">Próximamente vamos a sumar también un link de PayPal.</p>
-    <div class="footer-actions">
-      <span></span>
-      <button class="btn secondary" onclick="closeDonate()">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- GENERIC MODAL (confirmaciones y avisos) -->
-<div class="modal-bg" id="generic-modal">
-  <div class="card modal">
-    <h2 id="generic-modal-title">Aviso</h2>
-    <p class="muted" id="generic-modal-msg"></p>
-    <div class="footer-actions" id="generic-modal-actions"></div>
-  </div>
-</div>
-
-<script>
-/* =========================================================
-   BANCO DE PREGUNTAS
-   Formato: {q:"pregunta", o:["A","B","C","D"], c: indice_correcto (0-3)}
-   NOTA IMPORTANTE PARA EL PRESENTADOR:
-   Estas respuestas fueron completadas por Claude con el mejor
-   criterio posible a partir de conocimiento bíblico general y de
-   publicaciones de los Testigos de Jehová. Las preguntas marcadas
-   con "verify:true" son MUY específicas (abreviaturas de
-   publicaciones como T-30/T-37/S-38, títulos de canciones, cifras
-   puntuales) y conviene que el presentador las revise antes de
-   usarlas en el juego real. Podés editar "c" libremente para
-   corregir cualquier respuesta.
-   ========================================================= */
-const QUESTIONS_TJ = [
-{q:"¿Cómo se conoce a las cuatro letras originales que componen el nombre de Dios en hebreo?",o:["LEVIATAN","TETRAGRAMATON","HELENATRON","MARATON"],c:1},
-{q:"¿Cuáles son las 4 cualidades principales de Jehová?",o:["MISERICORDIA, AMOR, PACIENCIA, AUTODOMINIO","AMOR, PODER, SABIDURIA, JUSTICIA","PODER, LEALTAD, SANTIDAD, JUSTICIA","SANTIDAD, AMOR, BENEVOLENCIA, SABIDURIA"],c:1},
-{q:"¿Qué significa el nombre de Jehová?",o:["EL HACE QUE LLEGUE A SER","EL HACE QUE LOS DEMAS HAGAN","EL HACE POR LOS DEMAS","EL DEJA QUE CADA UNO HAGA"],c:0},
-{q:"¿Cuál de las siguientes afirmaciones sobre Jehová es correcta? Es:",o:["OMNIPRESENTE","OBSOLETO","OMNIPOTENTE","OBSECUENTE"],c:2,verify:true},
-{q:"¿Qué título distingue a Jehová como Dios eterno, majestuoso y venerable Juez de todos?",o:["ANCIANO DE NOCHE","REY DE REYES","JEHOVA DE LOS EJERCITOS","ANCIANO DE DIAS"],c:3},
-{q:"¿Con cuál de estos nombres se lo identifica también a Jesús?",o:["EMMANUEL, RUBEN, LEMUEL","SANTIAGO, JESUS, MARCOS","EMMANUEL, MIGUEL, ADAN","MIGUEL, ABEL, EMMANUEL"],c:2},
-{q:"¿Dónde nació Jesús?",o:["NAZARET","BELEN DE ZABULON","BELEN DE JUDEA","JERUSALEN"],c:2},
-{q:"¿Quién bautizó a Jesús?",o:["PEDRO","FELIPE","ANDRES","JUAN"],c:3},
-{q:"¿Qué edad tenía Jesús cuando sus padres lo encontraron en el templo?",o:["15","33","9","12"],c:3},
-{q:"¿Qué significa Unigénito?",o:["UNGIDO DE JEHOVÁ","HIJO AMADO","PRIMER HIJO QUE ABRE MATRIZ","EL UNICO HIJO QUE JEHOVA CREO DIRECTAMENTE"],c:3},
-{q:"¿Cuánto dura el reinado milenario de Cristo?",o:["144000","1200 años","1000 años","999 años"],c:2},
-{q:"¿Quiénes gobernarán en el reino de Cristo?",o:["LOS ANGELES","LOS PRINCIPES","JEHOVA Y CRISTO","CRISTO Y LOS 144000"],c:3},
-{q:"¿Qué llegan a ser los ungidos en su vida celestial?",o:["CORRUPTIBLES","AUTORITARIOS","ARISTOCRATAS","AUTARQUICOS"],c:2,verify:true},
-{q:"¿Qué pasa después de los 1000 años?",o:["LA RESURRECCION DE LAS PERSONAS","SE LIBERA A SATANAS","SE DEVUELVE LA PERFECCION","JESUS REGRESA"],c:1},
-{q:"¿A partir de qué año y mes empezó a regir el reino Mesiánico?",o:["OCTUBRE 1914","SEPTIEMBRE 1919","SEPTIEMBRE 1914","NISAN 14"],c:0},
-{q:"¿Cuántos son los frutos del espíritu de Jehová?",o:["3","9","1","5"],c:1},
-{q:"¿Qué es el espíritu santo de Dios?",o:["UNA ENTIDAD SEPARADA","EL PODER DE DIOS","UNA PERSONA","LA FUERZA ACTIVA"],c:3},
-{q:"Mencione 3 cualidades que produce la persona mediante el espíritu santo:",o:["AMOR, GOZO, FORTALEZA","AMOR, ENTUSIASMO, DECISION","AMOR, BENIGNIDAD, BONDAD","AMOR, BONDAD, OBEDIENCIA"],c:2},
-{q:"¿En qué ayuda hoy día el espíritu santo a los cristianos verdaderos?",o:["DA A CONOCER PREMONICIONES Y PRESENTIMIENTOS","REVELAR INTERPRETACIONES PERSONALES","HACER MILAGROS","DAR A CONOCER LA VERDAD DEL REINO"],c:3},
-{q:"¿Cuál es la palabra griega que se traduce espíritu?",o:["PNÉUMA","EMAUS","NEUMAN","SPIRIT"],c:0},
-{q:"¿En qué año se completó el libro de Romanos?",o:["54 E.C.","58 E.C.","56 E.C.","60 E.C."],c:2},
-{q:"¿En qué año se completó el libro de Mateo?",o:["45 E.C.","48 E.C.","43 E.C.","41 E.C."],c:3},
-{q:"¿En qué año se completó el libro de Jeremías?",o:["598 A.E.C.","555 A.E.C.","580 A.E.C.","546 A.E.C."],c:2},
-{q:"¿En qué año se completó el libro de Éxodo?",o:["1512 A.E.C.","1545 A.E.C.","1519 A.E.C.","1914 A.E.C."],c:0},
-{q:"¿En qué año se completó el libro de Proverbios?",o:["1465 A.E.C.","1919 E.C.","717 A.E.C.","718 A.E.C."],c:2},
-{q:"¿En qué año se completó el libro de Malaquías?",o:["445 A.E.C.","443 A.E.C.","564 A.E.C.","1512 E.C."],c:1},
-{q:"¿De quién pudo ser contemporáneo Amós?",o:["EZEQUIAS","ÁQUILA","OSEAS","JUAN EL BAUTISTA"],c:2},
-{q:"¿Cuál de los siguientes sí es hijo de Aarón?",o:["ITAMAR","DATAN","TAMAR","HUR"],c:0},
-{q:"¿En qué río se bañó 7 veces Naamán para sanar de la lepra?",o:["TIGRIS","NILO","JORDAN","PARANA"],c:2},
-{q:"¿Cuál fue el primer milagro de Jesús?",o:["BAUTIZARSE","SANAR A UN LEPROSO","CONVERTIR AGUA EN VINO","RESUCITAR A LAZARO"],c:2},
-{q:"¿Cuál fue el último milagro de Jesús?",o:["LA ASCENSION AL CIELO","LA RESURRECCION","CURAR A UN CIEGO","CURAR LA OREJA DE UN SOLDADO"],c:3},
-{q:"¿Quién fue la madre de Salomón?",o:["MICAL","ABIGAIL","BAT-SEBA","RUT"],c:2},
-{q:"¿En qué año se completó el libro de Génesis?",o:["1753 A.E.C.","1513 A.E.C.","1444 A.E.C.","1919 E.C."],c:1},
-{q:"¿En qué año se completó el libro de Deuteronomio?",o:["1473 A.E.C.","1915 E.C.","No se sabe","Nunca se completó"],c:0},
-{q:"¿En qué año se completó el libro de Levítico?",o:["1482 A.E.C.","1513 A.E.C.","1512 A.E.C.","No se completó"],c:2},
-{q:"¿En qué año se completó el libro de Números?",o:["1473 A.E.C.","No se completó","1918","No se sabe"],c:0},
-{q:"Según Proverbios 24:10, si te desanimas en los momentos difíciles, ¿qué pasa?",o:["Te vas a perder","Te irá bien","Te faltarán las fuerzas","Perderás buenas costumbres"],c:2},
-{q:"Según Proverbios 15:15, el que es bueno de corazón:",o:["Queda con hambre","Cubre una multitud de pecados","Goza de un banquete continuo","Soporta todas las cosas"],c:2},
-{q:"¿En qué año se completó el libro de Josué?",o:["1455 A.E.C.","752 A.E.C.","1513 A.E.C.","1450 A.E.C."],c:3},
-{q:"¿En qué año se completó el libro de Jueces?",o:["1092 A.E.C.","1859 A.E.C.","1100 A.E.C.","1213 A.E.C."],c:2},
-{q:"Según Proverbios 15:17, ¿qué es mejor para que haya amor?",o:["Un plato de harina","Un plato vacío","Un plato de verduras","Un plato de carne"],c:2},
-{q:"Según lo que Jesús enseñó, ¿qué es necesario para hallar la felicidad?",o:["No hacer nada","Tener muchos amigos","Reconocer las necesidades espirituales","Satisfacer a los demás"],c:2},
-{q:"Según Jesús mencionó, ¿hasta dónde seríamos sus testigos?",o:["Europa","Toda América","Jerusalén, Samaria, Belén y la parte más distante","Jerusalén, Judea, Samaria y hasta la parte más lejana de la tierra"],c:3},
-{q:"Según Jesús dijo en Juan, ¿quién es mayor que Él?",o:["Los ángeles","Los apóstoles","Los 144000","Jehová"],c:3},
-{q:"¿En qué año se completó el libro de Rut?",o:["1445 A.E.C.","1945 E.C.","1513 A.E.C.","1090 A.E.C."],c:3},
-{q:"¿En qué año se completó el libro de 1 Samuel?",o:["1456 E.C.","455 A.E.C.","1413 A.E.C.","1078 A.E.C."],c:3},
-{q:"¿En qué año se completó el libro de 2 Samuel?",o:["1040 A.E.C.","2012 A.E.C.","1513 E.C.","1914 A.E.C."],c:0},
-{q:"¿En qué año se completó el libro de 1 Reyes?",o:["1423 A.E.C.","1918 E.C.","580 A.E.C.","1455 E.C."],c:2},
-{q:"¿En qué año se completó el libro de 2 Reyes?",o:["580 A.E.C.","455 E.C.","4125 A.E.C.","250 E.C."],c:0},
-{q:"¿En qué año se completó el libro de 1 Crónicas?",o:["1513 A.E.C.","1945 E.C.","460 A.E.C.","1998 A.E.C."],c:2},
-{q:"¿En qué año se completó el libro de 2 Crónicas?",o:["430 E.C.","460 A.E.C.","1245 A.E.C.","1950 E.C."],c:1},
-{q:"¿En qué año se completó el libro de Génesis? (repaso)",o:["1914 E.C.","1513 A.E.C.","1475 E.C.","460 A.E.C."],c:1},
-{q:"¿A qué publicación hace referencia la abreviación T-37?",o:["Visite jw.org (2014)","Visite jw broadcasting","Visite la biblioteca en línea","Visite Betel"],c:0,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación T-30?",o:["La Biblia (2013)","La Atalaya","Despertad","Perspicacia"],c:0,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación T-16?",o:["La Biblia","Razonamiento","Esperanza para los que han muerto (1987)","La familia... ¿puede sobrevivir?"],c:2,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación T-21?",o:["Familia unida y feliz","Pacífico nuevo mundo","Disfrute de su vida de familia (1998)","¿Por qué estamos aquí?"],c:2,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación T-33?",o:["¿Quién es el gobernante del mundo?","¿Quién controla el mundo? (2013)","¿Quién es Jehová?","¿Quiénes son los testigos de Jehová?"],c:1,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación T-36?",o:["Reino (2014)","Religión falsa","¿Rige el destino nuestra vida?","Saber la verdad"],c:0,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación S-38?",o:["Instrucciones para la reunión Vida y Ministerio","Vida feliz","Todas las personas","Saber más de la Biblia"],c:0,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación T-35?",o:["Volver a vivir (2013)","La vida... ¿cómo se presentó aquí?","¿Por qué hay tantos problemas en la vida?","¿Quién es Jesucristo?"],c:0,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación nwt?",o:["Índice","Traducción del Nuevo Mundo","Guía de estudio","Nuestro Ministerio del Reino"],c:1},
-{q:"¿A qué publicación hace referencia la abreviación cl?",o:["Apocalipsis","Amor de Dios","Acercarse a Jehová","Benefíciese"],c:2,verify:true},
-{q:"¿A qué publicación hace referencia la abreviación sjj?",o:["Cantemos con gozo a Jehová (2017)","Conocimiento","Ejemplos de fe","El hombre en busca de Dios"],c:0},
-{q:"¿Cuántas referencias a los pájaros aparecen en la Biblia?",o:["Más de 300","1254","Más de 2500","Ninguna"],c:0,verify:true},
-{q:"¿En qué «día» creativo llegaron a existir los pájaros?",o:["Día 1","Día 3","Día 8","Día 5"],c:3},
-{q:"¿Cuál de estos condimentos se menciona en la Biblia?",o:["Eneldo","El comino","La ruda","Todas las anteriores"],c:3},
-{q:"¿Cuál de estas aves se menciona en la Biblia?",o:["La tórtola","La perdiz","El gorrión","Todas las anteriores"],c:3},
-{q:"¿Qué significa el nombre del valle el Tiropeón?",o:["Queseros","Panaderos","Carniceros","Verduleros"],c:0},
-{q:"¿Qué alimento principal tuvieron los israelitas durante los 40 años en el desierto?",o:["Papas","Carne","Delivery","Maná"],c:3},
-{q:"¿En qué desierto Jehová proveyó el maná por primera vez?",o:["Sin","Sinaí","Dotán","No se menciona en la Biblia"],c:0},
-{q:"¿Cuántas profecías aproximadamente se cumplieron en Jesús?",o:["30","45","No se determina una cifra exacta","144.000"],c:2,verify:true},
-{q:"¿En qué año dejó de utilizarse «Nuestro Ministerio del Reino» en la reunión de semana?",o:["2014","2016","2015","2018"],c:1,verify:true},
-{q:"¿En qué año inició la Noche de Adoración en Familia?",o:["2008","1999","2009","2013"],c:2},
-{q:"¿Qué nombre fue dado a Azarías en el cautiverio de Babilonia?",o:["Belsasar","Abed-nego","Sadrac","No se le cambió"],c:1},
-{q:"¿Cuántos soldados del ejército de Senaquerib mató el ángel de Jehová?",o:["185.000","105.000","195.000","115.000"],c:0},
-{q:"¿Qué nombre fue dado a Daniel en el cautiverio de Babilonia?",o:["Belsasar","Abed-nego","Sadrac","No se le cambió"],c:0},
-{q:"¿Qué nombre fue dado a Misael en el cautiverio de Babilonia?",o:["Belsasar","Abed-nego","Sadrac","Mesac"],c:3},
-{q:"¿Cuántas parejas de animales colocó Moisés en el arca?",o:["2","4","1950","Ninguno (fue Noé)"],c:3},
-{q:"Luego de la destrucción del año 70 D.C. a manos de los romanos, ¿en qué año se reconstruyó Jerusalén?",o:["120 D.C.","110 D.C.","130 D.C.","1945 D.C."],c:2},
-{q:"¿Qué significa Jerusalén?",o:["Posesión [o Fundamento] de Paz Doble","Paz","Ciudad de Jesús","Ciudad de Medio Oriente"],c:0},
-{q:"¿En qué año conquistó Babilonia a Jerusalén?",o:["307 A.E.C.","1250 A.E.C.","1945 A.E.C.","607 A.E.C."],c:3},
-{q:"¿Qué significa posiblemente el título Rabsaces?",o:["Rey de Asiria","Rey de Babilonia","Copero principal","No se sabe"],c:2},
-{q:"¿Qué significa evangelizador?",o:["Enviado","Apóstol","Ángel","Que lleva un buen mensaje"],c:3},
-{q:"¿Qué significa apóstol?",o:["Viajero","Servidor","Enviado","Que lleva un buen mensaje"],c:2},
-{q:"¿Qué significa ángel?",o:["Mensajero","Enviado","Que lleva las cargas","Apóstol"],c:0},
-{q:"¿Cuál es el nombre de la primera mujer?",o:["Evangelina","Evarista","Eva","Ela"],c:2},
-{q:"¿Cuál fue la última creación de Jehová que se tiene registro?",o:["Los animales","Adán","Los cielos","Eva"],c:3},
-{q:"¿Qué significa el nombre Eva?",o:["Mujer de Adán","Mujer","Alma de mujer","Una viviente"],c:3},
-{q:"¿Quién le puso nombre a Eva?",o:["Los ángeles","Fue por voto popular","Jehová","Adán"],c:3},
-{q:"¿En qué momento del registro bíblico se indica que Adán nombró a su esposa Eva?",o:["Después de ser creada","Después de tener hijos","Luego de despertarse","Después de violar la ley de Dios (Gén. 3:20)"],c:3},
-{q:"¿Qué significa Adán?",o:["Rojo","Humanidad","Persona","Ninguna es correcta"],c:1,verify:true},
-{q:"¿En qué año nació Adán?",o:["13580 A.E.C.","3500 A.E.C.","4026 A.E.C.","No se menciona en la Biblia"],c:2},
-{q:"¿Quién pronunció la primera poesía conocida?",o:["Caín","Abel","Adán","Salomón"],c:2},
-{q:"¿Con qué otro nombre se le conocía a Pablo?",o:["Paulo","Pablito","Saulo","Gamaliel"],c:2},
-{q:"¿Quién fue uno de los maestros de Pablo?",o:["Bernabé","Rabán","Gamaliel","Todos fueron sus maestros"],c:2},
-{q:"¿De qué tribu provenía Pablo?",o:["Israelita (genérico)","Neftalí","Benjamín","Efraín"],c:2},
-{q:"¿De dónde descendieron las tribus de Israel?",o:["De los egipcios","De los doce hijos de Jacob","No se sabe el origen","De los asirios"],c:1},
-{q:"¿Quién puso el nombre a Benjamín?",o:["Raquel","Jacob","Isaac","Rebeca"],c:1},
-{q:"¿Qué nombre le puso Raquel a Benjamín cuando nació?",o:["Kilión","Mahlón","Ben-oní","Benjamín"],c:2},
-{q:"¿Qué quiere decir el nombre Benjamín?",o:["Hijo de Jacob","Hijo de la Diestra","Hijo amado","Hijo de Raquel"],c:1},
-{q:"¿Cuál era el duodécimo hijo de Jacob?",o:["Manasés","Efraín","José","Benjamín"],c:3},
-{q:"¿De quién era hija Raquel, esposa de Jacob?",o:["Adán","Abán","Labán","No se menciona"],c:2},
-{q:"¿Dónde murió Raquel?",o:["Efrat","Harán","Canaán","No se menciona"],c:0},
-{q:"¿De dónde era Rut?",o:["Zabulón","Israel","Canaán","Moab"],c:3},
-{q:"¿Qué hijo de Noemí fue esposo de Rut?",o:["Kilión","Mahlón","No se casó con su hijo","La Biblia no lo menciona"],c:1},
-{q:"¿Qué significa Edén?",o:["Jardín","Placer","Arboleda","Ciudad de Adán"],c:1},
-{q:"¿En cuántos ríos se dividía el río principal de Edén?",o:["3","5","4","Solo había un río"],c:2},
-{q:"¿Cuál de los siguientes nombres pertenece a los ríos de Edén?",o:["Éufrates","Hidequel (Tigris)","Guihón","Todos ellos"],c:3},
-{q:"¿Qué significa el nombre Abdías?",o:["Siervo real","Siervo del rey","Siervo ministerial","Siervo de Jehová"],c:3},
-{q:"¿Quién fue Sansón?",o:["Un filisteo","Un hermano de Hércules","Un juez de Israel","Un profeta"],c:2},
-{q:"¿Quién traicionó a Sansón?",o:["Sus hermanos","Dalila","La vecina de al lado","Una prostituta"],c:1},
-{q:"¿Qué relación tenía el pelo largo de Sansón con su fuerza?",o:["La fuerza venía del pelo","Representaba su relación especial con Jehová como nazareo","Tenía una buena hidratación con hierbas","Su fuerza venía de su entrenamiento"],c:1},
-{q:"¿Qué significa posiblemente Dalila?",o:["Mujer de Israel","Colgante","Brazalete","Enviada de los filisteos"],c:1,verify:true},
-{q:"¿Qué significa el nombre Jaquín?",o:["Sacerdote de Jehová","Descendiente de Jehová","Que [Jehová] establezca firmemente","No se puede saber con exactitud"],c:2},
-{q:"¿Quién recibió hospitalariamente a Pablo y Silas en su primer viaje a Macedonia?",o:["Jasón","César","Silas","Bernabé"],c:0},
-{q:"¿Qué edad tenían en el reencuentro los gemelos Jacob y Esaú?",o:["98","88","97","77"],c:2},
-{q:"¿Qué significa Betel?",o:["Casa de oración","Casa de Israel","Casa de Dios","Casa de luz"],c:2},
-{q:"¿Qué significa fariseos?",o:["Hermandad","Adorador","Separados","Sectario"],c:2},
-{q:"¿A quién fue el primero que se le otorgó el título de «Rabán»?",o:["Pablo","Bernabé","Gamaliel","Caifás"],c:2},
-{q:"¿A quién se le atribuye la frase: «Si este proyecto proviene de hombres, será derribado; pero si proviene de Dios, no podrán derribarlo»?",o:["César","Caifás","Un salmista","Gamaliel"],c:3},
-{q:"¿A quién se le atribuye la frase: «¿Quién es Jehová, para que yo obedezca su voz y envíe a Israel?»?",o:["Poncio Pilato","Faraón","Caifás","Balaam"],c:1},
-{q:"¿Qué animal golpeó Balaam en su camino a maldecir a Israel?",o:["Iba caminando","Un caballo","Una asna","Iba en un carruaje"],c:2},
-{q:"¿A quién se le atribuye la frase: «¿Soy yo un perro, para que vengas a mí con cayados?»?",o:["César","Nemrod","Goliat","Félix"],c:2},
-{q:"¿Qué familiar intervino para salvar a Pablo de una emboscada de sus enemigos?",o:["La hermana","La sobrina","El sobrino","El tío"],c:2},
-{q:"¿Quién reemplazó a Judas como apóstol?",o:["Bernabé","Pablo","Matías","José"],c:2},
-{q:"¿A quién se le atribuye la frase: «Lo que he escrito, he escrito»?",o:["Caifás","Saulo de Tarso","Pilato","Pedro"],c:2},
-{q:"¿A qué criminal se liberó en el juicio a Jesús?",o:["Berseba","Almoran","Barrabás","Aguarras"],c:2},
-{q:"¿Quién fue el padre de Boaz de la línea del Mesías?",o:["Pérez","Jesé","Salmón","Asá"],c:2},
-{q:"¿Quién fue el padre de Manasés de la línea del Mesías?",o:["Acaz","Ezequías","Pérez","Amón"],c:1},
-{q:"¿A qué edad fue rey Josías?",o:["33","10","8","12"],c:2},
-{q:"¿Quién más menciona la Biblia que se levantó en rebelión contra Moisés (Núm. 16:1)?",o:["Coré, Datán, Abirán, Omán","Coré, Datán, Abirán, Of","Coré, Datán, Abirán, On","Solo fueron Coré, Datán, Abirán"],c:2},
-{q:"¿Quién hizo que Jacob quedara rengo?",o:["Esaú","Un ángel","Un golpe en batalla","Un enemigo"],c:1},
-{q:"¿Sobre quiénes gobernaban «los señores del eje»?",o:["Moabitas","Jaquinitas","Filisteos","Cananeos"],c:2},
-{q:"Cuando Jesús dijo a sus opositores «Yo dije: ‘Ustedes son dioses’», ¿de qué salmo citó?",o:["Salmo 115","Salmo 92","Salmo 82","Salmo 102"],c:2},
-{q:"¿Qué día y hora murió Jesús?",o:["Jueves 12 del mediodía","Martes 7 de la tarde","Viernes 3 de la tarde","Sábado 3 de la tarde"],c:2},
-{q:"¿Cuántos son los meses del calendario judío?",o:["11","12","10","13"],c:1},
-{q:"¿Cuál de los siguientes corresponde a un mes judío?",o:["Abiatar","Nassan","Nisán","Labam"],c:2},
-{q:"¿A qué hace referencia la palabra waw?",o:["Un instrumento de trabajo","Una letra","Una ciudad filistea","No aparece dicha palabra"],c:1},
-{q:"¿Cuál es el último libro que se escribió de la Biblia?",o:["Mateo","Revelación (Apocalipsis)","Juan","Marcos"],c:1},
-{q:"¿Cuántas resurrecciones menciona la Biblia?",o:["4","8","10","9"],c:3,verify:true},
-{q:"¿Qué título tiene la canción 3 de «Cantemos con gozo»?",o:["Tú me das fe, confianza y valor","Tú me das fuerza, valor y decisión","Tú me das fuerza, confianza y valor","La fe en Jehová da fuerza"],c:2,verify:true},
-{q:"¿Quién alimenta hoy día a los domésticos en sentido espiritual?",o:["Los ancianos","El comité de enlace","El esclavo fiel y prudente","Los ángeles"],c:2},
-{q:"En la parábola del capítulo 25 de Mateo, ¿qué cantidad de vírgenes menciona Jesús?",o:["8","5","10","12"],c:2},
-{q:"¿Qué reemplazó al anuario impreso desde que dejó de publicarse en 2017?",o:["Un video-informe anual","Un folleto trimestral","Ya no se informa nada","Un apéndice de La Atalaya"],c:0},
-{q:"¿Con qué frecuencia se realiza actualmente la Conmemoración de la muerte de Cristo?",o:["Cada mes","Una vez al año","Cada dos años","Solo cuando cae domingo"],c:1},
-{q:"¿Cuántos libros y cartas contiene la Biblia?",o:["56","75","66","45"],c:2},
-{q:"¿Con qué libro terminan las Escrituras Hebreo-arameas?",o:["Zacarías","Miqueas","Malaquías","Sofonías"],c:2},
-{q:"¿Qué significa la palabra iglesia?",o:["Lugar de culto","Lugar de adoración","Grupo de fieles (congregación)","Adoración"],c:2},
-{q:"¿Quién era la esposa de Aquila?",o:["Marta","Rut","Priscila","Jael"],c:2},
-{q:"¿Cuántas canciones contiene el libro «Cantemos con gozo a Jehová»?",o:["134","205","148","151"],c:3},
-{q:"¿Sobre qué montaña se posó el arca de Noé?",o:["Arsat","Alpes","Ararat","Siguió en el agua"],c:2},
-{q:"¿Qué fue lo que envió Noé por primera vez para constatar que el agua había bajado?",o:["Un gorrión","Un cuervo","Una paloma","Una codorniz"],c:1},
-{q:"¿Qué sucedió con la paloma que Noé envió la última vez?",o:["Trajo una hoja de olivo","No envió una paloma","No regresó","No se menciona en la Biblia"],c:2},
-{q:"¿Cuántos capítulos contiene el libro de Génesis?",o:["45","150","38","50"],c:3},
-{q:"¿Cuántos capítulos contiene el libro de 1 Reyes?",o:["32","22","15","50"],c:1},
-{q:"¿Cuántos capítulos contiene el libro de Zacarías?",o:["11","14","45","120"],c:1},
-{q:"¿Cómo se llamaba el papá de Juan el Bautista?",o:["Anás","Caifás","Zacarías","No se menciona"],c:2},
-{q:"¿Cómo sigue el estribillo de la canción 151, «Llamaré a los que duermen, ellos me responderán»?",o:["La obra de mis manos eres tú, ¿despierta ya?","Extraño tanto verlos… ese día llegará","Nuestro Dios está anhelante","Volveremos a besarlos"],c:1,verify:true},
-{q:"¿Cómo sigue el estribillo de la canción 139, «Por ti, oh Jehová, mediante Jesús»?",o:["Mi corazón rebosa de felicidad","El reino de Dios nos dará libertad","El nuevo mundo ha visto la luz","Un nuevo mundo ha visto la luz"],c:3,verify:true},
-{q:"¿A qué publicación hace referencia el título en inglés «Insight on the Scriptures»?",o:["Conocimiento de las Escrituras","Despertad de las Escrituras","Perspicacia para comprender las Escrituras","Atalaya en inglés"],c:2}
 ];
 
-const QUESTIONS_GK = [
-{q:"¿Qué instrumento tiene 88 teclas?",o:["Violín","Piano","Arpa","Acordeón"],c:1},
-{q:"¿Quién compuso «Las Cuatro Estaciones»?",o:["Mozart","Bach","Vivaldi","Beethoven"],c:2},
-{q:"¿Cuál fue la primera banda de los Beatles antes del nombre definitivo?",o:["The Quarrymen","The Rolling Stones","The Kinks","The Shadows"],c:0},
-{q:"¿Qué cantante es conocida como «La Reina del Tex-Mex»?",o:["Shakira","Selena Quintanilla","Gloria Estefan","Thalía"],c:1},
-{q:"¿De qué país es originario el tango?",o:["México","España","Argentina","Brasil"],c:2},
-{q:"¿Cuántas cuerdas tiene una guitarra clásica estándar?",o:["4","5","6","7"],c:2},
-{q:"¿Quién es conocido como «El Rey del Pop»?",o:["Prince","Michael Jackson","Elvis Presley","James Brown"],c:1},
-{q:"¿Qué género musical nació en Jamaica en los años 60?",o:["Reggae","Blues","Funk","Disco"],c:0},
-{q:"¿Qué banda interpretó «Bohemian Rhapsody»?",o:["Queen","Led Zeppelin","The Who","Pink Floyd"],c:0},
-{q:"¿Cuál es el instrumento nacional de México en muchos mariachis, de cuerdas graves?",o:["Guitarrón","Violonchelo","Contrabajo","Bajo eléctrico"],c:0},
-{q:"¿Qué ingrediente principal lleva el guacamole?",o:["Tomate","Palta / aguacate","Cebolla","Pimiento"],c:1},
-{q:"¿De qué país es originaria la pizza margarita?",o:["Francia","España","Italia","Grecia"],c:2},
-{q:"¿Qué tipo de leche se usa tradicionalmente para el dulce de leche?",o:["Leche de cabra","Leche de vaca","Leche de soja","Leche de almendra"],c:1},
-{q:"¿Qué especia se obtiene del estigma de una flor y es una de las más caras del mundo?",o:["Canela","Azafrán","Pimentón","Cúrcuma"],c:1},
-{q:"¿Cuál es el ingrediente base del sushi?",o:["Arroz","Fideos","Papa","Quinoa"],c:0},
-{q:"¿Qué fruta se usa tradicionalmente para hacer el vino?",o:["Manzana","Uva","Pera","Ciruela"],c:1},
-{q:"¿Qué país es famoso por la fondue de queso?",o:["Suiza","Bélgica","Holanda","Austria"],c:0},
-{q:"¿Qué carne lleva tradicionalmente el asado argentino como corte típico?",o:["Cordero","Cerdo","Vacuno","Pollo"],c:2},
-{q:"¿Qué técnica de cocción consiste en cocinar al vacío a baja temperatura?",o:["Sous vide","Flambeado","Gratinado","Escalfado"],c:0},
-{q:"¿Cuál es el ingrediente principal de un ceviche?",o:["Pescado o marisco crudo marinado en cítricos","Carne asada","Pollo frito","Arroz con verduras"],c:0},
-{q:"¿Quién pintó «La Mona Lisa»?",o:["Miguel Ángel","Rafael","Leonardo da Vinci","Donatello"],c:2},
-{q:"¿A qué movimiento artístico pertenece Salvador Dalí?",o:["Cubismo","Surrealismo","Impresionismo","Barroco"],c:1},
-{q:"¿Qué artista pintó «La noche estrellada»?",o:["Vincent van Gogh","Claude Monet","Edvard Munch","Paul Cézanne"],c:0},
-{q:"¿En qué museo se encuentra «El Guernica» de Picasso?",o:["Louvre","Museo del Prado","Museo Reina Sofía","Museo Británico"],c:2},
-{q:"¿Qué técnica de dibujo usa tinta y puntos para crear sombras?",o:["Puntillismo (stippling)","Esfumado","Acuarela","Grabado"],c:0},
-{q:"¿Quién esculpió el «David»?",o:["Leonardo da Vinci","Miguel Ángel","Bernini","Donatello"],c:1},
-{q:"¿Qué colores primarios se usan en pintura tradicional?",o:["Rojo, verde, azul","Amarillo, rojo, azul","Negro, blanco, gris","Naranja, violeta, verde"],c:1},
-{q:"¿Qué artista es famoso por sus obras de «sopa Campbell» dentro del Pop Art?",o:["Andy Warhol","Roy Lichtenstein","Jackson Pollock","Keith Haring"],c:0},
-{q:"¿Qué estudio de animación creó a Mickey Mouse?",o:["Warner Bros","Disney","Pixar","DreamWorks"],c:1},
-{q:"¿Cómo se llama el pueblo ficticio donde vive la familia Simpson?",o:["Quahog","Springfield","South Park","Bedrock"],c:1},
-{q:"¿Qué estudio de animación japonesa creó «Mi vecino Totoro»?",o:["Toei Animation","Studio Ghibli","Sunrise","Madhouse"],c:1},
-{q:"¿Cuál es el nombre real de Goku en la serie Dragon Ball?",o:["Kakaroto","Vegeta","Gohan","Piccolo"],c:0},
-{q:"¿Qué personaje de dibujos animados vive en una piña debajo del mar?",o:["Patricio Estrella","Bob Esponja","Calamardo","Don Cangrejo"],c:1},
-{q:"¿Qué serie animada sigue a una familia prehistórica llamada Picapiedra?",o:["Los Supersónicos","Los Picapiedra","Scooby-Doo","Tom y Jerry"],c:1},
-{q:"¿Cómo se llama el perro detective que resuelve misterios con una pandilla de adolescentes?",o:["Snoopy","Pluto","Scooby-Doo","Goofy"],c:2},
-{q:"¿Qué serie de animación creó Matt Groening antes de «Los Simpson»?",o:["Futurama","Vida en el infierno (Life in Hell)","Family Guy","King of the Hill"],c:1},
-{q:"¿Cuál es el nombre del ratón que persigue eternamente al gato Tom?",o:["Jerry","Stuart","Mickey","Speedy"],c:0},
-{q:"¿Qué serie de HBO está ambientada en los Siete Reinos de Poniente?",o:["Vikings","Juego de Tronos","The Witcher","Los Anillos de Poder"],c:1},
-{q:"¿En qué ciudad transcurre la serie «Friends»?",o:["Los Ángeles","Chicago","Nueva York","Boston"],c:2},
-{q:"¿Cómo se llama el protagonista de «Breaking Bad»?",o:["Jesse Pinkman","Walter White","Saul Goodman","Hank Schrader"],c:1},
-{q:"¿Qué serie sigue las aventuras de un grupo de amigos en un café de Manhattan llamado Central Perk?",o:["Seinfeld","Friends","How I Met Your Mother","Cheers"],c:1},
-{q:"¿Qué serie española de Netflix trata sobre un robo a la Fábrica Nacional de Moneda y Timbre?",o:["Élite","La Casa de Papel","Vis a vis","Las chicas del cable"],c:1},
-{q:"¿Cómo se llama el laboratorio ficticio de «Stranger Things»?",o:["Hawkins Lab","Umbrella Corp","Aperture Science","Black Mesa"],c:0},
-{q:"¿Qué serie de comedia estadounidense transcurre en una oficina de papelería llamada Dunder Mifflin?",o:["Parks and Recreation","The Office","Brooklyn Nine-Nine","Community"],c:1},
-{q:"¿Cuál es la capital de Francia?",o:["Lyon","Marsella","París","Niza"],c:2},
-{q:"¿Cuántos huesos tiene el cuerpo humano adulto aproximadamente?",o:["106","156","206","256"],c:2},
-{q:"¿Cuál es el planeta más grande del sistema solar?",o:["Saturno","Júpiter","Neptuno","Urano"],c:1},
-{q:"¿Qué gas es esencial para la respiración humana?",o:["Nitrógeno","Dióxido de carbono","Oxígeno","Hidrógeno"],c:2},
-{q:"¿En qué año llegó el hombre a la Luna por primera vez?",o:["1965","1969","1972","1959"],c:1},
-{q:"¿Cuál es el río más largo del mundo?",o:["Nilo","Amazonas","Mississippi","Yangtsé"],c:1},
-{q:"¿Qué deporte se juega en Wimbledon?",o:["Golf","Tenis","Críquet","Rugby"],c:1},
-{q:"¿Cuántos jugadores tiene un equipo de fútbol en la cancha?",o:["9","10","11","12"],c:2},
-{q:"¿Cuál es el metal más abundante en la corteza terrestre?",o:["Hierro","Aluminio","Cobre","Oro"],c:1},
-{q:"¿Qué país tiene forma de bota en el mapa?",o:["España","Italia","Grecia","Portugal"],c:1}
-];
-
-/* ============ MODALES GENÉRICOS (reemplazan alert/confirm nativos) ============ */
-function closeGenericModal(){ document.getElementById('generic-modal').classList.remove('active'); }
-function showAlert(msg, title){
-  document.getElementById('generic-modal-title').textContent = title || 'Aviso';
-  document.getElementById('generic-modal-msg').textContent = msg;
-  document.getElementById('generic-modal-actions').innerHTML =
-    `<span></span><button class="btn" onclick="closeGenericModal()">Entendido</button>`;
-  document.getElementById('generic-modal').classList.add('active');
-}
-function showConfirm(msg, onYes, title){
-  document.getElementById('generic-modal-title').textContent = title || 'Confirmar';
-  document.getElementById('generic-modal-msg').textContent = msg;
-  document.getElementById('generic-modal-actions').innerHTML =
-    `<button class="btn secondary" onclick="closeGenericModal()">Cancelar</button>
-     <button class="btn danger" id="generic-modal-yes">Sí, confirmar</button>`;
-  document.getElementById('generic-modal').classList.add('active');
-  document.getElementById('generic-modal-yes').onclick = ()=>{ closeGenericModal(); onYes(); };
-}
-
-/* ============ ESTADO ============ */
-const HISTORY_KEY = 'trivia_history_v1';
-const STATE_KEY = 'trivia_state_v1';
-let state = null;
-let timerInterval = null;
-let selectedTimeValue = null;
-let audienceUsedThisQuestion = false;
-
-function freshState(){
-  return {
-    mode:null, baseTime:null, players:[], usedIds:[], currentPlayerIndex:0,
-    currentQ:null, questionsThisTurn:0, maxPerTurn:10, phase:'mode',
-    tiebreak:null, timeLeft:0, timerRunning:false, answered:false,
-    playerOrderNames:[]
-  };
-}
-function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
-function loadState(){
-  const raw = localStorage.getItem(STATE_KEY);
-  if(raw){ try{ state = JSON.parse(raw); return true; }catch(e){} }
-  return false;
-}
-function getHistory(){
-  try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; }
-}
-function addToHistory(entry){
-  const h = getHistory(); h.unshift(entry);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0,50)));
-}
-
-if(!loadState()){ state = freshState(); }
-
-/* ============ NAVEGACIÓN ============ */
-function goTo(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  state.phase = id;
-  if(id==='screen-players'){ renderPlayersList(); }
-  saveState();
-}
-
-/* ============ MODO ============ */
-function selectMode(m){
-  state = freshState();
-  state.mode = m;
-  saveState();
-  goTo('screen-time');
-}
-
-/* ============ TIEMPO ============ */
-function selectTime(t, el){
-  selectedTimeValue = t;
-  document.querySelectorAll('.time-opt').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('time-next').disabled = false;
-  document.getElementById('custom-time').value='';
-  document.getElementById('custom-num').textContent='—';
-}
-function selectCustomTime(v){
-  const n = parseInt(v,10);
-  document.querySelectorAll('.time-opt').forEach(o=>o.classList.remove('selected'));
-  if(n && n>=5){
-    selectedTimeValue = n;
-    document.getElementById('custom-num').textContent = n;
-    document.getElementById('time-custom-box').classList.add('selected');
-    document.getElementById('time-next').disabled = false;
-  } else {
-    document.getElementById('time-next').disabled = true;
-  }
-}
-document.getElementById('time-next').addEventListener('click', ()=>{
-  state.baseTime = selectedTimeValue;
-  saveState();
-});
-
-/* ============ JUGADORES ============ */
-function renderPlayersList(){
-  const list = document.getElementById('players-list');
-  list.innerHTML='';
-  const count = Math.max(state.players.length,2);
-  if(state.players.length===0){ state.players=[{name:''},{name:''}]; }
-  state.players.forEach((p,i)=>{
-    const row = document.createElement('div');
-    row.className='player-row';
-    row.innerHTML = `<div class="avatar">${i+1}</div>
-      <input type="text" placeholder="Nombre del jugador ${i+1}" value="${p.name||''}" oninput="state.players[${i}].name=this.value">
-      ${state.players.length>1 ? `<span class="remove-x" onclick="removePlayer(${i})">×</span>` : ''}`;
-    list.appendChild(row);
-  });
-  document.getElementById('add-player-btn').style.display = state.players.length>=4 ? 'none':'inline-block';
-}
-function addPlayerRow(){
-  if(state.players.length<4){ state.players.push({name:''}); renderPlayersList(); }
-}
-function removePlayer(i){ state.players.splice(i,1); renderPlayersList(); }
-
-function tryStartFromPlayers(){
-  const names = state.players.map(p=>(p.name||'').trim()).filter(n=>n.length>0);
-  if(names.length<1){ showAlert('Ingresá al menos el nombre de un jugador.'); return; }
-  state.players = names.map(n=>({
-    name:n, score:0, retired:false, finished:false,
-    jokers:{fifty:false, audience:false, extend:false}
-  }));
-  state.currentPlayerIndex = 0;
-  saveState();
-  setupRulesScreen(false);
-  goTo('screen-rules');
-}
-
-/* ============ REGLAS ============ */
-function setupRulesScreen(isReturning){
-  document.getElementById('rules-order-list').textContent = state.players.map(p=>p.name).join(' → ');
-  const cont = document.getElementById('rules-continue-btn');
-  const backBtn = document.getElementById('rules-back-btn');
-  if(isReturning){
-    const nextP = state.players[state.currentPlayerIndex];
-    document.getElementById('rules-title').textContent = 'Reglas del juego';
-    document.getElementById('rules-sub').textContent = `Turno de: ${nextP.name}. Que el presentador vuelva a leer las reglas en voz alta.`;
-    cont.textContent = `Comenzar turno de ${nextP.name} →`;
-    backBtn.style.display='none';
-  } else {
-    document.getElementById('rules-title').textContent = 'Reglas del juego';
-    document.getElementById('rules-sub').textContent = 'Que el presentador lea esto en voz alta antes de arrancar.';
-    cont.textContent = `Comenzar turno de ${state.players[0].name} →`;
-    backBtn.style.display='inline-block';
-  }
-  cont.onclick = beginPlayerTurn;
-}
-
-/* ============ PREGUNTAS / POOL ============ */
-function pool(){ return state.mode==='tj' ? QUESTIONS_TJ : QUESTIONS_GK; }
-function pickRandomQuestion(excludeIds){
-  const p = pool();
-  const available = p.map((q,idx)=>idx).filter(idx=>!excludeIds.includes(idx));
-  if(available.length===0) return null;
-  const pick = available[Math.floor(Math.random()*available.length)];
-  return {id:pick, ...p[pick]};
-}
-
-/* ============ TURNO DE JUGADOR ============ */
-function beginPlayerTurn(){
-  state.questionsThisTurn = 0;
-  saveState();
-  goTo('screen-game');
-  loadNextQuestion();
-}
-function currentPlayer(){ return state.players[state.currentPlayerIndex]; }
-
-function renderScoreboard(){
-  const sb = document.getElementById('scoreboard');
-  sb.innerHTML = state.players.map((p,i)=>`
-    <div class="score-chip ${i===state.currentPlayerIndex?'current':''}">
-      ${p.name}${p.retired?' <span class="badge">retirado</span>':''}
-      <b>${p.score}</b>
-    </div>`).join('');
-}
-
-function loadNextQuestion(){
-  clearInterval(timerInterval);
-  audienceUsedThisQuestion = false;
-  document.getElementById('audience-box').style.display='none';
-  document.getElementById('audience-box').innerHTML='';
-  const q = pickRandomQuestion(state.usedIds);
-  if(!q){ endTurn('sin_preguntas'); return; }
-  state.currentQ = q;
-  state.usedIds.push(q.id);
-  state.answered = false;
-  state.timeLeft = state.baseTime;
-  state.timerRunning = false;
-  saveState();
-  renderQuestion();
-}
-
-function renderQuestion(){
-  renderScoreboard();
-  document.getElementById('turn-label').textContent = `Turno de ${currentPlayer().name}`;
-  document.getElementById('q-number').textContent = `P${state.questionsThisTurn+1}`;
-  document.getElementById('q-text').textContent = state.currentQ.q;
-  document.getElementById('timer-display').textContent = state.timeLeft;
-  document.getElementById('timer-display').classList.remove('low');
-  document.getElementById('start-timer-btn').disabled = false;
-  document.getElementById('start-timer-btn').textContent = '▶ Iniciar tiempo';
-  document.getElementById('next-btn').style.display='none';
-  document.getElementById('game-status').textContent='';
-
-  const grid = document.getElementById('options-grid');
-  grid.innerHTML='';
-  const letters=['A','B','C','D'];
-  state.currentQ.o.forEach((opt,i)=>{
-    const div = document.createElement('div');
-    div.className='opt';
-    div.id = 'opt-'+i;
-    div.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
-    div.onclick = ()=>selectAnswer(i);
-    grid.appendChild(div);
-  });
-
-  renderJokers();
-}
-
-function renderJokers(){
-  const p = currentPlayer();
-  const box = document.getElementById('jokers-box');
-  box.innerHTML = `
-    <div class="joker ${p.jokers.fifty?'used':''}" onclick="useFifty()">
-      <div class="jtitle">50/50</div><div class="jdesc">Elimina 2 opciones incorrectas</div>
-    </div>
-    <div class="joker ${p.jokers.audience?'used':''}" onclick="useAudience()">
-      <div class="jtitle">🗳️ Preguntar al público</div><div class="jdesc">Detiene el tiempo y muestra una encuesta</div>
-    </div>
-    <div class="joker ${p.jokers.extend?'used':''}" onclick="useExtend()">
-      <div class="jtitle">⏱️ Extender tiempo</div><div class="jdesc">Suma tiempo extra si queda poco</div>
-    </div>`;
-}
-
-/* ============ CRONÓMETRO ============ */
-function startTimer(){
-  if(state.timerRunning || state.answered) return;
-  state.timerRunning = true;
-  document.getElementById('start-timer-btn').disabled = true;
-  document.getElementById('start-timer-btn').textContent = 'Corriendo...';
-  saveState();
-  timerInterval = setInterval(()=>{
-    state.timeLeft--;
-    const td = document.getElementById('timer-display');
-    td.textContent = Math.max(state.timeLeft,0);
-    if(state.timeLeft<=5) td.classList.add('low'); else td.classList.remove('low');
-    if(state.timeLeft<=0){
-      clearInterval(timerInterval);
-      state.timerRunning=false;
-      timeUp();
-    }
-    saveState();
-  },1000);
-}
-function pauseTimer(){ clearInterval(timerInterval); state.timerRunning=false; saveState(); }
-
-function timeUp(){
-  if(state.answered) return;
-  document.getElementById('game-status').textContent = '⏰ Se acabó el tiempo — respuesta incorrecta.';
-  revealAnswer(-1);
-}
-
-/* ============ RESPONDER ============ */
-function selectAnswer(i){
-  if(state.answered) return;
-  pauseTimer();
-  const correct = state.currentQ.c;
-  if(i===correct){
-    currentPlayer().score += 10;
-    document.getElementById('game-status').textContent = '✅ ¡Correcto! +10 puntos.';
-  } else {
-    document.getElementById('game-status').textContent = '❌ Incorrecto.';
-  }
-  revealAnswer(i);
-}
-function revealAnswer(chosen){
-  state.answered = true;
-  saveState();
-  const correct = state.currentQ.c;
-  document.querySelectorAll('.opt').forEach((el,i)=>{
-    el.classList.add('disabled');
-    if(i===correct) el.classList.add('correct');
-    if(i===chosen && chosen!==correct) el.classList.add('wrong');
-  });
-  document.getElementById('start-timer-btn').disabled = true;
-  document.getElementById('next-btn').style.display='inline-block';
-  renderScoreboard();
-}
-
-/* ============ COMODINES ============ */
-function useFifty(){
-  const p = currentPlayer();
-  if(p.jokers.fifty || state.answered) return;
-  p.jokers.fifty = true;
-  const correct = state.currentQ.c;
-  const wrongIdx = [0,1,2,3].filter(i=>i!==correct);
-  wrongIdx.sort(()=>Math.random()-0.5);
-  const toEliminate = wrongIdx.slice(0,2);
-  toEliminate.forEach(i=>{
-    document.getElementById('opt-'+i).classList.add('eliminated');
-  });
-  renderJokers();
-  saveState();
-}
-function useAudience(){
-  const p = currentPlayer();
-  if(p.jokers.audience || state.answered) return;
-  p.jokers.audience = true;
-  pauseTimer();
-  const correct = state.currentQ.c;
-  const results = [0,0,0,0];
-  let remaining = 100;
-  const correctShare = 45 + Math.floor(Math.random()*30); // 45-74%
-  results[correct] = correctShare;
-  remaining -= correctShare;
-  const others = [0,1,2,3].filter(i=>i!==correct);
-  others.forEach((idx,k)=>{
-    if(k===others.length-1){ results[idx]=remaining; }
-    else{
-      const share = Math.floor(Math.random()*remaining*0.6);
-      results[idx]=share; remaining-=share;
-    }
-  });
-  const letters=['A','B','C','D'];
-  const box = document.getElementById('audience-box');
-  box.style.display='flex';
-  box.innerHTML = results.map((v,i)=>`
-    <div class="abar-row">
-      <span style="width:16px;">${letters[i]}</span>
-      <div class="abar-track"><div class="abar-fill" style="width:${v}%"></div></div>
-      <span style="width:36px;text-align:right;">${v}%</span>
-    </div>`).join('');
-  document.getElementById('game-status').textContent = '🗳️ El público votó — el cronómetro está detenido. Tocá "Iniciar tiempo" para seguir.';
-  document.getElementById('start-timer-btn').disabled = false;
-  document.getElementById('start-timer-btn').textContent = '▶ Reanudar tiempo';
-  renderJokers();
-  saveState();
-}
-function useExtend(){
-  const p = currentPlayer();
-  if(p.jokers.extend || state.answered) return;
-  const base = state.baseTime;
-  const threshold = base/2;
-  if(state.timeLeft > threshold){
-    showAlert(`Este comodín solo se puede usar cuando queden ${threshold} segundos o menos.`);
-    return;
-  }
-  p.jokers.extend = true;
-  state.timeLeft += base;
-  document.getElementById('timer-display').textContent = state.timeLeft;
-  document.getElementById('game-status').textContent = `⏱️ ¡Tiempo extendido! Se sumaron ${base} segundos.`;
-  renderJokers();
-  saveState();
-}
-
-/* ============ SIGUIENTE PREGUNTA / FIN DE TURNO ============ */
-function nextQuestion(){
-  state.questionsThisTurn++;
-  if(currentPlayer().retired){ return; }
-  if(state.questionsThisTurn >= state.maxPerTurn){ endTurn('completo'); return; }
-  saveState();
-  loadNextQuestion();
-}
-
-function confirmRetire(){
-  if(state.tiebreak){ return; } // no retiro en desempate
-  showConfirm(
-    `¿${currentPlayer().name} quiere retirarse de su partida? Conserva ${currentPlayer().score} puntos.`,
-    ()=>{ currentPlayer().retired = true; endTurn('retiro'); },
-    'Retirarse de la partida'
-  );
-}
-
-function endTurn(reason){
-  pauseTimer();
-  currentPlayer().finished = true;
-  saveState();
-  const title = document.getElementById('turnend-title');
-  const sub = document.getElementById('turnend-sub');
-  if(reason==='retiro') { title.textContent = `${currentPlayer().name} se retiró`; sub.textContent='Conserva los puntos acumulados.'; }
-  else if(reason==='sin_preguntas'){ title.textContent = `¡Se acabaron las preguntas del banco!`; sub.textContent = `Turno de ${currentPlayer().name} finalizado.`; }
-  else { title.textContent = `¡Turno de ${currentPlayer().name} terminado!`; sub.textContent = `Respondió ${state.questionsThisTurn} preguntas.`; }
-  document.getElementById('turnend-score').textContent = currentPlayer().score;
-
-  const btn = document.getElementById('turnend-continue');
-  const hasNext = state.players.some(p=>!p.finished);
-  if(hasNext){
-    btn.textContent = 'Ver reglas y continuar →';
-    btn.onclick = ()=>{
-      state.currentPlayerIndex = state.players.findIndex(p=>!p.finished);
-      saveState();
-      setupRulesScreen(true);
-      goTo('screen-rules');
-    };
-  } else {
-    btn.textContent = 'Ver resultado final →';
-    btn.onclick = ()=>{ goToFinal(); };
-  }
-  goTo('screen-turnend');
-}
-
-/* ============ FINAL / EMPATE ============ */
-function goToFinal(){
-  const maxScore = Math.max(...state.players.map(p=>p.score));
-  const tied = state.players.filter(p=>p.score===maxScore);
-  if(tied.length>1){
-    state.tiebreak = { names: tied.map(t=>t.name), round:1 };
-    saveState();
-    document.getElementById('tiebreak-who').textContent = `Empatados con ${maxScore} puntos: ${tied.map(t=>t.name).join(', ')}.`;
-    goTo('screen-tiebreak-intro');
-  } else {
-    finishGame();
-  }
-}
-
-let tiebreakResults = [];
-function startTiebreakRound(){
-  tiebreakResults = [];
-  goTo('screen-game');
-  runTiebreakQuestionForIndex(0);
-}
-function runTiebreakQuestionForIndex(i){
-  const names = state.tiebreak.names;
-  if(i>=names.length){
-    evaluateTiebreak();
-    return;
-  }
-  const playerObj = state.players.find(p=>p.name===names[i]);
-  const q = pickRandomQuestion(state.usedIds);
-  if(!q){ evaluateTiebreak(); return; }
-  state.usedIds.push(q.id);
-  state.currentQ = q;
-  state.answered=false;
-  state.timeLeft=15;
-  state.timerRunning=false;
-  saveState();
-
-  document.getElementById('turn-label').textContent = `⚖️ Desempate — turno de ${playerObj.name}`;
-  document.getElementById('q-number').textContent = `DESEMPATE`;
-  document.getElementById('q-text').textContent = q.q;
-  document.getElementById('timer-display').textContent = 15;
-  document.getElementById('timer-display').classList.remove('low');
-  document.getElementById('start-timer-btn').disabled=false;
-  document.getElementById('start-timer-btn').textContent='▶ Iniciar tiempo';
-  document.getElementById('next-btn').style.display='none';
-  document.getElementById('game-status').textContent='';
-  document.getElementById('jokers-box').innerHTML = '<span class="muted">Sin comodines durante el desempate.</span>';
-  document.getElementById('audience-box').style.display='none';
-  renderScoreboard();
-
-  const grid = document.getElementById('options-grid');
-  grid.innerHTML='';
-  const letters=['A','B','C','D'];
-  q.o.forEach((opt,idx)=>{
-    const div = document.createElement('div');
-    div.className='opt'; div.id='opt-'+idx;
-    div.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt}</span>`;
-    div.onclick = ()=>{
-      if(state.answered) return;
-      pauseTimer();
-      state.answered=true;
-      const correctIdx = q.c;
-      document.querySelectorAll('.opt').forEach((el,k)=>{
-        el.classList.add('disabled');
-        if(k===correctIdx) el.classList.add('correct');
-        if(k===idx && idx!==correctIdx) el.classList.add('wrong');
-      });
-      tiebreakResults.push({name:playerObj.name, correct: idx===correctIdx, timeLeft: state.timeLeft});
-      document.getElementById('next-btn').style.display='inline-block';
-      document.getElementById('next-btn').textContent = (i+1<names.length) ? `Siguiente: ${names[i+1]} →` : 'Ver resultado del desempate →';
-      document.getElementById('next-btn').onclick = ()=> runTiebreakQuestionForIndex(i+1);
-      saveState();
-    };
-    grid.appendChild(div);
-  });
-  timerInterval && clearInterval(timerInterval);
-  const startBtn = document.getElementById('start-timer-btn');
-  startBtn.onclick = ()=>{
-    if(state.timerRunning || state.answered) return;
-    state.timerRunning=true;
-    startBtn.disabled=true; startBtn.textContent='Corriendo...';
-    timerInterval = setInterval(()=>{
-      state.timeLeft--;
-      document.getElementById('timer-display').textContent = Math.max(state.timeLeft,0);
-      if(state.timeLeft<=5) document.getElementById('timer-display').classList.add('low');
-      if(state.timeLeft<=0){
-        clearInterval(timerInterval); state.timerRunning=false;
-        if(!state.answered){
-          state.answered=true;
-          const correctIdx = q.c;
-          document.querySelectorAll('.opt').forEach((el,k)=>{
-            el.classList.add('disabled');
-            if(k===correctIdx) el.classList.add('correct');
-          });
-          tiebreakResults.push({name:playerObj.name, correct:false, timeLeft:0});
-          document.getElementById('next-btn').style.display='inline-block';
-          document.getElementById('next-btn').textContent = (i+1<names.length) ? `Siguiente: ${names[i+1]} →` : 'Ver resultado del desempate →';
-          document.getElementById('next-btn').onclick = ()=> runTiebreakQuestionForIndex(i+1);
-        }
-      }
-    },1000);
-  };
-}
-function evaluateTiebreak(){
-  const correctOnes = tiebreakResults.filter(r=>r.correct);
-  if(correctOnes.length===1){
-    finishGame(correctOnes[0].name);
-    return;
-  }
-  if(correctOnes.length>1){
-    correctOnes.sort((a,b)=>b.timeLeft-a.timeLeft);
-    if(correctOnes[0].timeLeft > correctOnes[1].timeLeft){
-      finishGame(correctOnes[0].name);
-      return;
-    }
-    // sigue empatado entre los más rápidos con igual tiempo -> nueva ronda solo entre ellos
-    const stillTied = correctOnes.filter(r=>r.timeLeft===correctOnes[0].timeLeft).map(r=>r.name);
-    state.tiebreak.names = stillTied;
-    document.getElementById('tiebreak-who').textContent = `Sigue el empate entre: ${stillTied.join(', ')}. Nueva pregunta de desempate.`;
-    goTo('screen-tiebreak-intro');
-    return;
-  }
-  // nadie acertó -> se repite la ronda con los mismos jugadores
-  document.getElementById('tiebreak-who').textContent = `Nadie acertó — se repite el desempate entre: ${state.tiebreak.names.join(', ')}.`;
-  goTo('screen-tiebreak-intro');
-}
-
-function finishGame(tiebreakWinnerName){
-  goTo('screen-final');
-  const sorted = [...state.players].sort((a,b)=>b.score-a.score);
-  let winner = sorted[0];
-  if(tiebreakWinnerName){
-    winner = state.players.find(p=>p.name===tiebreakWinnerName);
-  }
-  const list = document.getElementById('final-list');
-  const medals = ['🥇','🥈','🥉','🎖️'];
-  list.innerHTML = sorted.map((p,i)=>{
-    const isWinner = p.name===winner.name;
-    return `<div class="final-row ${isWinner?'winner':''}">
-      <span><span class="medal">${medals[i]||''}</span>${p.name}${isWinner?' — 🏆 Campeón/a':''}${p.retired?' <span class="badge">retirado</span>':''}</span>
-      <span class="pts">${p.score}</span>
-    </div>`;
-  }).join('');
-
-  addToHistory({
-    name: winner.name,
-    score: winner.score,
-    mode: state.mode==='tj' ? 'Testigos de Jehová' : 'Conocimiento general',
-    date: new Date().toLocaleDateString('es-AR')
-  });
-  localStorage.removeItem(STATE_KEY);
-}
-
-function newGame(){
-  state = freshState();
-  saveState();
-  goTo('screen-mode');
-}
-
-/* ============ HISTORIAL ============ */
-function openHistory(){
-  const body = document.getElementById('history-body');
-  const h = getHistory();
-  body.innerHTML = h.length ? h.map(e=>`<tr><td>${e.name}</td><td>${e.score}</td><td>${e.mode}</td><td>${e.date}</td></tr>`).join('')
-    : '<tr><td colspan="4" class="muted">Todavía no hay partidas jugadas.</td></tr>';
-  document.getElementById('history-modal').classList.add('active');
-}
-function closeHistory(){ document.getElementById('history-modal').classList.remove('active'); }
-
-/* ============ DONACIONES ============ */
-function openDonate(){ document.getElementById('donate-modal').classList.add('active'); }
-function closeDonate(){ document.getElementById('donate-modal').classList.remove('active'); }
-function copyDonateAlias(){
-  const input = document.getElementById('donate-alias');
-  input.removeAttribute('readonly');
-  input.select();
-  input.setSelectionRange(0,99999);
-  try{
-    document.execCommand('copy');
-  }catch(e){
-    if(navigator.clipboard) navigator.clipboard.writeText(input.value);
-  }
-  input.setAttribute('readonly','readonly');
-}
-
-/* ============ RESTAURAR PANTALLA AL CARGAR ============ */
-window.addEventListener('load', ()=>{
-  renderPlayersList();
-  if(state.phase && state.phase!=='mode' && state.players && state.players.length){
-    if(state.phase==='screen-game' && state.currentQ){
-      goTo('screen-game');
-      renderQuestion();
-    } else if(document.getElementById(state.phase)){
-      if(state.phase==='screen-players') renderPlayersList();
-      goTo(state.phase);
-    } else {
-      goTo('screen-mode');
-    }
-  } else {
-    goTo('screen-mode');
-  }
-});
-</script>
-</body>
-</html>
+'use strict';
+const $=id=>document.getElementById(id),KEY='noche_trivia_v2',HKEY='noche_trivia_history_v2';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let memory={},storageOK=true;function read(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{return memory[k]??f}}function write(k,v){memory[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch{storageOK=false}}function remove(k){delete memory[k];try{localStorage.removeItem(k)}catch{}}
+let session=read(KEY,null),timer=null,config={mode:'bible',play:'party',topic:'Todos',time:30,count:5,n:2,names:['','','','']},libraryTopic='Todos',librarySearch='';
+if(session&&(!session.version||!Array.isArray(session.deck)||!Array.isArray(session.players)||!Array.isArray(session.log)))session=null;
+if(read('noche_theme','light')==='dark')document.body.classList.add('dark');
+function toggleTheme(){document.body.classList.toggle('dark');write('noche_theme',document.body.classList.contains('dark')?'dark':'light')}
+function save(){if(session)write(KEY,session)}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function notify(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',3500)}
+function mount(s){$('main').innerHTML=s;$('main').focus({preventScroll:true});window.scrollTo(0,0)}
+function modal(title,html){pause();$('modalTitle').textContent=title;$('modalBody').innerHTML=html;if(!$('modal').open)$('modal').showModal()}
+function closeModal(){$('modal').close()}
+function topics(){return [...new Set(BIBLE.map(q=>q.topic))]}
+function bank(){return config.mode==='bible'?BIBLE:GENERAL}
+function filtered(){return bank().filter(q=>config.topic==='Todos'||q.topic===config.topic)}
+function home(){pause();let resume=session&&!session.done?`<div class="resume"><span><b>Tu partida te espera.</b><br>${esc(session.players.map(p=>p.name).join(' · '))} · ${session.log.length} respuestas guardadas</span><button class="btn small" onclick="resumeGame()">Continuar partida ↗</button></div>`:session?.done?`<div class="resume"><span><b>La última noche quedó guardada.</b><br>Podés volver a ver el resultado y repasar las respuestas.</span><button class="btn small" onclick="renderResult()">Ver última partida ↗</button></div>`:'';
+mount(`${resume}<section class="hero"><div><div class="eyebrow">UNA MESA · BUENAS PREGUNTAS · GRAN COMPAÑÍA</div><h1>La próxima<br>buena <em>pregunta.</em></h1><p>Una noche para poner a prueba lo que sabés.<br>Y llevarte algo nuevo, gane quien gane.</p></div><div class="hero-art" aria-hidden="true"><div class="orbit"></div><span class="art-star">✳</span><div class="art-book"><span>EDICIÓN PARA COMPARTIR</span><b>?</b><span>NOCHE DE TRIVIA / VOL. 02</span></div><span class="art-pill">Una más y seguimos ↗</span></div></section>
+<div class="homegrid"><section class="panel"><div class="panel-title"><h2>Armemos la partida.</h2><span class="eyebrow">01 — 03</span></div><div class="step-label"><span>1</span>¿Qué tenemos ganas de jugar?</div><div class="segmented"><button class="modepick ${config.mode==='bible'?'active':''}" onclick="setConfig('mode','bible')" aria-pressed="${config.mode==='bible'}"><span class="mode-icon">▤</span><strong>Desafío bíblico</strong><small>Relatos, personas y enseñanzas.<br>Con referencias para aprender.</small></button><button class="modepick ${config.mode==='general'?'active':''}" onclick="setConfig('mode','general')" aria-pressed="${config.mode==='general'}"><span class="mode-icon">◎</span><strong>Cultura general</strong><small>Arte, música, ciencia y series.<br>Un poco de todo, para todos.</small></button></div>
+<div class="step"><div class="step-label"><span>2</span>Elegí tu forma de jugar</div><div class="fields"><label class="field">Modalidad<select onchange="setConfig('play',this.value)"><option value="party" ${config.play==='party'?'selected':''}>Concurso · 1 a 4 personas</option><option value="study" ${config.play==='study'?'selected':''}>Práctica · sin cronómetro</option></select></label><label class="field">Tema<select onchange="setConfig('topic',this.value)"><option>Todos</option>${(config.mode==='bible'?topics():[]).map(t=>`<option ${config.topic===t?'selected':''}>${t}</option>`).join('')}</select></label><label class="field">Preguntas por persona<select onchange="setConfig('count',Number(this.value))">${[5,10].map(n=>`<option ${config.count===n?'selected':''} value="${n}">${n} preguntas</option>`).join('')}</select></label><label class="field">Tiempo por pregunta<select onchange="setConfig('time',Number(this.value))" ${config.play==='study'?'disabled':''}>${[15,30,45,60].map(n=>`<option ${config.time===n?'selected':''} value="${n}">${n} segundos</option>`).join('')}</select></label></div></div>
+<div class="step"><div class="step-label"><span>3</span>¿Quiénes se suman?</div>${config.play==='party'?`<label class="field" style="margin-bottom:15px">Cantidad de personas<select onchange="setConfig('n',Number(this.value))">${[1,2,3,4].map(n=>`<option value="${n}" ${config.n===n?'selected':''}>${n} ${n===1?'persona':'personas'}</option>`).join('')}</select></label>`:''}<div class="players">${Array.from({length:config.play==='study'?1:config.n},(_,i)=>`<label class="playerfield"><span class="avatar">${i+1}</span><input aria-label="Nombre de la persona ${i+1}" maxlength="28" placeholder="${config.play==='study'?'Tu nombre':'Persona '+(i+1)}" value="${esc(config.names[i])}" oninput="config.names[${i}]=this.value"></label>`).join('')}</div></div><button class="btn full start" onclick="requestStart()">${config.play==='study'?'Empezar a practicar':'Todo listo. ¡A jugar!'} <span>↗</span></button><p class="fine">${filtered().length} preguntas disponibles para esta selección. Sin repeticiones en la partida. ${!storageOK?'El navegador no permite guardar el progreso.':''}</p><div id="configError" class="error" role="status"></div></section>
+<aside><div class="aside-note"><div class="eyebrow">EL GUSTO ESTÁ EN APRENDER</div><h2>La respuesta<br>también cuenta.</h2><p>En el desafío bíblico, cada respuesta viene con una explicación y un enlace al pasaje. Revisá el contexto, no solo la letra correcta.</p><div class="stats"><div><b>${BIBLE.length}</b><small>Preguntas bíblicas</small></div><div><b>1–4</b><small>Personas por partida</small></div></div></div><button class="aside-link" onclick="showRules()">Cómo se juega <span>↗</span></button><button class="aside-link" onclick="showLibrary()">Explorar preguntas y referencias <span>↗</span></button><p class="fine">Referencias bíblicas: Traducción del Nuevo Mundo, edición de estudio. Proyecto independiente, sin afiliación oficial. El juego funciona sin conexión; los enlaces requieren internet.</p></aside></div>`)}
+function setConfig(k,v){config[k]=v;if(k==='mode')config.topic='Todos';home()}
+function showRules(){modal('Todos en la misma página.',`<ol class="rules"><li>Se alterna una pregunta por persona en cada ronda. Cada acierto suma <b>10 puntos</b>.</li><li>El presentador inicia el reloj. Antes de iniciarlo, las respuestas están bloqueadas. En práctica no hay límite de tiempo.</li><li>Cada persona puede usar una vez el <b>50/50</b>, la <b>consulta al público</b> y <b>15 segundos extra</b>. La consulta se carga con votos reales en este dispositivo.</li><li>El resultado y la referencia aparecen después de responder. No se repiten preguntas durante una partida.</li><li>Si hay empate, se juega una pregunta extra por persona empatada, sin comodines. Se repite mientras queden preguntas suficientes; si se agotan, se comparte el primer puesto.</li><li>Salir, cambiar de pestaña o recargar pausa el reloj. La partida se guarda en este navegador, si permite almacenamiento local.</li></ol><button class="btn full" onclick="closeModal()">Entendido</button>`)}
+function requestStart(){let n=config.play==='study'?1:config.n,available=filtered().length;if(available<n*config.count){$('configError').textContent=`Este tema tiene ${available} preguntas. Elegí menos personas, 5 preguntas o el tema “Todos”.`;return}if(session&&!session.done){modal('¿Empezar otra partida?','<p>La partida guardada será reemplazada.</p><div class="row"><button class="btn secondary" onclick="closeModal()">Conservar partida</button><button class="btn" onclick="startGame()">Empezar otra</button></div>')}else startGame()}
+function startGame(){closeModal();pause();let n=config.play==='study'?1:config.n,names=config.names.slice(0,n).map((s,i)=>s.trim()||'Persona '+(i+1));if(new Set(names.map(s=>s.toLocaleLowerCase())).size!==n){notify('Usá un nombre diferente para cada persona.');return}let schedule=[];for(let round=0;round<config.count;round++)for(let i=0;i<n;i++)schedule.push(i);session={version:2,mode:config.mode,study:config.play==='study',base:config.time,count:config.count,players:names.map(name=>({name,score:0,jokers:{}})),schedule,pos:0,deck:shuffle(filtered()).map(q=>({...q,o:[...q.o]})),cursor:0,current:null,log:[],done:false,tie:false,round:0};nextCard()}
+function getPlayer(){return session.players[session.schedule[session.pos]]}
+function nextCard(){session.pendingTie=false;if(session.cursor>=session.deck.length)return finish();let raw=session.deck[session.cursor++],order=shuffle([0,1,2,3]);session.current={...raw,o:order.map(i=>raw.o[i]),c:order.indexOf(raw.c)};session.answer=null;session.remaining=session.study?null:session.tie?15:session.base;session.started=session.study;session.running=false;session.eliminated=[];session.votes=null;save();renderGame()}
+function scoreMarkup(){return session.players.map((p,i)=>`<div class="score ${i===session.schedule[session.pos]?'active':''}"><span>${esc(p.name)}</span><b>${p.score} <small style="font-size:10px;font-weight:400">pts</small></b></div>`).join('')}
+function renderGame(){let q=session.current,p=getPlayer(),answered=session.answer!==null,round=session.tie?'DESEMPATE '+session.round:'RONDA '+(Math.floor(session.pos/session.players.length)+1)+' DE '+session.count;
+mount(`<section class="game"><div class="gamehead"><div><div class="eyebrow">${session.study?'PRÁCTICA TRANQUILA':round}</div><h1>Es tu turno, ${esc(p.name)}.</h1></div><button class="quiet" onclick="home()">Pausar y salir ↗</button></div><div class="scoreboard">${scoreMarkup()}</div><div class="panel gamepanel"><div class="questionmeta"><span class="badge">${esc(q.topic)}</span><span class="clock" id="clock">${session.study?'Sin reloj':formatTime(session.remaining)}</span></div><div class="progress" aria-label="Progreso de la partida"><div style="width:${Math.round(session.pos/session.schedule.length*100)}%"></div></div><h2 class="question" id="question">${esc(q.q)}</h2><div class="options" aria-labelledby="question">${q.o.map((o,i)=>`<button class="option ${session.eliminated.includes(i)?'eliminated':''} ${answered&&i===q.c?'correct':''} ${answered&&session.answer.chosen===i&&i!==q.c?'wrong':''}" onclick="answer(${i})" ${answered||!session.started?'disabled':''}><span class="letter">${'ABCD'[i]}</span><span>${esc(o)}${answered&&i===q.c?' ✓':''}${answered&&session.answer.chosen===i&&i!==q.c?' ✕':''}</span></button>`).join('')}</div>${answered?answerMarkup():''}<div id="voteSummary"></div><div class="gameactions">${!answered&&!session.study?`<button class="btn" id="timerButton" onclick="toggleTimer()">${session.running?'Ⅱ Pausar':session.started?'▶ Continuar tiempo':'▶ Iniciar tiempo'}</button>`:''}${answered?`<button class="btn full" onclick="advance()">${session.pos===session.schedule.length-1?'Ver resultado de la ronda':'Siguiente persona'} →</button>`:`<span class="fine" style="margin:0">${session.study?'Leé con calma. Sin penalizaciones.':'Cada acierto suma 10 puntos.'}</span>`}</div></div>${!session.study&&!session.tie?`<div class="jokers"><button class="joker" onclick="fifty()" ${p.jokers.fifty||answered?'disabled':''}>½ &nbsp; 50/50<small>Quitá dos opciones</small></button><button class="joker" onclick="audience()" ${p.jokers.audience||answered?'disabled':''}>▥ &nbsp; Público<small>Cargá los votos reales</small></button><button class="joker" onclick="extend()" ${p.jokers.extend||answered?'disabled':''}>＋15 segundos<small>Un poco de aire</small></button></div>`:''}<p class="hint">${answered?'Las referencias permiten revisar la respuesta en su contexto.':session.study?'Podés consultar todas las referencias al terminar.':'El reloj se pausa al salir de esta pantalla. Atajos: teclas 1, 2, 3 y 4.'}</p></section>`);renderVotes()}
+function formatTime(n){return String(Math.max(0,Math.ceil(n??0))).padStart(2,'0')+' s'}
+function toggleTimer(){if(session.running){pause();renderGame();return}if(session.answer!==null)return;session.started=true;session.running=true;session.deadline=Date.now()+session.remaining*1000;save();renderGame();clearInterval(timer);timer=setInterval(tick,150)}
+function tick(){if(!session?.running)return;session.remaining=Math.max(0,(session.deadline-Date.now())/1000);if($('clock')){$('clock').textContent=formatTime(session.remaining);$('clock').classList.toggle('low',session.remaining<=5)}if(session.remaining<=0)answer(-1);else save()}
+function pause(){clearInterval(timer);timer=null;if(session?.running){session.remaining=Math.max(0,(session.deadline-Date.now())/1000);session.running=false;save();if($('timerButton'))$('timerButton').textContent='▶ Continuar tiempo'}}
+function answer(i){if(!session||session.answer!==null||!session.started||session.eliminated.includes(i))return;if(session.running&&Date.now()>=session.deadline)i=-1;pause();let right=i===session.current.c;if(right)getPlayer().score+=10;session.answer={chosen:i,right};session.log.push({q:session.current,player:session.schedule[session.pos],chosen:i,right,tie:session.tie});save();renderGame()}
+function answerMarkup(){let q=session.current,a=session.answer;return `<section class="answerbox" role="status"><h3 style="color:${a.right?'var(--good)':'var(--bad)'}">${a.right?'¡Bien pensado! +10 puntos':a.chosen===-1?'Se terminó el tiempo.':'Esta vez no. Seguimos aprendiendo.'}</h3><p><b>Respuesta: ${esc(q.o[q.c])}.</b> ${esc(q.ex)}</p>${q.ref?`<a href="${esc(q.url)}" target="_blank" rel="noopener noreferrer">Leer ${esc(q.ref)} ↗</a>`:''}</section>`}
+function advance(){if(session.answer===null)return;session.pos++;if(session.pos<session.schedule.length)return nextCard();let max=Math.max(...session.players.map(p=>p.score)),leaders=session.players.map((p,i)=>p.score===max?i:-1).filter(i=>i>=0);if(leaders.length===1||session.study)return finish();if(session.deck.length-session.cursor<leaders.length){session.shared=true;return finish()}session.tie=true;session.pendingTie=true;session.round++;session.schedule=leaders;session.pos=0;save();modal('Una ronda más.',`<p>Empate entre <b>${leaders.map(i=>esc(session.players[i].name)).join(' y ')}</b>. Una pregunta nueva para cada persona, 15 segundos y sin comodines.</p><button class="btn full" onclick="closeModal();nextCard()">Comenzar desempate →</button>`)}
+function fifty(){let p=getPlayer();if(p.jokers.fifty||session.answer!==null||session.tie)return;session.eliminated=shuffle([0,1,2,3].filter(i=>i!==session.current.c)).slice(0,2);p.jokers.fifty=true;save();renderGame()}
+function extend(){let p=getPlayer();if(p.jokers.extend||session.answer!==null||session.tie)return;session.remaining+=15;if(session.running)session.deadline+=15000;p.jokers.extend=true;save();renderGame()}
+function audience(){let p=getPlayer();if(p.jokers.audience||session.answer!==null||session.tie)return;modal('Escuchemos al público.',`<p>Pedí que levanten la mano por A, B, C o D y anotá la cantidad de votos. Son votos de las personas presentes, no una simulación.</p>${session.current.o.map((o,i)=>`<label class="vote"><span><b>${'ABCD'[i]}</b> · ${esc(o)}</span><input aria-label="Votos ${'ABCD'[i]}" id="vote${i}" type="number" min="0" max="9999" step="1" value="0"></label>`).join('')}<p id="voteError" class="error"></p><button class="btn full" onclick="submitVotes()">Mostrar votación</button>`)}
+function submitVotes(){let v=[0,1,2,3].map(i=>Number($('vote'+i).value));if(v.some(n=>!Number.isInteger(n)||n<0||n>9999)||!v.some(n=>n>0)){$('voteError').textContent='Ingresá al menos un voto. Usá números enteros entre 0 y 9999.';return}session.votes=v;getPlayer().jokers.audience=true;save();closeModal();renderGame()}
+function renderVotes(){if(!session?.votes||!$('voteSummary'))return;let total=session.votes.reduce((a,b)=>a+b,0);$('voteSummary').innerHTML=`<div class="answerbox"><div class="eyebrow">PÚBLICO · ${total} VOTOS REALES</div><div class="row" style="margin-top:10px">${session.votes.map((v,i)=>`<span class="badge">${'ABCD'[i]} · ${Math.round(v/total*100)}%</span>`).join('')}</div><p class="fine">${session.answer!==null?'Así votó el público en esta pregunta.':'La mayoría también puede equivocarse. Reanudá el reloj cuando estés listo.'}</p></div>`}
+function resumeGame(){if(!session||session.done)return;pause();if(session.pendingTie)return nextCard();if(session.pos>=session.schedule.length)return advance();if(!session.current)return nextCard();renderGame()}
+function finish(){pause();session.done=true;let max=Math.max(...session.players.map(p=>p.score));session.winners=session.players.map((p,i)=>p.score===max?i:-1).filter(i=>i>=0);if(!session.historySaved){let h=read(HKEY,[]);h.unshift({date:new Date().toISOString(),names:session.winners.map(i=>session.players[i].name),score:max,mode:session.mode,study:session.study});write(HKEY,h.slice(0,50));session.historySaved=true}save();renderResult()}
+function renderResult(){let ranked=session.players.map((p,i)=>({...p,i})).sort((a,b)=>b.score-a.score),wins=session.winners.map(i=>session.players[i].name).join(' y '),right=session.log.filter(l=>l.right).length;mount(`<section class="game"><div class="result-hero"><span class="seal">✳</span><div class="eyebrow">${session.study?'PRÁCTICA COMPLETADA':'FIN DE LA PARTIDA'}</div><h1>${session.study?'Una idea más para llevarte.':esc(wins)+(session.winners.length>1?', primer puesto compartido.':', ¡bien jugado!')}</h1><p>${right} aciertos en ${session.log.length} respuestas. ${session.shared?'Se agotaron las preguntas para un desempate completo.':''}</p></div><div class="panel"><h2 style="font-size:29px">Así quedó la mesa.</h2><div class="ranking">${ranked.map((p,i)=>`<div class="rank"><span class="place">${i&&ranked[i-1].score===p.score?'=':i+1}</span><span class="name">${esc(p.name)}<small>${session.log.filter(l=>l.player===p.i&&l.right).length} aciertos</small></span><b>${p.score}<small>puntos</small></b></div>`).join('')}</div><div class="row"><button class="btn" onclick="home()">Armar otra partida ↗</button><button class="btn secondary" onclick="shareResult()">Compartir resultado</button></div><details style="margin-top:28px"><summary style="cursor:pointer;font-weight:650">Repasar las ${session.log.length} respuestas</summary>${session.log.map(l=>`<article class="reviewrow"><div class="eyebrow">${esc(session.players[l.player].name)} · ${l.right?'ACIERTO':'PARA REPASAR'}</div><h3>${esc(l.q.q)}</h3><p>Elegiste: ${l.chosen<0?'Sin respuesta':esc(l.q.o[l.chosen])}<br><b>Correcta: ${esc(l.q.o[l.q.c])}</b><br>${esc(l.q.ex)}</p>${l.q.ref?`<a target="_blank" rel="noopener noreferrer" href="${esc(l.q.url)}">${esc(l.q.ref)} ↗</a>`:''}</article>`).join('')}</details></div></section>`)}
+async function shareResult(){let text='Noche de Trivia\n'+session.players.map(p=>p.name+': '+p.score+' puntos').join('\n');try{if(navigator.share)await navigator.share({title:'Noche de Trivia',text});else if(navigator.clipboard){await navigator.clipboard.writeText(text);notify('Resultado copiado para compartir.')}else modal('Tu resultado',`<p style="white-space:pre-line;user-select:text">${esc(text)}</p><p>Seleccioná y copiá el resultado para compartirlo.</p>`)}catch(e){if(e.name!=='AbortError')notify('No se pudo compartir. Intentá de nuevo.')}}
+function showHistory(){modal('Las noches que compartimos.',read(HKEY,[]).map(e=>`<div class="historyrow"><b>${esc(e.names.join(' y '))} · ${e.score} puntos</b><small>${e.study?'Práctica':e.mode==='bible'?'Desafío bíblico':'Cultura general'} · ${new Date(e.date).toLocaleDateString('es-AR')}</small></div>`).join('')||'<p>Todavía no hay partidas terminadas. La próxima puede ser la primera.</p>')}
+function showLibrary(){pause();mount(`<div class="pageintro"><div><div class="eyebrow">BIBLIOTECA BÍBLICA · ${BIBLE.length} PREGUNTAS</div><h1>La curiosidad sigue.</h1></div><button class="quiet" onclick="home()">← Volver</button></div><p class="muted" style="margin-bottom:24px;max-width:700px">Preguntas redactadas sobre pasajes concretos de la Traducción del Nuevo Mundo. Abrí cada tarjeta para ver la respuesta y su referencia. No se incluyen las preguntas pendientes de verificar del archivo original.</p><div class="libraryfilters"><input id="librarySearch" type="search" placeholder="Buscá una persona, un relato o un pasaje…" aria-label="Buscar preguntas" value="${esc(librarySearch)}" oninput="librarySearch=this.value;renderLibrary()"><select aria-label="Filtrar por tema" onchange="libraryTopic=this.value;renderLibrary()"><option>Todos</option>${topics().map(t=>`<option ${libraryTopic===t?'selected':''}>${t}</option>`).join('')}</select></div><p class="fine" id="libraryCount" style="margin-bottom:18px"></p><div class="librarylist" id="libraryList"></div>`);renderLibrary()}
+function normalized(s){return s.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function renderLibrary(){let list=BIBLE.filter(q=>(libraryTopic==='Todos'||q.topic===libraryTopic)&&normalized(q.q+' '+q.ref+' '+q.o.join(' ')).includes(normalized(librarySearch)));$('libraryCount').textContent=list.length+' preguntas encontradas';$('libraryList').innerHTML=list.map(q=>`<details><summary><span class="eyebrow">${esc(q.topic)} · ${q.level}</span>${esc(q.q)}</summary><p><b>${esc(q.o[q.c])}.</b> ${esc(q.ex)}</p><a href="${esc(q.url)}" target="_blank" rel="noopener noreferrer">Leer ${esc(q.ref)} ↗</a></details>`).join('')||'<p class="empty">No hay coincidencias. Probá con otra palabra.</p>'}
+function support(){modal('Gracias por sumar.',`<p>El archivo original incluye este alias de colaboración voluntaria. No es necesario aportar para jugar.</p><label class="field">Alias de transferencia<input readonly value="cetro.chispa.tribu" aria-label="Alias de colaboración"></label><p class="fine">Comprobá el destinatario en tu banco antes de confirmar una transferencia.</p>`)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause()});window.addEventListener('pagehide',pause);document.addEventListener('keydown',e=>{if($('modal').open||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;if($('question')&&['1','2','3','4'].includes(e.key)){e.preventDefault();answer(Number(e.key)-1)}});$('modal').addEventListener('click',e=>{if(e.target===$('modal')){let r=$('modal').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal()}});
+if(session)session.running=false;
+home();
+</script></body></html>
